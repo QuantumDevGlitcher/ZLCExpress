@@ -125,15 +125,24 @@ const categoryHierarchy = [
     name: "Prendas",
     count: 4,
     expanded: true,
+    icon: "minus",
     subcategories: [
-      { id: "ropa-hombre", name: "Ropa de Hombre", count: 8 },
-      { id: "ropa-mujer", name: "Ropa de Mujer", count: 6 },
-      { id: "blusas", name: "Blusas", count: 0, checked: true },
-      { id: "faldas", name: "Faldas", count: 0, checked: false },
-      { id: "vestidos", name: "Vestidos", count: 0, checked: false },
-      { id: "blusas-work", name: "Blusas", count: 0, checked: false },
-      { id: "leggings", name: "Leggings", count: 0, checked: false },
-      { id: "ropa-interior", name: "Ropa Interior", count: 0, checked: false },
+      { id: "ropa-hombre", name: "Ropa de Hombre", count: 8, icon: "plus" },
+      {
+        id: "ropa-mujer",
+        name: "Ropa de Mujer",
+        count: 6,
+        icon: "minus",
+        expanded: true,
+      },
+    ],
+    subSubcategories: [
+      { id: "blusas", name: "Blusas", checked: true },
+      { id: "faldas", name: "Faldas", checked: false },
+      { id: "vestidos", name: "Vestidos", checked: false },
+      { id: "blusas-2", name: "Blusas", checked: false },
+      { id: "leggings", name: "Leggings", checked: false },
+      { id: "ropa-interior", name: "Ropa Interior", checked: false },
     ],
   },
   {
@@ -141,13 +150,14 @@ const categoryHierarchy = [
     name: "Calzado",
     count: 6,
     expanded: false,
+    icon: "minus",
     subcategories: [
-      { id: "caballero", name: "Caballero", count: 0, checked: false },
-      { id: "dama", name: "Dama", count: 0, checked: false },
-      { id: "deportes", name: "Deportes", count: 0, checked: false },
-      { id: "nino", name: "Niño", count: 0, checked: false },
-      { id: "nina", name: "Niña", count: 0, checked: false },
-      { id: "hogar", name: "Hogar", count: 0, checked: false },
+      { id: "caballero", name: "Caballero", checked: false },
+      { id: "dama", name: "Dama", checked: false },
+      { id: "deportes", name: "Deportes", checked: false },
+      { id: "nino", name: "Niño", checked: false },
+      { id: "nina", name: "Niña", checked: false },
+      { id: "hogar", name: "Hogar", checked: false },
     ],
   },
   {
@@ -155,6 +165,7 @@ const categoryHierarchy = [
     name: "Automotriz",
     count: 10,
     expanded: false,
+    icon: "plus",
     subcategories: [],
   },
 ];
@@ -249,11 +260,12 @@ export default function Categories() {
         cat.id === parentId
           ? {
               ...cat,
-              subcategories: cat.subcategories.map((sub) =>
-                sub.id === subcategoryId
-                  ? { ...sub, checked: !sub.checked }
-                  : sub,
-              ),
+              subSubcategories:
+                cat.subSubcategories?.map((sub) =>
+                  sub.id === subcategoryId
+                    ? { ...sub, checked: !sub.checked }
+                    : sub,
+                ) || [],
             }
           : cat,
       ),
@@ -267,90 +279,146 @@ export default function Categories() {
       <main style={{ paddingTop: "80px" }}>
         <div className="flex">
           {/* Left Sidebar - Categories */}
-          <aside className="w-64 bg-gray-50 border-r p-4 min-h-screen">
-            <div className="space-y-4">
+          <aside className="w-64 bg-gray-100 border-r border-gray-300 min-h-screen">
+            <div className="p-3 space-y-1">
               {/* Categories Header */}
-              <div className="flex items-center justify-between">
-                <h3 className="font-semibold text-gray-900 flex items-center">
+              <div className="flex items-center justify-between py-2 px-2 bg-white border border-gray-300 rounded">
+                <span className="font-medium text-sm text-gray-900">
                   Categorías (Producto)
-                </h3>
-                <Minus className="h-4 w-4 text-gray-500" />
+                </span>
+                <Minus className="h-4 w-4 text-gray-600" />
               </div>
 
               {/* Categories List */}
-              <div className="space-y-2">
+              <div className="space-y-1">
                 {categories.map((category) => (
-                  <div key={category.id}>
-                    <Collapsible open={category.expanded}>
-                      <CollapsibleTrigger
-                        onClick={() => toggleCategory(category.id)}
-                        className="flex items-center justify-between w-full text-left py-1 hover:bg-gray-100 rounded px-2"
-                      >
-                        <span className="font-medium text-sm">
-                          {category.name} ({category.count})
-                        </span>
-                        <div className="flex items-center space-x-1">
-                          <Plus className="h-3 w-3 text-gray-500" />
-                          {category.expanded ? (
-                            <ChevronDown className="h-3 w-3 text-gray-500" />
-                          ) : (
-                            <ChevronRight className="h-3 w-3 text-gray-500" />
-                          )}
-                        </div>
-                      </CollapsibleTrigger>
+                  <div key={category.id} className="space-y-1">
+                    <div className="flex items-center justify-between py-1 px-2 hover:bg-gray-200 rounded cursor-pointer">
+                      <span className="text-sm font-medium text-gray-900">
+                        {category.name} ({category.count})
+                      </span>
+                      <div className="flex items-center space-x-1">
+                        {category.icon === "plus" ? (
+                          <Plus className="h-3 w-3 text-gray-600" />
+                        ) : (
+                          <Minus className="h-3 w-3 text-gray-600" />
+                        )}
+                      </div>
+                    </div>
 
-                      <CollapsibleContent className="ml-4 space-y-1 mt-2">
+                    {/* Subcategories */}
+                    {category.subcategories && category.expanded && (
+                      <div className="ml-4 space-y-1">
                         {category.subcategories.map((sub) => (
                           <div
                             key={sub.id}
-                            className="flex items-center space-x-2 py-1"
+                            className="flex items-center justify-between py-1 px-2 hover:bg-gray-200 rounded cursor-pointer"
+                          >
+                            <span className="text-sm text-gray-800">
+                              {sub.name} ({sub.count})
+                            </span>
+                            {sub.icon && (
+                              <div className="flex items-center">
+                                {sub.icon === "plus" ? (
+                                  <Plus className="h-3 w-3 text-gray-600" />
+                                ) : (
+                                  <Minus className="h-3 w-3 text-gray-600" />
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+
+                        {/* Sub-subcategories with checkboxes */}
+                        {category.subSubcategories && (
+                          <div className="ml-4 space-y-1">
+                            {category.subSubcategories.map((subSub) => (
+                              <div
+                                key={subSub.id}
+                                className="flex items-center space-x-2 py-1 px-2"
+                              >
+                                <Checkbox
+                                  id={subSub.id}
+                                  checked={subSub.checked}
+                                  onCheckedChange={() =>
+                                    toggleSubcategory(category.id, subSub.id)
+                                  }
+                                  className="h-3 w-3"
+                                />
+                                <label
+                                  htmlFor={subSub.id}
+                                  className="text-sm text-gray-700 cursor-pointer"
+                                >
+                                  {subSub.name}
+                                </label>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Calzado subcategories */}
+                    {category.id === "calzado" && category.expanded && (
+                      <div className="ml-4 space-y-1">
+                        {category.subcategories.map((sub) => (
+                          <div
+                            key={sub.id}
+                            className="flex items-center space-x-2 py-1 px-2"
                           >
                             <Checkbox
                               id={sub.id}
                               checked={sub.checked}
-                              onCheckedChange={() =>
-                                toggleSubcategory(category.id, sub.id)
-                              }
                               className="h-3 w-3"
                             />
                             <label
                               htmlFor={sub.id}
-                              className="text-sm text-gray-700 cursor-pointer flex-1"
+                              className="text-sm text-gray-700 cursor-pointer"
                             >
-                              {sub.name} {sub.count > 0 && `(${sub.count})`}
+                              {sub.name}
                             </label>
                           </div>
                         ))}
-                      </CollapsibleContent>
-                    </Collapsible>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
 
-              <Separator />
-
               {/* Price Range */}
-              <div className="space-y-3">
-                <div className="text-sm text-gray-600">
-                  Precio: ${priceRange[0]}-
-                  {priceRange[1] >= 10000 ? "10000+" : priceRange[1]}
+              <div className="pt-4 space-y-3">
+                <div className="w-full h-px bg-gray-300"></div>
+                <div className="px-2">
+                  <div className="text-xs text-gray-600 mb-2">
+                    Precio: ${priceRange[0]}-
+                    {priceRange[1] >= 10000 ? "10000" : priceRange[1]}
+                  </div>
+                  <div className="relative">
+                    <Slider
+                      value={priceRange}
+                      onValueChange={setPriceRange}
+                      max={10000}
+                      min={100}
+                      step={100}
+                      className="w-full"
+                    />
+                    <div className="flex justify-between mt-1">
+                      <span className="text-xs text-gray-500">$100</span>
+                      <span className="text-xs text-gray-500">$10000</span>
+                    </div>
+                  </div>
                 </div>
-                <Slider
-                  value={priceRange}
-                  onValueChange={setPriceRange}
-                  max={10000}
-                  min={100}
-                  step={100}
-                  className="w-full"
-                />
               </div>
 
-              <Separator />
-
               {/* Suppliers */}
-              <div className="flex items-center justify-between">
-                <span className="font-medium text-sm">Proveedores</span>
-                <Plus className="h-4 w-4 text-gray-500" />
+              <div className="pt-3">
+                <div className="w-full h-px bg-gray-300 mb-3"></div>
+                <div className="flex items-center justify-between py-1 px-2 hover:bg-gray-200 rounded cursor-pointer">
+                  <span className="text-sm font-medium text-gray-900">
+                    Proveedores
+                  </span>
+                  <Plus className="h-4 w-4 text-gray-600" />
+                </div>
               </div>
             </div>
           </aside>
@@ -358,22 +426,22 @@ export default function Categories() {
           {/* Main Content */}
           <div className="flex-1 flex">
             {/* Center Content Area */}
-            <div className="flex-1 p-6">
+            <div className="flex-1 p-6 bg-gray-50">
               {/* Search Bar */}
               <div className="mb-6">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <div className="relative max-w-2xl">
                   <Input
                     placeholder="Buscar"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 h-10"
+                    className="pr-12 h-10 bg-white border border-gray-300"
                   />
                   <Button
                     size="sm"
-                    className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0"
+                    className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0 bg-gray-200 hover:bg-gray-300 border border-gray-300"
+                    variant="ghost"
                   >
-                    <Search className="h-4 w-4" />
+                    <Search className="h-4 w-4 text-gray-600" />
                   </Button>
                 </div>
               </div>
@@ -381,74 +449,72 @@ export default function Categories() {
               {/* Product List */}
               <div className="space-y-4">
                 {filteredLots.map((lot) => (
-                  <Card
+                  <div
                     key={lot.id}
                     className={cn(
-                      "p-6 hover:shadow-lg transition-shadow",
+                      "bg-white border rounded-lg p-6 hover:shadow-md transition-shadow",
                       lot.highlighted && "border-2 border-blue-500",
                     )}
                   >
                     <div className="flex gap-6">
                       <div className="w-48 h-32 flex-shrink-0 bg-gray-200 rounded-lg overflow-hidden">
-                        <img
-                          src={lot.image}
-                          alt={lot.title}
-                          className="w-full h-full object-cover"
-                        />
+                        <div className="w-full h-full bg-gray-300 flex items-center justify-center">
+                          <span className="text-gray-500 text-sm">Imagen</span>
+                        </div>
                       </div>
 
                       <div className="flex-1 space-y-3">
                         <div>
-                          <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                          <h3 className="text-xl font-semibold text-gray-900 mb-3">
                             {lot.title}
                           </h3>
-                          <p className="text-sm text-gray-600 mb-2">
+                          <p className="text-sm text-gray-700 mb-1">
                             Colores disponibles: {lot.colors.join(", ")}.
                           </p>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-gray-700">
                             Tamaños: {lot.sizes.join(", ")}.
                           </p>
                         </div>
 
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-end justify-between pt-4">
                           <div className="space-y-1">
-                            <div className="text-sm font-semibold">
+                            <div className="text-sm font-semibold text-gray-900">
                               Precio por contenedor: XXX$
                             </div>
-                            <div className="text-sm text-gray-600">
+                            <div className="text-sm text-gray-700">
                               Precio unitario: XX$
                             </div>
                           </div>
 
-                          <Button className="bg-blue-900 hover:bg-blue-800 text-white px-6">
+                          <Button className="bg-slate-700 hover:bg-slate-800 text-white px-6 py-2 rounded">
                             Ver detalles →
                           </Button>
                         </div>
                       </div>
                     </div>
-                  </Card>
+                  </div>
                 ))}
               </div>
             </div>
 
             {/* Right Sidebar - Filters */}
-            <aside className="w-80 bg-gray-50 border-l p-4 min-h-screen">
+            <aside className="w-80 bg-gray-100 border-l border-gray-300 p-4 min-h-screen">
               <div className="space-y-6">
                 {/* Filter Header */}
-                <div className="bg-gray-200 px-4 py-2 rounded text-center font-medium">
+                <div className="bg-gray-300 px-4 py-2 rounded text-center font-medium text-sm">
                   Filtro (Proveedor)
                 </div>
 
                 {/* Container Type */}
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">
+                  <label className="text-sm font-medium text-gray-900">
                     Tipo de contenedor:
                   </label>
                   <Select
                     value={selectedContainerType}
                     onValueChange={setSelectedContainerType}
                   >
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full bg-white border border-gray-300">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -463,14 +529,14 @@ export default function Categories() {
 
                 {/* Container Count */}
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">
+                  <label className="text-sm font-medium text-gray-900">
                     # de Contenedores:
                   </label>
                   <Select
                     value={containerCount}
                     onValueChange={setContainerCount}
                   >
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full bg-white border border-gray-300">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -485,16 +551,20 @@ export default function Categories() {
 
                 {/* Supplier Status */}
                 <div className="space-y-3">
-                  <label className="text-sm font-medium">
+                  <label className="text-sm font-medium text-gray-900">
                     Estado del Proveedor:
                   </label>
                   <RadioGroup
                     value={supplierStatus}
                     onValueChange={setSupplierStatus}
+                    className="space-y-2"
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="verificado" id="verificado" />
-                      <Label htmlFor="verificado" className="text-sm">
+                      <Label
+                        htmlFor="verificado"
+                        className="text-sm text-gray-700"
+                      >
                         Verificado
                       </Label>
                     </div>
@@ -503,7 +573,10 @@ export default function Categories() {
                         value="no-verificado"
                         id="no-verificado"
                       />
-                      <Label htmlFor="no-verificado" className="text-sm">
+                      <Label
+                        htmlFor="no-verificado"
+                        className="text-sm text-gray-700"
+                      >
                         No Verificado
                       </Label>
                     </div>
@@ -512,17 +585,23 @@ export default function Categories() {
 
                 {/* Lead Time */}
                 <div className="space-y-3">
-                  <div className="text-sm font-medium">
+                  <div className="text-sm font-medium text-gray-900">
                     Lead Time: {leadTimeRange[0]}-{leadTimeRange[1]} días
                   </div>
-                  <Slider
-                    value={leadTimeRange}
-                    onValueChange={setLeadTimeRange}
-                    max={60}
-                    min={5}
-                    step={5}
-                    className="w-full"
-                  />
+                  <div className="relative">
+                    <Slider
+                      value={leadTimeRange}
+                      onValueChange={setLeadTimeRange}
+                      max={60}
+                      min={5}
+                      step={5}
+                      className="w-full"
+                    />
+                    <div className="flex justify-between mt-1">
+                      <span className="text-xs text-gray-500">5</span>
+                      <span className="text-xs text-gray-500">60</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </aside>
