@@ -4,63 +4,115 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Navigation } from "@/components/Navigation";
-import { 
-  Building2, 
-  User, 
-  MapPin, 
-  Shield, 
-  CheckCircle, 
-  ArrowLeft, 
+import {
+  Building2,
+  User,
+  MapPin,
+  Shield,
+  CheckCircle,
+  ArrowLeft,
   ArrowRight,
-  AlertCircle
+  AlertCircle,
 } from "lucide-react";
 
 // Form validation schema
-const formSchema = z.object({
-  companyName: z.string().min(2, "El nombre de la empresa debe tener al menos 2 caracteres"),
-  taxId: z.string().min(5, "El número de registro fiscal es requerido"),
-  country: z.string().min(1, "Seleccione un país"),
-  sector: z.string().min(1, "Seleccione un sector"),
-  contactName: z.string().min(2, "El nombre de contacto es requerido"),
-  contactPosition: z.string().min(2, "El cargo es requerido"),
-  email: z.string().email("Ingrese un email válido"),
-  phone: z.string().min(8, "Ingrese un número de teléfono válido"),
-  street: z.string().min(5, "La dirección es requerida"),
-  city: z.string().min(2, "La ciudad es requerida"),
-  state: z.string().min(2, "El estado/provincia es requerido"),
-  postalCode: z.string().min(3, "El código postal es requerido"),
-  fiscalCountry: z.string().min(1, "Seleccione un país"),
-  password: z.string().min(8, "La contraseña debe tener al menos 8 caracteres"),
-  confirmPassword: z.string(),
-  acceptTerms: z.boolean().refine(val => val === true, "Debe aceptar los términos y condiciones"),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Las contraseñas no coinciden",
-  path: ["confirmPassword"],
-});
+const formSchema = z
+  .object({
+    companyName: z
+      .string()
+      .min(2, "El nombre de la empresa debe tener al menos 2 caracteres"),
+    taxId: z.string().min(5, "El número de registro fiscal es requerido"),
+    country: z.string().min(1, "Seleccione un país"),
+    sector: z.string().min(1, "Seleccione un sector"),
+    contactName: z.string().min(2, "El nombre de contacto es requerido"),
+    contactPosition: z.string().min(2, "El cargo es requerido"),
+    email: z.string().email("Ingrese un email válido"),
+    phone: z.string().min(8, "Ingrese un número de teléfono válido"),
+    street: z.string().min(5, "La dirección es requerida"),
+    city: z.string().min(2, "La ciudad es requerida"),
+    state: z.string().min(2, "El estado/provincia es requerido"),
+    postalCode: z.string().min(3, "El código postal es requerido"),
+    fiscalCountry: z.string().min(1, "Seleccione un país"),
+    password: z
+      .string()
+      .min(8, "La contraseña debe tener al menos 8 caracteres"),
+    confirmPassword: z.string(),
+    acceptTerms: z
+      .boolean()
+      .refine((val) => val === true, "Debe aceptar los términos y condiciones"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Las contraseñas no coinciden",
+    path: ["confirmPassword"],
+  });
 
 type FormValues = z.infer<typeof formSchema>;
 
 const countries = [
-  "Costa Rica", "Panamá", "Colombia", "Venezuela", "Ecuador", "Perú", 
-  "Bolivia", "Chile", "Argentina", "Uruguay", "Paraguay", "Brasil",
-  "Guatemala", "Honduras", "El Salvador", "Nicaragua", "México"
+  "Costa Rica",
+  "Panamá",
+  "Colombia",
+  "Venezuela",
+  "Ecuador",
+  "Perú",
+  "Bolivia",
+  "Chile",
+  "Argentina",
+  "Uruguay",
+  "Paraguay",
+  "Brasil",
+  "Guatemala",
+  "Honduras",
+  "El Salvador",
+  "Nicaragua",
+  "México",
 ];
 
 const sectors = [
-  "Textil y Confección", "Calzado y Cuero", "Electrónicos", "Hogar y Decoración",
-  "Belleza y Cuidado Personal", "Deportes y Recreación", "Automotriz", 
-  "Herramientas e Industriales", "Alimentos Procesados", "Farmacéutico",
-  "Juguetes", "Muebles", "Metales y Minerales", "Otros"
+  "Textil y Confección",
+  "Calzado y Cuero",
+  "Electrónicos",
+  "Hogar y Decoración",
+  "Belleza y Cuidado Personal",
+  "Deportes y Recreación",
+  "Automotriz",
+  "Herramientas e Industriales",
+  "Alimentos Procesados",
+  "Farmacéutico",
+  "Juguetes",
+  "Muebles",
+  "Metales y Minerales",
+  "Otros",
 ];
 
 const steps = [
@@ -101,7 +153,7 @@ export default function Register() {
   const onSubmit = async (values: FormValues) => {
     setIsSubmitting(true);
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
     console.log("Form submitted:", values);
     setIsSubmitting(false);
     // Here you would typically redirect to a success page or dashboard
@@ -121,7 +173,7 @@ export default function Register() {
 
   const canProceed = () => {
     const fieldsToValidate = getFieldsForStep(currentStep);
-    return fieldsToValidate.every(field => {
+    return fieldsToValidate.every((field) => {
       const value = form.getValues(field as keyof FormValues);
       return value && value !== "";
     });
@@ -145,7 +197,7 @@ export default function Register() {
   return (
     <div className="min-h-screen bg-zlc-gray-50">
       <Navigation />
-      
+
       <div className="container-section py-12">
         <div className="mx-auto max-w-4xl">
           {/* Header */}
@@ -185,7 +237,8 @@ export default function Register() {
             <Progress value={progress} className="h-2" />
             <div className="mt-2 text-center">
               <span className="text-sm text-zlc-gray-600">
-                Paso {currentStep} de {steps.length}: {steps[currentStep - 1].title}
+                Paso {currentStep} de {steps.length}:{" "}
+                {steps[currentStep - 1].title}
               </span>
             </div>
           </div>
@@ -194,20 +247,29 @@ export default function Register() {
           <Card className="shadow-soft-lg">
             <CardHeader>
               <CardTitle className="flex items-center text-xl">
-                <steps[currentStep - 1].icon className="mr-2 h-6 w-6 text-zlc-blue-600" />
+                {(() => {
+                  const StepIcon = steps[currentStep - 1].icon;
+                  return (
+                    <StepIcon className="mr-2 h-6 w-6 text-zlc-blue-600" />
+                  );
+                })()}
                 {steps[currentStep - 1].title}
               </CardTitle>
               <CardDescription>
                 {currentStep === 1 && "Información básica de su empresa"}
-                {currentStep === 2 && "Datos de la persona de contacto principal"}
+                {currentStep === 2 &&
+                  "Datos de la persona de contacto principal"}
                 {currentStep === 3 && "Dirección fiscal de la empresa"}
-                {currentStep === 4 && "Configure su contraseña y acepte los términos"}
+                {currentStep === 4 &&
+                  "Configure su contraseña y acepte los términos"}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                  
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="space-y-6"
+                >
                   {/* Step 1: Company Information */}
                   {currentStep === 1 && (
                     <div className="space-y-6">
@@ -218,7 +280,10 @@ export default function Register() {
                           <FormItem>
                             <FormLabel>Nombre de la Empresa *</FormLabel>
                             <FormControl>
-                              <Input placeholder="Ej: Importadora del Caribe S.A." {...field} />
+                              <Input
+                                placeholder="Ej: Importadora del Caribe S.A."
+                                {...field}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -230,12 +295,18 @@ export default function Register() {
                         name="taxId"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Número de Registro Fiscal (NIT/RUC) *</FormLabel>
+                            <FormLabel>
+                              Número de Registro Fiscal (NIT/RUC) *
+                            </FormLabel>
                             <FormControl>
-                              <Input placeholder="Ej: 3-101-123456" {...field} />
+                              <Input
+                                placeholder="Ej: 3-101-123456"
+                                {...field}
+                              />
                             </FormControl>
                             <FormDescription>
-                              Ingrese el número de identificación tributaria de su empresa
+                              Ingrese el número de identificación tributaria de
+                              su empresa
                             </FormDescription>
                             <FormMessage />
                           </FormItem>
@@ -249,7 +320,10 @@ export default function Register() {
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel>País de Operación *</FormLabel>
-                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <Select
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
                                 <FormControl>
                                   <SelectTrigger>
                                     <SelectValue placeholder="Seleccione un país" />
@@ -274,7 +348,10 @@ export default function Register() {
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel>Sector o Industria *</FormLabel>
-                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <Select
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
                                 <FormControl>
                                   <SelectTrigger>
                                     <SelectValue placeholder="Seleccione un sector" />
@@ -307,7 +384,10 @@ export default function Register() {
                             <FormItem>
                               <FormLabel>Nombre Completo *</FormLabel>
                               <FormControl>
-                                <Input placeholder="Ej: Juan Carlos Pérez" {...field} />
+                                <Input
+                                  placeholder="Ej: Juan Carlos Pérez"
+                                  {...field}
+                                />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -321,7 +401,10 @@ export default function Register() {
                             <FormItem>
                               <FormLabel>Cargo *</FormLabel>
                               <FormControl>
-                                <Input placeholder="Ej: Gerente de Compras" {...field} />
+                                <Input
+                                  placeholder="Ej: Gerente de Compras"
+                                  {...field}
+                                />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -337,10 +420,10 @@ export default function Register() {
                             <FormItem>
                               <FormLabel>Email Corporativo *</FormLabel>
                               <FormControl>
-                                <Input 
-                                  type="email" 
-                                  placeholder="juan.perez@empresa.com" 
-                                  {...field} 
+                                <Input
+                                  type="email"
+                                  placeholder="juan.perez@empresa.com"
+                                  {...field}
                                 />
                               </FormControl>
                               <FormDescription>
@@ -358,7 +441,10 @@ export default function Register() {
                             <FormItem>
                               <FormLabel>Teléfono *</FormLabel>
                               <FormControl>
-                                <Input placeholder="+506 2234-5678" {...field} />
+                                <Input
+                                  placeholder="+506 2234-5678"
+                                  {...field}
+                                />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -378,11 +464,11 @@ export default function Register() {
                           <FormItem>
                             <FormLabel>Dirección *</FormLabel>
                             <FormControl>
-                              <Textarea 
+                              <Textarea
                                 placeholder="Ej: Calle 15, Avenida 3-5, Edificio Corporativo, Oficina 502"
                                 className="resize-none"
                                 rows={3}
-                                {...field} 
+                                {...field}
                               />
                             </FormControl>
                             <FormMessage />
@@ -440,7 +526,10 @@ export default function Register() {
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>País *</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
                               <FormControl>
                                 <SelectTrigger>
                                   <SelectValue placeholder="Seleccione un país" />
@@ -472,10 +561,15 @@ export default function Register() {
                             <FormItem>
                               <FormLabel>Contraseña *</FormLabel>
                               <FormControl>
-                                <Input type="password" placeholder="Mínimo 8 caracteres" {...field} />
+                                <Input
+                                  type="password"
+                                  placeholder="Mínimo 8 caracteres"
+                                  {...field}
+                                />
                               </FormControl>
                               <FormDescription>
-                                Use una contraseña segura con al menos 8 caracteres
+                                Use una contraseña segura con al menos 8
+                                caracteres
                               </FormDescription>
                               <FormMessage />
                             </FormItem>
@@ -489,7 +583,11 @@ export default function Register() {
                             <FormItem>
                               <FormLabel>Confirmar Contraseña *</FormLabel>
                               <FormControl>
-                                <Input type="password" placeholder="Repita la contraseña" {...field} />
+                                <Input
+                                  type="password"
+                                  placeholder="Repita la contraseña"
+                                  {...field}
+                                />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -508,8 +606,9 @@ export default function Register() {
                                 Proceso de Verificación
                               </p>
                               <p className="text-zlc-blue-700">
-                                Su empresa será verificada manualmente antes de obtener acceso completo a la plataforma. 
-                                Este proceso puede tomar de 1-3 días hábiles.
+                                Su empresa será verificada manualmente antes de
+                                obtener acceso completo a la plataforma. Este
+                                proceso puede tomar de 1-3 días hábiles.
                               </p>
                             </div>
                           </div>
@@ -542,7 +641,8 @@ export default function Register() {
                                   >
                                     Política de Privacidad
                                   </Link>
-                                  , incluyendo las cláusulas específicas sobre la Zona Libre de Colón.
+                                  , incluyendo las cláusulas específicas sobre
+                                  la Zona Libre de Colón.
                                 </FormLabel>
                                 <FormMessage />
                               </div>
@@ -557,13 +657,20 @@ export default function Register() {
                   <div className="flex items-center justify-between pt-6 border-t">
                     <div className="flex items-center space-x-4">
                       {currentStep > 1 && (
-                        <Button type="button" variant="outline" onClick={prevStep}>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={prevStep}
+                        >
                           <ArrowLeft className="mr-2 h-4 w-4" />
                           Anterior
                         </Button>
                       )}
-                      
-                      <Link to="/login" className="text-sm text-zlc-gray-600 hover:text-zlc-blue-600">
+
+                      <Link
+                        to="/login"
+                        className="text-sm text-zlc-gray-600 hover:text-zlc-blue-600"
+                      >
                         ¿Ya tiene una cuenta? Iniciar sesión
                       </Link>
                     </div>
@@ -585,7 +692,9 @@ export default function Register() {
                           disabled={isSubmitting || !form.formState.isValid}
                           className="bg-zlc-blue-800 hover:bg-zlc-blue-900"
                         >
-                          {isSubmitting ? "Registrando..." : "Registrar Empresa"}
+                          {isSubmitting
+                            ? "Registrando..."
+                            : "Registrar Empresa"}
                         </Button>
                       )}
                     </div>
