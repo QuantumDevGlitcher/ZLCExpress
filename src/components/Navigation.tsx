@@ -78,15 +78,20 @@ export function Navigation({ className }: NavigationProps) {
       <div className="container-section">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-zlc-blue-800 text-white">
-              <Building2 className="h-6 w-6" />
+          <Link
+            to="/"
+            className="flex items-center space-x-3 hover:opacity-90 transition-opacity"
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-zlc-blue-700 to-zlc-blue-900 text-white shadow-soft">
+              <Building2 className="h-7 w-7" />
             </div>
             <div className="flex flex-col">
-              <span className="text-lg font-bold text-zlc-blue-900">
+              <span className="text-xl font-bold text-zlc-blue-900 tracking-tight">
                 ZLC Express
               </span>
-              <span className="text-xs text-zlc-gray-600">B2B Marketplace</span>
+              <span className="text-sm text-zlc-gray-600 font-medium">
+                B2B Marketplace
+              </span>
             </div>
           </Link>
 
