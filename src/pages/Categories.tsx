@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -186,7 +186,9 @@ export default function Categories() {
   // Right sidebar states
   const [selectedContainerType, setSelectedContainerType] = useState("20'");
   const [containerCount, setContainerCount] = useState("2");
-  const [supplierStatus, setSupplierStatus] = useState("verificado");
+  const [selectedSupplierStatuses, setSelectedSupplierStatuses] = useState<
+    string[]
+  >(["verificado"]);
   const [leadTimeRange, setLeadTimeRange] = useState([5, 30]);
 
   // Filter and search logic
@@ -217,10 +219,20 @@ export default function Categories() {
     }
 
     // Supplier status filter
-    if (supplierStatus === "verificado") {
-      filtered = filtered.filter((lot) => lot.supplierVerified);
-    } else if (supplierStatus === "no-verificado") {
-      filtered = filtered.filter((lot) => !lot.supplierVerified);
+    if (selectedSupplierStatuses.length > 0) {
+      filtered = filtered.filter((lot) => {
+        if (
+          selectedSupplierStatuses.includes("verificado") &&
+          selectedSupplierStatuses.includes("no-verificado")
+        ) {
+          return true; // Show all if both are selected
+        } else if (selectedSupplierStatuses.includes("verificado")) {
+          return lot.supplierVerified;
+        } else if (selectedSupplierStatuses.includes("no-verificado")) {
+          return !lot.supplierVerified;
+        }
+        return false;
+      });
     }
 
     // Lead time filter
@@ -241,7 +253,7 @@ export default function Categories() {
     selectedCategory,
     searchQuery,
     selectedContainerType,
-    supplierStatus,
+    selectedSupplierStatuses,
     leadTimeRange,
     priceRange,
   ]);
@@ -554,13 +566,28 @@ export default function Categories() {
                   <label className="text-sm font-medium text-gray-900">
                     Estado del Proveedor:
                   </label>
-                  <RadioGroup
-                    value={supplierStatus}
-                    onValueChange={setSupplierStatus}
-                    className="space-y-2"
-                  >
+                  <div className="space-y-2">
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="verificado" id="verificado" />
+                      <Checkbox
+                        id="verificado"
+                        checked={selectedSupplierStatuses.includes(
+                          "verificado",
+                        )}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            setSelectedSupplierStatuses([
+                              ...selectedSupplierStatuses,
+                              "verificado",
+                            ]);
+                          } else {
+                            setSelectedSupplierStatuses(
+                              selectedSupplierStatuses.filter(
+                                (status) => status !== "verificado",
+                              ),
+                            );
+                          }
+                        }}
+                      />
                       <Label
                         htmlFor="verificado"
                         className="text-sm text-gray-700"
@@ -569,9 +596,25 @@ export default function Categories() {
                       </Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem
-                        value="no-verificado"
+                      <Checkbox
                         id="no-verificado"
+                        checked={selectedSupplierStatuses.includes(
+                          "no-verificado",
+                        )}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            setSelectedSupplierStatuses([
+                              ...selectedSupplierStatuses,
+                              "no-verificado",
+                            ]);
+                          } else {
+                            setSelectedSupplierStatuses(
+                              selectedSupplierStatuses.filter(
+                                (status) => status !== "no-verificado",
+                              ),
+                            );
+                          }
+                        }}
                       />
                       <Label
                         htmlFor="no-verificado"
@@ -580,7 +623,7 @@ export default function Categories() {
                         No Verificado
                       </Label>
                     </div>
-                  </RadioGroup>
+                  </div>
                 </div>
 
                 {/* Lead Time */}
