@@ -58,7 +58,7 @@ const formSchema = z
     contactName: z.string().min(2, "El nombre de contacto es requerido"),
     contactPosition: z.string().min(2, "El cargo es requerido"),
     email: z.string().email("Ingrese un email válido"),
-    phone: z.string().min(8, "Ingrese un número de teléfono válido"),
+    phone: z.string().min(8, "Ingrese un número de teléfono v��lido"),
     street: z.string().min(5, "La dirección es requerida"),
     city: z.string().min(2, "La ciudad es requerida"),
     state: z.string().min(2, "El estado/provincia es requerido"),
@@ -336,6 +336,56 @@ export default function Register() {
                       />
 
                       <div className="grid gap-6 md:grid-cols-2">
+                        <FormField
+                          control={form.control}
+                          name="country"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>País de Operación *</FormLabel>
+                              <FormControl>
+                                <SearchableCountrySelect
+                                  value={field.value}
+                                  onValueChange={field.onChange}
+                                  placeholder="Seleccione un país"
+                                  countriesByRegion={countriesByRegion}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="sector"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Sector o Industria *</FormLabel>
+                              <Select
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Seleccione un sector" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  {sectors.map((sector) => (
+                                    <SelectItem key={sector} value={sector}>
+                                      {sector}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
+                  )}
+
                   {/* Step 2: Contact Information */}
                   {currentStep === 2 && (
                     <div className="space-y-6">
@@ -489,36 +539,14 @@ export default function Register() {
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>País *</FormLabel>
-                            <Select
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                            >
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Seleccione un país" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent className="max-h-64">
-                                {Object.entries(countriesByRegion).map(
-                                  ([region, countries]) => (
-                                    <div key={region}>
-                                      <div className="px-2 py-1.5 text-xs font-semibold text-zlc-blue-800 bg-zlc-gray-100 border-b">
-                                        {region}
-                                      </div>
-                                      {countries.map((country) => (
-                                        <SelectItem
-                                          key={country}
-                                          value={country}
-                                          className="pl-4"
-                                        >
-                                          {country}
-                                        </SelectItem>
-                                      ))}
-                                    </div>
-                                  ),
-                                )}
-                              </SelectContent>
-                            </Select>
+                            <FormControl>
+                              <SearchableCountrySelect
+                                value={field.value}
+                                onValueChange={field.onChange}
+                                placeholder="Seleccione un país"
+                                countriesByRegion={countriesByRegion}
+                              />
+                            </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
