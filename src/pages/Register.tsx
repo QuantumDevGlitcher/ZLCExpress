@@ -569,12 +569,25 @@ export default function Register() {
                                   <SelectValue placeholder="Seleccione un país" />
                                 </SelectTrigger>
                               </FormControl>
-                              <SelectContent>
-                                {countries.map((country) => (
-                                  <SelectItem key={country} value={country}>
-                                    {country}
-                                  </SelectItem>
-                                ))}
+                              <SelectContent className="max-h-64">
+                                {Object.entries(countriesByRegion).map(
+                                  ([region, countries]) => (
+                                    <div key={region}>
+                                      <div className="px-2 py-1.5 text-xs font-semibold text-zlc-blue-800 bg-zlc-gray-100 border-b">
+                                        {region}
+                                      </div>
+                                      {countries.map((country) => (
+                                        <SelectItem
+                                          key={country}
+                                          value={country}
+                                          className="pl-4"
+                                        >
+                                          {country}
+                                        </SelectItem>
+                                      ))}
+                                    </div>
+                                  ),
+                                )}
                               </SelectContent>
                             </Select>
                             <FormMessage />
