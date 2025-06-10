@@ -98,7 +98,6 @@
     font-feature-settings:
       "rlig" 1,
       "calt" 1;
-    padding-top: 4rem; /* 64px to account for fixed header */
   }
 
   h1,
