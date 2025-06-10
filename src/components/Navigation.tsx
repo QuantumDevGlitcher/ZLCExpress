@@ -80,21 +80,20 @@ export function Navigation({ className }: NavigationProps) {
           {/* Logo */}
           <Link
             to="/"
-            className="flex items-center space-x-3 hover:opacity-90 transition-opacity"
+            className="flex items-center space-x-3 hover:opacity-90 transition-opacity min-w-fit"
           >
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-zlc-blue-700 to-zlc-blue-900 text-white shadow-soft">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-zlc-blue-700 to-zlc-blue-900 text-white shadow-soft flex-shrink-0">
               <Building2 className="h-7 w-7" />
             </div>
-            <div className="flex flex-col">
-              <span className="text-xl font-bold text-zlc-blue-900 tracking-tight">
+            <div className="flex flex-col justify-center min-w-0">
+              <span className="text-xl font-bold text-zlc-blue-900 tracking-tight whitespace-nowrap">
                 ZLC Express
               </span>
-              <span className="text-sm text-zlc-gray-600 font-medium">
+              <span className="text-sm text-zlc-gray-600 font-medium whitespace-nowrap">
                 B2B Marketplace
               </span>
             </div>
           </Link>
-
           {/* Desktop Navigation */}
           <NavigationMenu className="hidden lg:flex">
             <NavigationMenuList>
