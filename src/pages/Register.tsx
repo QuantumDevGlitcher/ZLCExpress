@@ -336,53 +336,24 @@ export default function Register() {
                       />
 
                       <div className="grid gap-6 md:grid-cols-2">
-                        <FormField
-                          control={form.control}
-                          name="country"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>País de Operación *</FormLabel>
-                              <FormControl>
-                                <SearchableCountrySelect
-                                  value={field.value}
-                                  onValueChange={field.onChange}
-                                  placeholder="Seleccione un país"
-                                  countriesByRegion={countriesByRegion}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={form.control}
-                          name="sector"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Sector o Industria *</FormLabel>
-                              <Select
+                      <FormField
+                        control={form.control}
+                        name="fiscalCountry"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>País *</FormLabel>
+                            <FormControl>
+                              <SearchableCountrySelect
+                                value={field.value}
                                 onValueChange={field.onChange}
-                                defaultValue={field.value}
-                              >
-                                <FormControl>
-                                  <SelectTrigger>
-                                    <SelectValue placeholder="Seleccione un sector" />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                  {sectors.map((sector) => (
-                                    <SelectItem key={sector} value={sector}>
-                                      {sector}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
+                                placeholder="Seleccione un país"
+                                countriesByRegion={countriesByRegion}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
                     </div>
                   )}
 
