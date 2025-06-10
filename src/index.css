@@ -95,29 +95,11 @@
 
   body {
     @apply bg-background text-foreground font-sans;
-    font-feature-settings: 'rlig' 1, 'calt' 1;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
     color: #000000; /* Force jet black for all text */
   }
-
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-semibold tracking-tight;
-    color: #000000; /* Jet black for headings */
-  }
-
-  p, span, div, label, button {
-    color: #000000; /* Jet black for common text elements */
-  }
-
-  /* Ensure inputs and form elements use jet black text */
-  input, textarea, select {
-    color: #000000 !important;
-  }
-
-  /* Override specific UI component text colors */
-  .text-gray-900, .text-gray-800, .text-gray-700, .text-gray-600, .text-slate-900, .text-slate-800, .text-slate-700 {
-    color: #000000 !important;
-  }
-}
 
   h1,
   h2,
@@ -126,6 +108,33 @@
   h5,
   h6 {
     @apply font-semibold tracking-tight;
+    color: #000000; /* Jet black for headings */
+  }
+
+  p,
+  span,
+  div,
+  label,
+  button {
+    color: #000000; /* Jet black for common text elements */
+  }
+
+  /* Ensure inputs and form elements use jet black text */
+  input,
+  textarea,
+  select {
+    color: #000000 !important;
+  }
+
+  /* Override specific UI component text colors */
+  .text-gray-900,
+  .text-gray-800,
+  .text-gray-700,
+  .text-gray-600,
+  .text-slate-900,
+  .text-slate-800,
+  .text-slate-700 {
+    color: #000000 !important;
   }
 }
 
