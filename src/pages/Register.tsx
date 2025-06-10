@@ -336,27 +336,6 @@ export default function Register() {
                       />
 
                       <div className="grid gap-6 md:grid-cols-2">
-                      <FormField
-                        control={form.control}
-                        name="fiscalCountry"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>País *</FormLabel>
-                            <FormControl>
-                              <SearchableCountrySelect
-                                value={field.value}
-                                onValueChange={field.onChange}
-                                placeholder="Seleccione un país"
-                                countriesByRegion={countriesByRegion}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  )}
-
                   {/* Step 2: Contact Information */}
                   {currentStep === 2 && (
                     <div className="space-y-6">
