@@ -204,15 +204,15 @@ export default function Index() {
                 <div className="flex items-center space-x-6 text-sm text-blue-200">
                   <div className="flex items-center">
                     <CheckCircle className="mr-2 h-4 w-4 text-green-400" />
-                    <span>Verificación empresarial</span>
+                    <span className="text-white">Verificación empresarial</span>
                   </div>
                   <div className="flex items-center">
                     <CheckCircle className="mr-2 h-4 w-4 text-green-400" />
-                    <span>Pagos seguros</span>
+                    <span className="text-white">Pagos seguros</span>
                   </div>
                   <div className="flex items-center">
                     <CheckCircle className="mr-2 h-4 w-4 text-green-400" />
-                    <span>Soporte 24/7</span>
+                    <span className="text-white">Soporte 24/7</span>
                   </div>
                 </div>
               </div>
