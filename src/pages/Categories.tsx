@@ -580,6 +580,10 @@ export default function Categories() {
                         }}
                         className="border-zlc-blue-800 data-[state=checked]:bg-zlc-blue-800 data-[state=checked]:border-zlc-blue-800"
                       />
+                      <Label
+                        htmlFor="verificado"
+                        className="text-sm text-gray-700"
+                      >
                         Verificado
                       </Label>
                     </div>
