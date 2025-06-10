@@ -79,23 +79,43 @@ const formSchema = z
 type FormValues = z.infer<typeof formSchema>;
 
 const countries = [
+  // Central America
+  "Belice",
   "Costa Rica",
-  "Panamá",
-  "Colombia",
-  "Venezuela",
-  "Ecuador",
-  "Perú",
-  "Bolivia",
-  "Chile",
-  "Argentina",
-  "Uruguay",
-  "Paraguay",
-  "Brasil",
+  "El Salvador",
   "Guatemala",
   "Honduras",
-  "El Salvador",
   "Nicaragua",
-  "México",
+  "Panamá",
+
+  // Caribbean
+  "Antigua y Barbuda",
+  "Bahamas",
+  "Barbados",
+  "Cuba",
+  "Dominica",
+  "Granada",
+  "Haití",
+  "Jamaica",
+  "República Dominicana",
+  "San Cristóbal y Nieves",
+  "Santa Lucía",
+  "San Vicente y las Granadinas",
+  "Trinidad y Tobago",
+
+  // South America
+  "Argentina",
+  "Bolivia",
+  "Brasil",
+  "Chile",
+  "Colombia",
+  "Ecuador",
+  "Guyana",
+  "Paraguay",
+  "Perú",
+  "Suriname",
+  "Uruguay",
+  "Venezuela",
 ];
 
 const sectors = [
