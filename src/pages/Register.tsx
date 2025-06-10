@@ -78,45 +78,46 @@ const formSchema = z
 
 type FormValues = z.infer<typeof formSchema>;
 
-const countries = [
-  // Central America
-  "Belice",
-  "Costa Rica",
-  "El Salvador",
-  "Guatemala",
-  "Honduras",
-  "Nicaragua",
-  "Panamá",
-
-  // Caribbean
-  "Antigua y Barbuda",
-  "Bahamas",
-  "Barbados",
-  "Cuba",
-  "Dominica",
-  "Granada",
-  "Haití",
-  "Jamaica",
-  "República Dominicana",
-  "San Cristóbal y Nieves",
-  "Santa Lucía",
-  "San Vicente y las Granadinas",
-  "Trinidad y Tobago",
-
-  // South America
-  "Argentina",
-  "Bolivia",
-  "Brasil",
-  "Chile",
-  "Colombia",
-  "Ecuador",
-  "Guyana",
-  "Paraguay",
-  "Perú",
-  "Suriname",
-  "Uruguay",
-  "Venezuela",
-];
+const countriesByRegion = {
+  "América Central": [
+    "Belice",
+    "Costa Rica",
+    "El Salvador",
+    "Guatemala",
+    "Honduras",
+    "Nicaragua",
+    "Panamá",
+  ],
+  Caribe: [
+    "Antigua y Barbuda",
+    "Bahamas",
+    "Barbados",
+    "Cuba",
+    "Dominica",
+    "Granada",
+    "Haití",
+    "Jamaica",
+    "República Dominicana",
+    "San Cristóbal y Nieves",
+    "Santa Lucía",
+    "San Vicente y las Granadinas",
+    "Trinidad y Tobago",
+  ],
+  "América del Sur": [
+    "Argentina",
+    "Bolivia",
+    "Brasil",
+    "Chile",
+    "Colombia",
+    "Ecuador",
+    "Guyana",
+    "Paraguay",
+    "Perú",
+    "Suriname",
+    "Uruguay",
+    "Venezuela",
+  ],
+};
 
 const sectors = [
   "Textil y Confección",
@@ -349,12 +350,25 @@ export default function Register() {
                                     <SelectValue placeholder="Seleccione un país" />
                                   </SelectTrigger>
                                 </FormControl>
-                                <SelectContent>
-                                  {countries.map((country) => (
-                                    <SelectItem key={country} value={country}>
-                                      {country}
-                                    </SelectItem>
-                                  ))}
+                                <SelectContent className="max-h-64">
+                                  {Object.entries(countriesByRegion).map(
+                                    ([region, countries]) => (
+                                      <div key={region}>
+                                        <div className="px-2 py-1.5 text-xs font-semibold text-zlc-blue-800 bg-zlc-gray-100 border-b">
+                                          {region}
+                                        </div>
+                                        {countries.map((country) => (
+                                          <SelectItem
+                                            key={country}
+                                            value={country}
+                                            className="pl-4"
+                                          >
+                                            {country}
+                                          </SelectItem>
+                                        ))}
+                                      </div>
+                                    ),
+                                  )}
                                 </SelectContent>
                               </Select>
                               <FormMessage />
