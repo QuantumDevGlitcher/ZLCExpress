@@ -1,0 +1,331 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Badge } from "@/components/ui/badge";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Building2,
+  ChevronDown,
+  Globe,
+  HelpCircle,
+  Home,
+  Menu,
+  Package,
+  Scale,
+  Settings,
+  ShoppingCart,
+  User,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+
+const languages = [
+  { code: "es", name: "Español", flag: "🇪🇸" },
+  { code: "en", name: "English", flag: "🇺🇸" },
+  { code: "pt", name: "Português", flag: "🇧🇷" },
+];
+
+const currencies = [
+  { code: "USD", name: "US Dollar", symbol: "$" },
+  { code: "EUR", name: "Euro", symbol: "€" },
+  { code: "CRC", name: "Costa Rican Colón", symbol: "₡" },
+  { code: "PAB", name: "Panamanian Balboa", symbol: "B/." },
+];
+
+const mainMenuItems = [
+  { label: "Inicio", href: "/", icon: Home },
+  { label: "Categorías", href: "/categories", icon: Package },
+  { label: "Cómo Funciona", href: "/how-it-works", icon: HelpCircle },
+  { label: "Ayuda/Soporte", href: "/support", icon: HelpCircle },
+  { label: "Marco Legal", href: "/legal", icon: Scale },
+];
+
+interface NavigationProps {
+  className?: string;
+}
+
+export function Navigation({ className }: NavigationProps) {
+  const [selectedLanguage, setSelectedLanguage] = useState(languages[0]);
+  const [selectedCurrency, setSelectedCurrency] = useState(currencies[0]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // This would come from auth context
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+
+  const companyStatus = "verified"; // This would come from auth context
+
+  return (
+    <header
+      className={cn(
+        "sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60",
+        className,
+      )}
+    >
+      <div className="container-section">
+        <div className="flex h-16 items-center justify-between">
+          {/* Logo */}
+          <Link to="/" className="flex items-center space-x-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-zlc-blue-800 text-white">
+              <Building2 className="h-6 w-6" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-lg font-bold text-zlc-blue-900">
+                ZLC Express
+              </span>
+              <span className="text-xs text-zlc-gray-600">B2B Marketplace</span>
+            </div>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <NavigationMenu className="hidden lg:flex">
+            <NavigationMenuList>
+              {mainMenuItems.map((item) => (
+                <NavigationMenuItem key={item.href}>
+                  <NavigationMenuLink asChild>
+                    <Link
+                      to={item.href}
+                      className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-zlc-gray-100 hover:text-zlc-blue-800 focus:bg-zlc-gray-100 focus:text-zlc-blue-800 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+                    >
+                      <item.icon className="mr-2 h-4 w-4" />
+                      {item.label}
+                    </Link>
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+              ))}
+            </NavigationMenuList>
+          </NavigationMenu>
+
+          {/* Right side controls */}
+          <div className="flex items-center space-x-4">
+            {/* Language & Currency Selector */}
+            <div className="hidden md:flex items-center space-x-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="h-9 px-3">
+                    <Globe className="mr-2 h-4 w-4" />
+                    <span className="mr-1">{selectedLanguage.flag}</span>
+                    <span className="mr-2 text-sm">
+                      {selectedLanguage.code.toUpperCase()}
+                    </span>
+                    <span className="mx-1">|</span>
+                    <span className="ml-1 text-sm font-medium">
+                      {selectedCurrency.symbol}
+                    </span>
+                    <ChevronDown className="ml-2 h-3 w-3" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel>Idioma</DropdownMenuLabel>
+                  <DropdownMenuGroup>
+                    {languages.map((lang) => (
+                      <DropdownMenuItem
+                        key={lang.code}
+                        onClick={() => setSelectedLanguage(lang)}
+                        className={cn(
+                          selectedLanguage.code === lang.code &&
+                            "bg-zlc-blue-50",
+                        )}
+                      >
+                        <span className="mr-2">{lang.flag}</span>
+                        {lang.name}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuLabel>Moneda</DropdownMenuLabel>
+                  <DropdownMenuGroup>
+                    {currencies.map((currency) => (
+                      <DropdownMenuItem
+                        key={currency.code}
+                        onClick={() => setSelectedCurrency(currency)}
+                        className={cn(
+                          selectedCurrency.code === currency.code &&
+                            "bg-zlc-blue-50",
+                        )}
+                      >
+                        <span className="mr-2 font-mono text-sm">
+                          {currency.symbol}
+                        </span>
+                        {currency.name}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+
+            {/* User Authentication */}
+            {isLoggedIn ? (
+              <div className="flex items-center space-x-3">
+                {companyStatus === "verified" && (
+                  <Badge
+                    variant="secondary"
+                    className="bg-green-100 text-green-800"
+                  >
+                    Empresa Verificada
+                  </Badge>
+                )}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm" className="h-9">
+                      <User className="mr-2 h-4 w-4" />
+                      Mi Cuenta
+                      <ChevronDown className="ml-2 h-3 w-3" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>
+                      <ShoppingCart className="mr-2 h-4 w-4" />
+                      Dashboard
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Package className="mr-2 h-4 w-4" />
+                      Mis Pedidos
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Settings className="mr-2 h-4 w-4" />
+                      Configuración
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => setIsLoggedIn(false)}>
+                      Cerrar Sesión
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            ) : (
+              <div className="hidden sm:flex items-center space-x-3">
+                <Button variant="ghost" asChild>
+                  <Link to="/login">Iniciar Sesión</Link>
+                </Button>
+                <Button
+                  asChild
+                  className="bg-zlc-blue-800 hover:bg-zlc-blue-900"
+                >
+                  <Link to="/register">Registrar Empresa</Link>
+                </Button>
+              </div>
+            )}
+
+            {/* Mobile Menu */}
+            <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="lg:hidden">
+                  <Menu className="h-5 w-5" />
+                  <span className="sr-only">Toggle menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-80">
+                <div className="flex flex-col space-y-6 mt-6">
+                  {/* Mobile Navigation */}
+                  <nav className="flex flex-col space-y-2">
+                    {mainMenuItems.map((item) => (
+                      <Link
+                        key={item.href}
+                        to={item.href}
+                        onClick={() => setIsSheetOpen(false)}
+                        className="flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-zlc-gray-100"
+                      >
+                        <item.icon className="mr-3 h-4 w-4" />
+                        {item.label}
+                      </Link>
+                    ))}
+                  </nav>
+
+                  {/* Mobile Language & Currency */}
+                  <div className="space-y-4 border-t pt-6">
+                    <div>
+                      <h4 className="text-sm font-medium mb-2">Idioma</h4>
+                      <div className="space-y-1">
+                        {languages.map((lang) => (
+                          <button
+                            key={lang.code}
+                            onClick={() => setSelectedLanguage(lang)}
+                            className={cn(
+                              "flex w-full items-center rounded-lg px-3 py-2 text-sm",
+                              selectedLanguage.code === lang.code
+                                ? "bg-zlc-blue-100 text-zlc-blue-900"
+                                : "hover:bg-zlc-gray-100",
+                            )}
+                          >
+                            <span className="mr-2">{lang.flag}</span>
+                            {lang.name}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <h4 className="text-sm font-medium mb-2">Moneda</h4>
+                      <div className="space-y-1">
+                        {currencies.map((currency) => (
+                          <button
+                            key={currency.code}
+                            onClick={() => setSelectedCurrency(currency)}
+                            className={cn(
+                              "flex w-full items-center rounded-lg px-3 py-2 text-sm",
+                              selectedCurrency.code === currency.code
+                                ? "bg-zlc-blue-100 text-zlc-blue-900"
+                                : "hover:bg-zlc-gray-100",
+                            )}
+                          >
+                            <span className="mr-2 font-mono">
+                              {currency.symbol}
+                            </span>
+                            {currency.name}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Mobile Auth */}
+                  {!isLoggedIn && (
+                    <div className="space-y-2 border-t pt-6">
+                      <Button
+                        variant="ghost"
+                        asChild
+                        className="w-full justify-start"
+                      >
+                        <Link to="/login" onClick={() => setIsSheetOpen(false)}>
+                          Iniciar Sesión
+                        </Link>
+                      </Button>
+                      <Button
+                        asChild
+                        className="w-full bg-zlc-blue-800 hover:bg-zlc-blue-900"
+                      >
+                        <Link
+                          to="/register"
+                          onClick={() => setIsSheetOpen(false)}
+                        >
+                          Registrar Empresa
+                        </Link>
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}
