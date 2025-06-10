@@ -288,7 +288,7 @@ export default function Categories() {
     <div className="min-h-screen bg-white">
       <Navigation />
 
-      <main style={{ paddingTop: "80px" }}>
+      <main className="pt-14 sm:pt-16 md:pt-20">
         <div className="flex">
           {/* Left Sidebar - Categories */}
           <aside className="w-64 bg-gray-100 border-r border-gray-300 min-h-screen">

@@ -75,27 +75,27 @@ export function Navigation({ className }: NavigationProps) {
         className,
       )}
     >
-      <div className="container-section">
-        <div className="flex h-16 items-center justify-between gap-4">
+      <div className="w-full max-w-none px-4 sm:px-6 lg:px-8 xl:max-w-7xl xl:mx-auto">
+        <div className="flex h-14 sm:h-16 items-center justify-between gap-2 sm:gap-4">
           {/* Logo */}
           <Link
             to="/"
-            className="flex items-center space-x-3 hover:opacity-90 transition-opacity min-w-fit"
+            className="flex items-center space-x-2 sm:space-x-3 hover:opacity-90 transition-opacity min-w-fit flex-shrink-0"
           >
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-zlc-blue-700 to-zlc-blue-900 text-white shadow-soft flex-shrink-0">
-              <Building2 className="h-7 w-7" />
+            <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-lg sm:rounded-xl bg-gradient-to-br from-zlc-blue-700 to-zlc-blue-900 text-white shadow-soft">
+              <Building2 className="h-5 w-5 sm:h-7 sm:w-7" />
             </div>
-            <div className="flex flex-col justify-center min-w-0">
-              <span className="text-xl font-bold text-zlc-blue-900 tracking-tight whitespace-nowrap">
+            <div className="hidden sm:flex flex-col justify-center min-w-0">
+              <span className="text-lg sm:text-xl font-bold text-zlc-blue-900 tracking-tight whitespace-nowrap">
                 ZLC Express
               </span>
-              <span className="text-sm text-zlc-gray-600 font-medium whitespace-nowrap">
+              <span className="text-xs sm:text-sm text-zlc-gray-600 font-medium whitespace-nowrap">
                 B2B Marketplace
               </span>
             </div>
           </Link>
           {/* Desktop Navigation */}
-          <NavigationMenu className="hidden lg:flex">
+          <NavigationMenu className="hidden xl:flex">
             <NavigationMenuList>
               {mainMenuItems.map((item) => (
                 <NavigationMenuItem key={item.href}>
@@ -116,7 +116,7 @@ export function Navigation({ className }: NavigationProps) {
           {/* Right side controls */}
           <div className="flex items-center space-x-4">
             {/* Language & Currency Selector */}
-            <div className="hidden md:flex items-center space-x-2">
+            <div className="hidden lg:flex items-center space-x-2">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm" className="h-9 px-3">
@@ -214,7 +214,7 @@ export function Navigation({ className }: NavigationProps) {
                 </DropdownMenu>
               </div>
             ) : (
-              <div className="hidden sm:flex items-center space-x-3">
+              <div className="hidden md:flex items-center space-x-3">
                 <Button variant="ghost" asChild>
                   <Link to="/login">Iniciar Sesión</Link>
                 </Button>
@@ -230,7 +230,7 @@ export function Navigation({ className }: NavigationProps) {
             {/* Mobile Menu */}
             <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="lg:hidden">
+                <Button variant="ghost" size="icon" className="xl:hidden">
                   <Menu className="h-5 w-5" />
                   <span className="sr-only">Toggle menu</span>
                 </Button>

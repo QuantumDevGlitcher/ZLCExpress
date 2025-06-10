@@ -151,7 +151,7 @@ export default function Index() {
     <div className="min-h-screen bg-white">
       <Navigation />
 
-      <main style={{ paddingTop: "80px" }}>
+      <main className="pt-14 sm:pt-16 md:pt-20">
         {/* Hero Section */}
         <section className="relative overflow-hidden bg-gradient-to-br from-zlc-blue-900 via-zlc-blue-800 to-zlc-blue-700">
           <div
