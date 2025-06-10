@@ -355,7 +355,7 @@ export default function Categories() {
                                   onCheckedChange={() =>
                                     toggleSubcategory(category.id, subSub.id)
                                   }
-                                  className="h-3 w-3"
+                                  className="h-3 w-3 border-zlc-blue-800 data-[state=checked]:bg-zlc-blue-800 data-[state=checked]:border-zlc-blue-800"
                                 />
                                 <label
                                   htmlFor={subSub.id}
@@ -381,7 +381,7 @@ export default function Categories() {
                             <Checkbox
                               id={sub.id}
                               checked={sub.checked}
-                              className="h-3 w-3"
+                              className="h-3 w-3 border-zlc-blue-800 data-[state=checked]:bg-zlc-blue-800 data-[state=checked]:border-zlc-blue-800"
                             />
                             <label
                               htmlFor={sub.id}
@@ -570,56 +570,32 @@ export default function Categories() {
                     <div className="flex items-center space-x-2">
                       <Checkbox
                         id="verificado"
-                        checked={selectedSupplierStatuses.includes(
-                          "verificado",
-                        )}
+                        checked={selectedSupplierStatuses.includes("verificado")}
                         onCheckedChange={(checked) => {
                           if (checked) {
-                            setSelectedSupplierStatuses([
-                              ...selectedSupplierStatuses,
-                              "verificado",
-                            ]);
+                            setSelectedSupplierStatuses([...selectedSupplierStatuses, "verificado"]);
                           } else {
-                            setSelectedSupplierStatuses(
-                              selectedSupplierStatuses.filter(
-                                (status) => status !== "verificado",
-                              ),
-                            );
+                            setSelectedSupplierStatuses(selectedSupplierStatuses.filter(status => status !== "verificado"));
                           }
                         }}
+                        className="border-zlc-blue-800 data-[state=checked]:bg-zlc-blue-800 data-[state=checked]:border-zlc-blue-800"
                       />
-                      <Label
-                        htmlFor="verificado"
-                        className="text-sm text-gray-700"
-                      >
                         Verificado
                       </Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <Checkbox
                         id="no-verificado"
-                        checked={selectedSupplierStatuses.includes(
-                          "no-verificado",
-                        )}
+                        checked={selectedSupplierStatuses.includes("no-verificado")}
                         onCheckedChange={(checked) => {
                           if (checked) {
-                            setSelectedSupplierStatuses([
-                              ...selectedSupplierStatuses,
-                              "no-verificado",
-                            ]);
+                            setSelectedSupplierStatuses([...selectedSupplierStatuses, "no-verificado"]);
                           } else {
-                            setSelectedSupplierStatuses(
-                              selectedSupplierStatuses.filter(
-                                (status) => status !== "no-verificado",
-                              ),
-                            );
+                            setSelectedSupplierStatuses(selectedSupplierStatuses.filter(status => status !== "no-verificado"));
                           }
                         }}
+                        className="border-zlc-blue-800 data-[state=checked]:bg-zlc-blue-800 data-[state=checked]:border-zlc-blue-800"
                       />
-                      <Label
-                        htmlFor="no-verificado"
-                        className="text-sm text-gray-700"
-                      >
                         No Verificado
                       </Label>
                     </div>
