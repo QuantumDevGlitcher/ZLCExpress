@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { useCart } from "@/contexts/CartContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -200,6 +201,7 @@ function FixedChat() {
 
 export default function ProductDetail() {
   const { id } = useParams();
+  const { addItem } = useCart();
   const [selectedQuantity, setSelectedQuantity] = useState(1);
   const [customPrice, setCustomPrice] = useState("");
   const [showCustomQuote, setShowCustomQuote] = useState(false);
@@ -220,6 +222,23 @@ export default function ProductDetail() {
     return product.pricing.discounts.find(
       (d) => selectedQuantity >= d.quantity,
     );
+  };
+
+  const handleAddToCart = () => {
+    addItem({
+      productId: product.id,
+      productTitle: product.title,
+      productImage: product.images[0],
+      supplier: product.supplier.name,
+      supplierId: product.supplier.name, // In a real app, this would be a proper ID
+      containerType: product.specifications.containerType,
+      quantity: selectedQuantity,
+      pricePerContainer: product.pricing.pricePerContainer,
+      currency: product.pricing.currency,
+      incoterm: product.logistics.incoterm,
+      customPrice: customPrice ? parseFloat(customPrice) : undefined,
+      notes: "",
+    });
   };
 
   return (
@@ -608,10 +627,21 @@ export default function ProductDetail() {
                     </div>
                   </div>
 
-                  <Button className="w-full bg-zlc-blue-600 hover:bg-zlc-blue-700 h-12">
-                    <Send className="w-4 h-4 mr-2" />
-                    Enviar Oferta
-                  </Button>
+                  <div className="space-y-2">
+                    <Button
+                      onClick={handleAddToCart}
+                      className="w-full bg-zlc-blue-600 hover:bg-zlc-blue-700 h-12"
+                    >
+                      <Package className="w-4 h-4 mr-2" />
+                      Agregar al Carrito
+                    </Button>
+                    <Button variant="outline" className="w-full h-10" asChild>
+                      <Link to="/cart">
+                        <Send className="w-4 h-4 mr-2" />
+                        Ver Carrito
+                      </Link>
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
 

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { CartDropdown } from "@/components/CartDropdown";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -115,6 +116,8 @@ export function Navigation({ className }: NavigationProps) {
 
           {/* Right side controls */}
           <div className="flex items-center space-x-4">
+            {/* Cart Dropdown */}
+            <CartDropdown />
             {/* Language & Currency Selector */}
             <div className="hidden lg:flex items-center space-x-2">
               <DropdownMenu>
@@ -220,7 +223,7 @@ export function Navigation({ className }: NavigationProps) {
                 </Button>
                 <Button
                   asChild
-                  className="bg-zlc-blue-800 hover:bg-zlc-blue-900 text-white"
+                  className="bg-zlc-blue-800 hover:bg-zlc-blue-900"
                 >
                   <Link to="/register">Registrar Empresa</Link>
                 </Button>
