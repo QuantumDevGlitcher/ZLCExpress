@@ -580,13 +580,51 @@ export default function Categories() {
                         )}
                         onCheckedChange={(checked) => {
                           if (checked) {
-                          <Button
-                            asChild
-              <Button
-                asChild
-                className="bg-zlc-blue-800 hover:bg-zlc-blue-900"
-              >
-                <Link to={`/product/${lot.id}`}>
+                            setSelectedSupplierStatuses([...selectedSupplierStatuses, "no-verificado"]);
+                          } else {
+                            setSelectedSupplierStatuses(selectedSupplierStatuses.filter(status => status !== "no-verificado"));
+                          }
+                        }}
+                        className="border-zlc-blue-800 data-[state=checked]:bg-zlc-blue-800 data-[state=checked]:border-zlc-blue-800"
+                      />
+                      <Label
+                        htmlFor="no-verificado"
+                        className="text-sm text-gray-700"
+                      >
+                        No Verificado
+                      </Label>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Lead Time */}
+                <div className="space-y-3">
+                  <div className="text-sm font-medium text-gray-900">
+                    Lead Time: {leadTimeRange[0]}-{leadTimeRange[1]} días
+                  </div>
+                  <div className="relative">
+                    <Slider
+                      value={leadTimeRange}
+                      onValueChange={setLeadTimeRange}
+                      max={60}
+                      min={5}
+                      step={5}
+                      className="w-full"
+                    />
+                    <div className="flex justify-between mt-1">
+                      <span className="text-xs text-gray-500">5</span>
+                      <span className="text-xs text-gray-500">60</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
                   <Eye className="mr-2 h-4 w-4" />
                   Ver detalles del lote
                 </Link>
