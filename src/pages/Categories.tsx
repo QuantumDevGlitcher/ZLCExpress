@@ -498,8 +498,13 @@ export default function Categories() {
                             </div>
                           </div>
 
-                          <Button className="bg-slate-700 hover:bg-slate-800 text-white px-6 py-2 rounded">
-                            Ver detalles →
+                          <Button
+                            asChild
+                            className="bg-slate-700 hover:bg-slate-800 text-white px-6 py-2 rounded"
+                          >
+                            <Link to={`/product/${lot.id}`}>
+                              Ver detalles →
+                            </Link>
                           </Button>
                         </div>
                       </div>
@@ -575,13 +580,17 @@ export default function Categories() {
                         )}
                         onCheckedChange={(checked) => {
                           if (checked) {
-                            setSelectedSupplierStatuses([
-                              ...selectedSupplierStatuses,
-                              "verificado",
-                            ]);
-                          } else {
-                            setSelectedSupplierStatuses(
-                              selectedSupplierStatuses.filter(
+                          <Button
+                            asChild
+              <Button
+                asChild
+                className="bg-zlc-blue-800 hover:bg-zlc-blue-900"
+              >
+                <Link to={`/product/${lot.id}`}>
+                  <Eye className="mr-2 h-4 w-4" />
+                  Ver detalles del lote
+                </Link>
+              </Button>
                                 (status) => status !== "verificado",
                               ),
                             );
