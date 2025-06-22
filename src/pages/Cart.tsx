@@ -554,18 +554,33 @@ export default function Cart() {
                       <p className="font-medium text-green-900 mb-1">
                         Proceso Seguro
                       </p>
-                      <p className="text-green-700">
-                        Todas las cotizaciones son verificadas por nuestro
-                        equipo antes del envío. Sus datos están protegidos.
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
+                        <Send className="ml-2 h-4 w-4" />
+                      </>
+                    )}
+                  </Button>
+
+                  {/* Shipping Request Button */}
+                  <Link
+                    to="/shipping-request"
+                    state={{ quoteId: `quote-${Date.now()}` }}
+                  >
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="border-zlc-blue-600 text-zlc-blue-600 hover:bg-zlc-blue-50"
+                    >
+                      <Truck className="mr-2 h-4 w-4" />
+                      Solicitar Envío
+                    </Button>
+                  </Link>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
         </div>
-      </main>
+      </div>
     </div>
+  );
+}
   );
 }
