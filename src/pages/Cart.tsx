@@ -32,6 +32,7 @@ import {
   CheckCircle,
   Plus,
   Minus,
+  Ship,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -96,36 +97,29 @@ export default function Cart() {
     });
 
     setIsSubmitting(false);
-
-    // Reset form
-    setPaymentConditions("");
-    setPurchaseOrderFile(null);
-    setFreightEstimate(0);
-    setNotes("");
-
-    // Show success message (you could use a toast here)
-    alert("¡Solicitud de cotización enviada exitosamente!");
   };
 
+  // Empty cart state
   if (state.items.length === 0) {
     return (
       <div className="min-h-screen bg-zlc-gray-50">
         <Navigation />
         <main className="pt-14 sm:pt-16 md:pt-20">
-          <div className="container-section py-12">
-            <div className="max-w-4xl mx-auto text-center">
-              <Package className="h-24 w-24 text-gray-300 mx-auto mb-6" />
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">
-                Tu carrito está vacío
-              </h1>
-              <p className="text-lg text-gray-600 mb-8">
-                Explora nuestro catálogo y agrega productos para solicitar
-                cotizaciones
-              </p>
-              <Button asChild className="bg-zlc-blue-600 hover:bg-zlc-blue-700">
-                <Link to="/categories">Explorar Productos</Link>
-              </Button>
-            </div>
+          <div className="container-section py-16 text-center">
+            <Package className="h-16 w-16 text-gray-400 mx-auto mb-6" />
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">
+              Su carrito está vacío
+            </h1>
+            <p className="text-gray-600 mb-8">
+              Explore nuestro catálogo y agregue productos para solicitar
+              cotizaciones
+            </p>
+            <Button asChild className="btn-professional">
+              <Link to="/categories">
+                <Package className="h-4 w-4 mr-2" />
+                Explorar Catálogo
+              </Link>
+            </Button>
           </div>
         </main>
       </div>
@@ -197,21 +191,22 @@ export default function Cart() {
                         <div className="flex-1 space-y-3">
                           <div className="flex items-start justify-between">
                             <div>
-                              <h3 className="font-semibold text-gray-900">
+                              <h3 className="font-medium text-gray-900 line-clamp-2">
                                 {item.productTitle}
                               </h3>
-                              <div className="flex items-center text-sm text-gray-600 mt-1">
-                                <Building className="h-3 w-3 mr-1" />
-                                {item.supplier}
-                              </div>
-                              <div className="flex items-center space-x-4 mt-2">
-                                <Badge variant="outline">
+                              <div className="flex items-center gap-2 mt-1">
+                                <Building className="h-3 w-3 text-gray-400" />
+                                <span className="text-sm text-gray-600">
+                                  {item.supplier}
+                                </span>
+                                <Badge
+                                  variant="outline"
+                                  className="text-xs px-1 py-0"
+                                >
                                   {item.containerType}
                                 </Badge>
-                                <Badge variant="outline">{item.incoterm}</Badge>
                               </div>
                             </div>
-
                             <Button
                               variant="ghost"
                               size="sm"
@@ -225,7 +220,9 @@ export default function Cart() {
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             {/* Quantity */}
                             <div>
-                              <Label className="text-sm">Contenedores</Label>
+                              <Label className="text-xs text-gray-500">
+                                Cantidad (Contenedores)
+                              </Label>
                               <div className="flex items-center space-x-2 mt-1">
                                 <Button
                                   variant="outline"
@@ -238,18 +235,9 @@ export default function Cart() {
                                 >
                                   <Minus className="h-3 w-3" />
                                 </Button>
-                                <Input
-                                  type="number"
-                                  value={item.quantity}
-                                  onChange={(e) =>
-                                    updateQuantity(
-                                      item.id,
-                                      parseInt(e.target.value) || 1,
-                                    )
-                                  }
-                                  className="h-8 w-16 text-center"
-                                  min="1"
-                                />
+                                <span className="font-medium w-8 text-center">
+                                  {item.quantity}
+                                </span>
                                 <Button
                                   variant="outline"
                                   size="sm"
@@ -265,47 +253,45 @@ export default function Cart() {
 
                             {/* Price per Container */}
                             <div>
-                              <Label className="text-sm">
-                                Precio por Contenedor
+                              <Label className="text-xs text-gray-500">
+                                Precio Unitario ({item.currency})
                               </Label>
-                              <div className="mt-1">
-                                <Input
-                                  type="number"
-                                  placeholder={`${item.pricePerContainer}`}
-                                  value={item.customPrice || ""}
-                                  onChange={(e) =>
-                                    handleCustomPriceChange(
-                                      item.id,
-                                      e.target.value,
-                                    )
-                                  }
-                                  className="h-8"
-                                />
-                                <div className="text-xs text-gray-500 mt-1">
-                                  Precio base: $
-                                  {item.pricePerContainer.toLocaleString()}
-                                </div>
-                              </div>
+                              <Input
+                                type="number"
+                                value={
+                                  item.customPrice || item.pricePerContainer
+                                }
+                                onChange={(e) =>
+                                  handleCustomPriceChange(
+                                    item.id,
+                                    e.target.value,
+                                  )
+                                }
+                                className="h-8 text-sm mt-1"
+                                placeholder="Precio personalizado"
+                              />
                             </div>
 
-                            {/* Subtotal */}
+                            {/* Total */}
                             <div>
-                              <Label className="text-sm">Subtotal</Label>
+                              <Label className="text-xs text-gray-500">
+                                Total Línea
+                              </Label>
                               <div className="mt-1">
-                                <div className="h-8 flex items-center">
-                                  <span className="font-semibold text-lg text-zlc-blue-900">
-                                    $
-                                    {(
-                                      (item.customPrice ||
-                                        item.pricePerContainer) * item.quantity
-                                    ).toLocaleString()}
-                                  </span>
-                                </div>
-                                <div className="text-xs text-gray-500">
-                                  {item.currency}
-                                </div>
+                                <span className="font-bold text-lg text-zlc-blue-600">
+                                  $
+                                  {(
+                                    (item.customPrice ||
+                                      item.pricePerContainer) * item.quantity
+                                  ).toLocaleString()}
+                                </span>
                               </div>
                             </div>
+                          </div>
+
+                          <div className="text-xs text-gray-500">
+                            Incoterm: {item.incoterm} | MOQ:{" "}
+                            {item.quantity * 20}+ unidades
                           </div>
                         </div>
                       </div>
@@ -322,102 +308,83 @@ export default function Cart() {
                     Condiciones de Pago
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <Label htmlFor="payment">Condiciones Deseadas</Label>
-                    <Select
-                      value={paymentConditions}
-                      onValueChange={setPaymentConditions}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Seleccione condiciones de pago" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="30-70-bl">
-                          30% Anticipo, 70% contra BL
-                        </SelectItem>
-                        <SelectItem value="50-50-bl">
-                          50% Anticipo, 50% contra BL
-                        </SelectItem>
-                        <SelectItem value="lc-sight">
-                          Carta de Crédito a la Vista
-                        </SelectItem>
-                        <SelectItem value="lc-30">
-                          Carta de Crédito 30 días
-                        </SelectItem>
-                        <SelectItem value="100-advance">
-                          100% Anticipo
-                        </SelectItem>
-                        <SelectItem value="custom">Personalizado</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {paymentConditions === "custom" && (
-                    <div>
-                      <Label htmlFor="customPayment">
+                <CardContent>
+                  <Select
+                    value={paymentConditions}
+                    onValueChange={setPaymentConditions}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Seleccione condiciones de pago" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="30-70-bl">
+                        30% Anticipo - 70% contra B/L
+                      </SelectItem>
+                      <SelectItem value="letter-credit">
+                        Carta de Crédito (L/C)
+                      </SelectItem>
+                      <SelectItem value="50-50">
+                        50% Anticipo - 50% contra Embarque
+                      </SelectItem>
+                      <SelectItem value="prepaid">
+                        Pago Total Anticipado
+                      </SelectItem>
+                      <SelectItem value="custom">
                         Condiciones Personalizadas
-                      </Label>
-                      <Textarea
-                        id="customPayment"
-                        placeholder="Describa sus condiciones de pago deseadas..."
-                        className="min-h-20"
-                      />
-                    </div>
-                  )}
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs text-gray-500 mt-2">
+                    Las condiciones finales serán negociadas con cada proveedor
+                  </p>
                 </CardContent>
               </Card>
 
               {/* Purchase Order Upload */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <FileText className="h-5 w-5 mr-2 text-zlc-blue-600" />
-                    Orden de Compra (Opcional)
-                  </CardTitle>
+                  <CardTitle>Orden de Compra (Opcional)</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div
-                      className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-zlc-blue-400 transition-colors"
-                      onClick={() => fileInputRef.current?.click()}
-                    >
-                      <Upload className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-                      <p className="text-sm text-gray-600">
-                        {purchaseOrderFile
-                          ? `Archivo seleccionado: ${purchaseOrderFile.name}`
-                          : "Haga clic para adjuntar su Orden de Compra oficial (PDF, Word)"}
-                      </p>
-                      <p className="text-xs text-gray-500 mt-1">Máximo 10MB</p>
-                    </div>
-
+                <CardContent className="space-y-4">
+                  <div>
                     <input
                       ref={fileInputRef}
                       type="file"
-                      accept=".pdf,.doc,.docx"
                       onChange={handleFileUpload}
+                      accept=".pdf,.doc,.docx,.xls,.xlsx"
                       className="hidden"
                     />
-
-                    {purchaseOrderFile && (
-                      <div className="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-lg">
-                        <div className="flex items-center">
-                          <FileText className="h-4 w-4 text-green-600 mr-2" />
-                          <span className="text-sm text-green-800">
-                            {purchaseOrderFile.name}
-                          </span>
-                        </div>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => setPurchaseOrderFile(null)}
-                          className="text-red-500 hover:text-red-700"
-                        >
-                          <Trash2 className="h-3 w-3" />
-                        </Button>
-                      </div>
-                    )}
+                    <Button
+                      variant="outline"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="w-full"
+                    >
+                      <Upload className="h-4 w-4 mr-2" />
+                      Subir Orden de Compra
+                    </Button>
+                    <p className="text-xs text-gray-500 mt-1">
+                      Formatos aceptados: PDF, DOC, XLS (máx. 10MB)
+                    </p>
                   </div>
+
+                  {purchaseOrderFile && (
+                    <div className="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-lg">
+                      <div className="flex items-center">
+                        <FileText className="h-4 w-4 text-green-600 mr-2" />
+                        <span className="text-sm text-green-800">
+                          {purchaseOrderFile.name}
+                        </span>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setPurchaseOrderFile(null)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 
@@ -464,9 +431,15 @@ export default function Cart() {
                     </p>
                   </div>
 
-                  <Button variant="outline" className="w-full">
-                    Solicitar Cotización de Flete
-                  </Button>
+                  <Link
+                    to="/shipping-request"
+                    state={{ quoteId: `quote-${Date.now()}` }}
+                  >
+                    <Button variant="outline" className="w-full">
+                      <Ship className="h-4 w-4 mr-2" />
+                      Solicitar Cotización de Flete
+                    </Button>
+                  </Link>
                 </CardContent>
               </Card>
 
@@ -505,35 +478,49 @@ export default function Cart() {
 
                     <Separator />
 
-                    <div className="flex justify-between items-center">
-                      <span className="text-lg font-semibold">
-                        Total Estimado:
-                      </span>
-                      <span className="text-xl font-bold text-zlc-blue-900">
-                        ${grandTotal.toLocaleString()} USD
+                    <div className="flex justify-between text-lg">
+                      <span className="font-semibold">Total Estimado:</span>
+                      <span className="font-bold text-zlc-blue-600">
+                        ${grandTotal.toLocaleString()}
                       </span>
                     </div>
                   </div>
 
                   <Alert>
                     <AlertCircle className="h-4 w-4" />
-                    <AlertDescription className="text-sm">
-                      Este es un estimado. El precio final será confirmado por
-                      el proveedor en la cotización oficial.
+                    <AlertDescription className="text-xs">
+                      Los precios finales pueden variar según las condiciones
+                      acordadas con cada proveedor
                     </AlertDescription>
                   </Alert>
+                </CardContent>
+              </Card>
 
+              {/* Action Buttons */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Enviar Solicitud</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
                   <Button
                     onClick={handleSendQuote}
-                    disabled={isSubmitting || !paymentConditions}
-                    className="w-full bg-zlc-blue-600 hover:bg-zlc-blue-700 h-12"
+                    disabled={
+                      isSubmitting ||
+                      state.items.length === 0 ||
+                      !paymentConditions
+                    }
+                    className="w-full btn-professional"
+                    size="lg"
                   >
                     {isSubmitting ? (
-                      "Enviando..."
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        Enviando...
+                      </>
                     ) : (
                       <>
-                        <Send className="h-4 w-4 mr-2" />
                         Enviar Solicitud de Cotización
+                        <Send className="ml-2 h-4 w-4" />
                       </>
                     )}
                   </Button>
@@ -554,33 +541,18 @@ export default function Cart() {
                       <p className="font-medium text-green-900 mb-1">
                         Proceso Seguro
                       </p>
-                        <Send className="ml-2 h-4 w-4" />
-                      </>
-                    )}
-                  </Button>
-
-                  {/* Shipping Request Button */}
-                  <Link
-                    to="/shipping-request"
-                    state={{ quoteId: `quote-${Date.now()}` }}
-                  >
-                    <Button
-                      variant="outline"
-                      size="lg"
-                      className="border-zlc-blue-600 text-zlc-blue-600 hover:bg-zlc-blue-50"
-                    >
-                      <Truck className="mr-2 h-4 w-4" />
-                      Solicitar Envío
-                    </Button>
-                  </Link>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
+                      <p className="text-green-800">
+                        Sus datos están protegidos y solo serán compartidos con
+                        proveedores verificados en ZLC.
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </div>
-      </div>
+      </main>
     </div>
-  );
-}
   );
 }
