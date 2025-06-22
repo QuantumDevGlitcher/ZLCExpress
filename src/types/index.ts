@@ -210,3 +210,182 @@ export interface Incident {
   resolvedAt?: Date;
   attachments?: File[];
 }
+
+// Module 6: Order Management and Company Profile Types
+export interface Order {
+  id: string;
+  orderNumber: string;
+  quoteId?: string;
+  supplierId: string;
+  supplierName: string;
+  companyId: string;
+  status:
+    | "pending"
+    | "confirmed"
+    | "in_production"
+    | "shipped"
+    | "in_transit"
+    | "customs"
+    | "delivered"
+    | "completed"
+    | "cancelled";
+  orderType: "quote" | "purchase_order";
+  containers: OrderContainer[];
+  totalAmount: number;
+  currency: string;
+  incoterm: "FOB" | "CIF" | "CFR" | "EXW";
+  paymentConditions: string;
+  createdAt: Date;
+  updatedAt: Date;
+  estimatedDelivery?: Date;
+  actualDelivery?: Date;
+  shippingData?: {
+    shippingLine: string;
+    containerNumber: string;
+    blNumber: string;
+    vesselName: string;
+    etd: Date;
+    eta: Date;
+    trackingUrl?: string;
+  };
+  keyDates: {
+    proformaIssued?: Date;
+    paymentConfirmed?: Date;
+    productionStarted?: Date;
+    departed?: Date;
+    arrived?: Date;
+    delivered?: Date;
+  };
+  documents: OrderDocument[];
+  payments: PaymentRecord[];
+}
+
+export interface OrderContainer {
+  id: string;
+  orderId: string;
+  productId: string;
+  productTitle: string;
+  containerType: "20'" | "40'";
+  quantity: number;
+  unitPrice: number;
+  subtotal: number;
+  specifications: Record<string, string>;
+}
+
+export interface OrderDocument {
+  id: string;
+  orderId: string;
+  type:
+    | "commercial_invoice"
+    | "packing_list"
+    | "bill_of_lading"
+    | "certificate"
+    | "customs_declaration"
+    | "payment_receipt";
+  title: string;
+  fileName: string;
+  fileUrl: string;
+  uploadedAt: Date;
+  uploadedBy: string;
+}
+
+export interface PaymentRecord {
+  id: string;
+  orderId: string;
+  type: "advance" | "balance" | "full";
+  amount: number;
+  currency: string;
+  method: "wire_transfer" | "letter_of_credit" | "cash" | "check";
+  status: "pending" | "confirmed" | "failed";
+  paymentDate: Date;
+  reference: string;
+  receipt?: string; // file URL
+  notes?: string;
+}
+
+export interface CompanyProfile {
+  id: string;
+  legalName: string;
+  taxId: string; // NIT/RUC
+  fiscalAddress: {
+    street: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    country: string;
+  };
+  contactInfo: {
+    phone: string;
+    email: string;
+    website?: string;
+  };
+  verificationStatus: "pending" | "verified" | "rejected";
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface AuthorizedContact {
+  id: string;
+  companyId: string;
+  name: string;
+  email: string;
+  phone: string;
+  position: string;
+  role: "buyer" | "approver" | "accounting" | "admin";
+  permissions: string[];
+  isActive: boolean;
+  createdAt: Date;
+}
+
+export interface PaymentMethod {
+  id: string;
+  companyId: string;
+  type: "wire_transfer" | "letter_of_credit";
+  title: string;
+  isDefault: boolean;
+  bankData?: {
+    bankName: string;
+    swift: string;
+    bic: string;
+    accountNumber: string;
+    accountHolder: string;
+    currency: string;
+  };
+  lcTemplate?: string; // file URL for LC template
+  createdAt: Date;
+}
+
+export interface NotificationSettings {
+  companyId: string;
+  productionCompleted: {
+    email: boolean;
+    sms: boolean;
+  };
+  shipmentDeparted: {
+    email: boolean;
+    sms: boolean;
+  };
+  portArrival: {
+    email: boolean;
+    sms: boolean;
+  };
+  paymentPending: {
+    email: boolean;
+    sms: boolean;
+  };
+  incidentOpened: {
+    email: boolean;
+    sms: boolean;
+  };
+}
+
+export interface OrderHistoryReport {
+  orderId: string;
+  orderNumber: string;
+  supplier: string;
+  containers: number;
+  amount: number;
+  currency: string;
+  date: Date;
+  status: string;
+}
