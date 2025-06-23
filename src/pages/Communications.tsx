@@ -21,7 +21,7 @@ import {
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
 
-export function Communications() {
+function Communications() {
   const {
     chatThreads,
     notifications,
