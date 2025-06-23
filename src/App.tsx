@@ -25,6 +25,9 @@ import CompanyProfile from "./pages/CompanyProfile";
 import MyRFQs from "./pages/MyRFQs";
 import PaymentTerms from "./pages/PaymentTerms";
 import ContractTemplates from "./pages/ContractTemplates";
+import OfferHistory from "./pages/OfferHistory";
+import Communications from "./pages/Communications";
+import CustomsSupport from "./pages/CustomsSupport";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
