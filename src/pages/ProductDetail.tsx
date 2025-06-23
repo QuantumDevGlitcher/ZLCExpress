@@ -979,8 +979,6 @@ export default function ProductDetail() {
         </div>
       </main>
 
-      {/* Fixed Chat Component */}
-      <FixedChat />
     </div>
   );
 }
