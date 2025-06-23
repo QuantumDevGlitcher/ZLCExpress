@@ -657,16 +657,18 @@ export default function ProductDetail() {
                       </Button>
                     </RFQRequestDialog>
                   </div>
-                      variant="outline"
-                      className="w-full h-10"
-                      asChild
-                    >
-                      <Link to="/cart">
-                        <Send className="w-4 h-4 mr-2" />
-                        Ver Carrito
-                      </Link>
-                    </Button>
-                  </div>
+
+                  <Button
+                    variant="outline"
+                    className="w-full h-10"
+                    asChild
+                  >
+                    <Link to="/cart">
+                      <Send className="w-4 h-4 mr-2" />
+                      Ver Carrito
+                    </Link>
+                  </Button>
+                </div>
                 </CardContent>
               </Card>
 
