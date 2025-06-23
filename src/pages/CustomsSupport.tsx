@@ -977,3 +977,5 @@ function CustomsSupport() {
     </div>
   );
 }
+
+export default CustomsSupport;
