@@ -639,9 +639,26 @@ export default function ProductDetail() {
                     </Button>
 
                     <RFQRequestDialog
-                      product={mockProduct}
+                      product={{
+                        id: product.id,
+                        title: product.title,
+                        description: product.description,
+                        containerSize: product.specifications.containerType.includes("20") ? "20'" : "40'",
+                        moq: product.specifications.totalUnits,
+                        priceRange: {
+                          min: product.pricing.pricePerContainer,
+                          max: product.pricing.pricePerContainer,
+                          currency: product.pricing.currency,
+                        },
+                        images: product.images,
+                        specifications: {},
+                        supplierId: "supplier-1",
+                        availableFrom: new Date(),
+                        estimatedDelivery: "21-31 días",
+                        status: "available",
+                      }}
                       supplierId="supplier-1"
-                      supplierName="Textiles Modernos S.A."
+                      supplierName={product.supplier.name}
                       onRFQCreated={(rfqId) => {
                         console.log("RFQ created:", rfqId);
                         // Optionally navigate to RFQ page or show success message
@@ -753,7 +770,7 @@ export default function ProductDetail() {
 
               {/* Volume Pricing Section */}
               <VolumePricingTable
-                productId={mockProduct.id}
+                productId={product.id}
                 onPricingChange={(calculation) => {
                   console.log("Pricing changed:", calculation);
                   // Update pricing display or state
