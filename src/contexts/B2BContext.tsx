@@ -219,6 +219,102 @@ function b2bReducer(state: B2BState, action: B2BAction): B2BState {
     case "SET_CONTAINER_SPECS":
       return { ...state, containerSpecs: action.payload };
 
+    case "SET_CHAT_THREADS":
+      return { ...state, chatThreads: action.payload };
+
+    case "ADD_CHAT_MESSAGE":
+      return {
+        ...state,
+        chatThreads: state.chatThreads.map((thread) =>
+          thread.id === action.payload.threadId
+            ? {
+                ...thread,
+                messages: [...thread.messages, action.payload.message],
+                lastActivity: action.payload.message.timestamp,
+              }
+            : thread,
+        ),
+      };
+
+    case "MARK_MESSAGE_READ":
+      return {
+        ...state,
+        chatThreads: state.chatThreads.map((thread) => ({
+          ...thread,
+          messages: thread.messages.map((message) =>
+            message.id === action.payload
+              ? { ...message, isRead: true }
+              : message,
+          ),
+          unreadCount: thread.messages.filter(
+            (m) => !m.isRead && m.id !== action.payload,
+          ).length,
+        })),
+      };
+
+    case "SET_NOTIFICATIONS":
+      return { ...state, notifications: action.payload };
+
+    case "MARK_NOTIFICATION_READ":
+      return {
+        ...state,
+        notifications: state.notifications.map((notification) =>
+          notification.id === action.payload
+            ? { ...notification, isRead: true }
+            : notification,
+        ),
+      };
+
+    case "MARK_ALL_NOTIFICATIONS_READ":
+      return {
+        ...state,
+        notifications: state.notifications.map((notification) => ({
+          ...notification,
+          isRead: true,
+        })),
+      };
+
+    case "DELETE_NOTIFICATION":
+      return {
+        ...state,
+        notifications: state.notifications.filter(
+          (notification) => notification.id !== action.payload,
+        ),
+      };
+
+    case "SET_OFFER_HISTORY":
+      return { ...state, offerHistory: action.payload };
+
+    case "SET_STOCK_ALERTS":
+      return { ...state, stockAlerts: action.payload };
+
+    case "ADD_STOCK_ALERT":
+      return {
+        ...state,
+        stockAlerts: [...state.stockAlerts, action.payload],
+      };
+
+    case "UPDATE_STOCK_ALERT":
+      return {
+        ...state,
+        stockAlerts: state.stockAlerts.map((alert) =>
+          alert.id === action.payload.id
+            ? { ...alert, ...action.payload.updates }
+            : alert,
+        ),
+      };
+
+    case "DELETE_STOCK_ALERT":
+      return {
+        ...state,
+        stockAlerts: state.stockAlerts.filter(
+          (alert) => alert.id !== action.payload,
+        ),
+      };
+
+    case "SET_STOCK_ALERT_TRIGGERS":
+      return { ...state, stockAlertTriggers: action.payload };
+
     default:
       return state;
   }
