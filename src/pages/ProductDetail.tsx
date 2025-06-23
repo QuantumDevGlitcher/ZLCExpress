@@ -57,6 +57,7 @@ import {
   AlertCircle,
   Users,
   Scale,
+  ShoppingCart,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -119,87 +120,10 @@ const product = {
   documentation: {
     commercialInvoice: true,
     packingList: true,
-    customsData: true,
-    contractTemplates: true,
-    hsCode: "6109.10.00",
-    customsValue: "USD 14,500",
+    certificateOfOrigin: true,
+    customsDeclaration: true,
   },
 };
-
-// Fixed Chat Component
-function FixedChat() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [message, setMessage] = useState("");
-
-  return (
-    <>
-      {/* Chat Button */}
-      <div className="fixed bottom-6 right-6 z-50">
-        <Button
-          onClick={() => setIsOpen(!isOpen)}
-          className="h-14 w-14 rounded-full bg-zlc-blue-600 hover:bg-zlc-blue-700 shadow-soft-xl"
-        >
-          <MessageCircle className="h-6 w-6 text-white" />
-        </Button>
-      </div>
-
-      {/* Chat Window */}
-      {isOpen && (
-        <div className="fixed bottom-24 right-6 z-50 w-80 bg-white rounded-xl shadow-soft-xl border">
-          <div className="p-4 bg-zlc-blue-600 text-white rounded-t-xl">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                  <Building className="h-4 w-4" />
-                </div>
-                <div>
-                  <h4 className="font-medium text-sm">GlobalTextile Corp</h4>
-                  <p className="text-xs text-blue-100">En línea</p>
-                </div>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsOpen(false)}
-                className="text-white hover:bg-white/20 h-6 w-6 p-0"
-              >
-                ×
-              </Button>
-            </div>
-          </div>
-
-          <div className="h-64 overflow-y-auto p-4 space-y-3">
-            <div className="flex justify-start">
-              <div className="bg-gray-100 rounded-lg p-2 max-w-xs">
-                <p className="text-sm">
-                  ¡Hola! ¿En qué puedo ayudarte con este lote?
-                </p>
-                <span className="text-xs text-gray-500">10:30 AM</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="p-4 border-t">
-            <div className="flex space-x-2">
-              <Input
-                placeholder="Escribe tu mensaje..."
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                className="flex-1"
-              />
-              <Button
-                size="sm"
-                className="bg-zlc-blue-600 hover:bg-zlc-blue-700"
-              >
-                <Send className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
-    </>
-  );
-}
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -232,7 +156,7 @@ export default function ProductDetail() {
       productTitle: product.title,
       productImage: product.images[0],
       supplier: product.supplier.name,
-      supplierId: product.supplier.name, // In a real app, this would be a proper ID
+      supplierId: product.supplier.name,
       containerType: product.specifications.containerType,
       quantity: selectedQuantity,
       pricePerContainer: product.pricing.pricePerContainer,
@@ -259,377 +183,205 @@ export default function ProductDetail() {
               to="/categories?category=ropa"
               className="hover:text-zlc-blue-600"
             >
-              Ropa
+              Ropa y Textiles
             </Link>
             <span>/</span>
-            <span className="text-gray-900">Camisetas de Algodón</span>
+            <span className="text-gray-900">Camisetas</span>
           </div>
 
-          {/* Header */}
-          <div className="bg-white rounded-xl shadow-soft p-6 mb-6">
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex-1">
-                <div className="flex items-center space-x-3 mb-2">
-                  <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-                    {product.title}
-                  </h1>
-                  {product.negotiable && (
-                    <Badge className="bg-blue-100 text-blue-800">
-                      Negociable
-                    </Badge>
-                  )}
-                </div>
-
-                {/* Supplier Info */}
-                <div className="flex items-center space-x-4">
-                  <div className="flex items-center space-x-2">
-                    <img
-                      src={product.supplier.logo}
-                      alt={product.supplier.name}
-                      className="w-8 h-8 rounded-full"
-                    />
-                    <div>
-                      <p className="font-medium text-gray-900">
-                        {product.supplier.name}
-                      </p>
-                      <p className="text-sm text-gray-600">
-                        {product.supplier.country}
-                      </p>
-                    </div>
-                    {product.supplier.verified && (
-                      <Badge
-                        variant="secondary"
-                        className="bg-green-100 text-green-800"
-                      >
-                        <CheckCircle className="w-3 h-3 mr-1" />
-                        Verificado
-                      </Badge>
-                    )}
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                    <span className="text-sm font-medium">
-                      {product.supplier.rating}
-                    </span>
-                  </div>
-                </div>
+          <div className="grid lg:grid-cols-2 gap-8 mb-8">
+            {/* Product Images */}
+            <div className="space-y-4">
+              <div className="aspect-square bg-white rounded-lg border overflow-hidden group relative">
+                <img
+                  src={product.images[selectedImage]}
+                  alt={product.title}
+                  className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                />
+                <Button
+                  size="icon"
+                  variant="secondary"
+                  className="absolute top-4 right-4 opacity-80 hover:opacity-100"
+                >
+                  <ZoomIn className="h-4 w-4" />
+                </Button>
               </div>
 
-              <div className="flex items-center space-x-2">
-                <Button variant="outline" size="sm">
-                  <Heart className="w-4 h-4 mr-2" />
-                  Guardar
-                </Button>
-                <Button variant="outline" size="sm">
-                  <Share2 className="w-4 h-4 mr-2" />
-                  Compartir
-                </Button>
+              {/* Image Thumbnails */}
+              <div className="grid grid-cols-4 gap-2">
+                {product.images.map((image, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedImage(index)}
+                    className={cn(
+                      "aspect-square rounded-lg border-2 overflow-hidden transition-all",
+                      selectedImage === index
+                        ? "border-zlc-blue-600 ring-2 ring-zlc-blue-200"
+                        : "border-gray-200 hover:border-gray-300",
+                    )}
+                  >
+                    <img
+                      src={image}
+                      alt={`Vista ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
               </div>
             </div>
-          </div>
 
-          <div className="grid lg:grid-cols-3 gap-6">
-            {/* Left Column - Main Content */}
-            <div className="lg:col-span-2 space-y-6">
-              {/* Image Gallery */}
+            {/* Product Info */}
+            <div className="space-y-6">
+              {/* Header */}
+              <div>
+                <div className="flex items-start justify-between mb-2">
+                  <h1 className="text-3xl font-bold text-gray-900">
+                    {product.title}
+                  </h1>
+                  <div className="flex items-center space-x-2">
+                    <Button size="icon" variant="ghost">
+                      <Heart className="h-5 w-5" />
+                    </Button>
+                    <Button size="icon" variant="ghost">
+                      <Share2 className="h-5 w-5" />
+                    </Button>
+                  </div>
+                </div>
+
+                {product.negotiable && (
+                  <Badge className="bg-orange-100 text-orange-800 mb-4">
+                    Precio Negociable
+                  </Badge>
+                )}
+
+                <p className="text-gray-600 text-lg leading-relaxed">
+                  {product.description}
+                </p>
+              </div>
+
+              {/* Supplier Info */}
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <img
+                        src={product.supplier.logo}
+                        alt={product.supplier.name}
+                        className="w-12 h-12 rounded-lg object-cover"
+                      />
+                      <div>
+                        <div className="flex items-center space-x-2">
+                          <h3 className="font-semibold text-gray-900">
+                            {product.supplier.name}
+                          </h3>
+                          {product.supplier.verified && (
+                            <Badge className="bg-green-100 text-green-800 text-xs">
+                              <CheckCircle className="w-3 h-3 mr-1" />
+                              Verificado
+                            </Badge>
+                          )}
+                        </div>
+                        <div className="flex items-center space-x-4 text-sm text-gray-600">
+                          <div className="flex items-center space-x-1">
+                            <MapPin className="w-4 h-4" />
+                            <span>{product.supplier.country}</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <Star className="w-4 h-4 fill-current text-yellow-400" />
+                            <span>{product.supplier.rating}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <Button variant="outline" size="sm">
+                      <MessageCircle className="w-4 h-4 mr-2" />
+                      Contactar
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Pricing */}
               <Card>
                 <CardContent className="p-6">
                   <div className="space-y-4">
-                    <div className="relative">
-                      <img
-                        src={product.images[selectedImage]}
-                        alt={product.title}
-                        className="w-full h-96 object-cover rounded-lg"
-                      />
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="absolute top-4 right-4 bg-white/90"
-                      >
-                        <ZoomIn className="w-4 h-4" />
-                      </Button>
-                    </div>
-
-                    <div className="grid grid-cols-4 gap-2">
-                      {product.images.map((image, index) => (
-                        <button
-                          key={index}
-                          onClick={() => setSelectedImage(index)}
-                          className={cn(
-                            "relative rounded-lg overflow-hidden border-2 transition-colors",
-                            selectedImage === index
-                              ? "border-zlc-blue-600"
-                              : "border-gray-200",
-                          )}
-                        >
-                          <img
-                            src={image}
-                            alt={`${product.title} ${index + 1}`}
-                            className="w-full h-20 object-cover"
-                          />
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Product Description */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <Package className="w-5 h-5 mr-2 text-zlc-blue-600" />
-                    Descripción del Producto
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-gray-700">{product.description}</p>
-
-                  <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <h4 className="font-semibold mb-2">Material</h4>
-                      <p className="text-gray-600">
-                        {product.specifications.material}
-                      </p>
-
-                      <h4 className="font-semibold mb-2 mt-4">
-                        Colores Disponibles
-                      </h4>
-                      <div className="flex flex-wrap gap-2">
-                        {product.specifications.colors.map((color) => (
-                          <Badge key={color} variant="outline">
-                            {color}
-                          </Badge>
-                        ))}
-                      </div>
-
-                      <h4 className="font-semibold mb-2 mt-4">
-                        Tallas Disponibles
-                      </h4>
-                      <div className="flex flex-wrap gap-2">
-                        {product.specifications.sizes.map((size) => (
-                          <Badge key={size} variant="outline">
-                            {size}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div>
-                      <div className="space-y-3">
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Cantidad total:</span>
-                          <span className="font-medium">
-                            {product.specifications.totalUnits.toLocaleString()}{" "}
-                            unidades
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Peso bruto:</span>
-                          <span className="font-medium">
-                            {product.specifications.grossWeight}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Peso neto:</span>
-                          <span className="font-medium">
-                            {product.specifications.netWeight}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Contenedor:</span>
-                          <span className="font-medium">
-                            {product.specifications.containerType}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Logistics Data */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <Truck className="w-5 h-5 mr-2 text-zlc-blue-600" />
-                    Datos Logísticos del Lote
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <div className="space-y-3">
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Incoterm:</span>
-                          <Badge className="bg-zlc-blue-100 text-zlc-blue-800">
-                            {product.logistics.incoterm}
-                          </Badge>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">
-                            Dimensiones del Contenedor:
-                          </span>
-                          <span className="font-medium text-sm">
-                            {product.specifications.dimensions}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div>
-                      <h4 className="font-semibold mb-2 flex items-center">
-                        <Clock className="w-4 h-4 mr-1" />
-                        Tiempo de Entrega
-                      </h4>
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Producción:</span>
-                          <span>{product.logistics.leadTime.production}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Embarque:</span>
-                          <span>{product.logistics.leadTime.shipping}</span>
-                        </div>
-                        <div className="flex justify-between font-medium">
-                          <span>Total:</span>
-                          <span>{product.logistics.leadTime.total}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Right Column - Pricing & Actions */}
-            <div className="space-y-6">
-              {/* Pricing */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <Calculator className="w-5 h-5 mr-2 text-zlc-blue-600" />
-                    Precios y Descuentos
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="text-center p-4 bg-zlc-blue-50 rounded-lg">
-                    <div className="text-2xl font-bold text-zlc-blue-900">
-                      USD {product.pricing.pricePerContainer.toLocaleString()}
-                    </div>
-                    <div className="text-sm text-gray-600">
-                      Precio por Contenedor
-                    </div>
-                    <div className="text-sm text-gray-600 mt-1">
-                      USD {product.pricing.pricePerUnit} por unidad
-                    </div>
-                  </div>
-
-                  {/* Volume Discounts */}
-                  <div>
-                    <h4 className="font-semibold mb-2">
-                      Descuentos por Volumen
-                    </h4>
-                    <div className="space-y-2">
-                      {product.pricing.discounts.map((discount) => (
-                        <div
-                          key={discount.quantity}
-                          className="flex justify-between items-center text-sm"
-                        >
-                          <span>{discount.quantity}+ contenedores</span>
-                          <div className="text-right">
-                            <span className="font-medium text-green-600">
-                              -{discount.discount}%
-                            </span>
-                            <div className="text-xs text-gray-500">
-                              USD {discount.finalPrice.toLocaleString()}
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Order Configuration */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <Package className="w-5 h-5 mr-2 text-zlc-blue-600" />
-                    Configuración de Pedido
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <Label htmlFor="quantity">Número de Contenedores</Label>
-                    <Select
-                      value={selectedQuantity.toString()}
-                      onValueChange={(value) =>
-                        setSelectedQuantity(parseInt(value))
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {[1, 2, 3, 4, 5, 10, 15, 20, 25, 30].map((num) => (
-                          <SelectItem key={num} value={num.toString()}>
-                            {num} contenedor{num > 1 ? "es" : ""}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {product.negotiable && (
-                    <div>
-                      <Label htmlFor="customPrice">
-                        Ofrecer Precio por Contenedor (USD)
-                      </Label>
-                      <Input
-                        id="customPrice"
-                        placeholder="Ej: 15,000"
-                        value={customPrice}
-                        onChange={(e) => setCustomPrice(e.target.value)}
-                      />
-                    </div>
-                  )}
-
-                  {/* Order Summary */}
-                  <div className="bg-gray-50 p-4 rounded-lg space-y-2">
-                    <div className="flex justify-between">
-                      <span>Subtotal:</span>
-                      <span>
-                        USD{" "}
-                        {(
-                          product.pricing.pricePerContainer * selectedQuantity
-                        ).toLocaleString()}
-                      </span>
-                    </div>
-                    {getAppliedDiscount() && (
-                      <div className="flex justify-between text-green-600">
-                        <span>
-                          Descuento ({getAppliedDiscount()?.discount}%):
+                      <div className="flex items-baseline space-x-2">
+                        <span className="text-3xl font-bold text-zlc-blue-600">
+                          ${product.pricing.pricePerContainer.toLocaleString()}
                         </span>
-                        <span>
-                          -USD{" "}
+                        <span className="text-gray-600">por contenedor</span>
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        ${product.pricing.pricePerUnit} por unidad •{" "}
+                        {product.specifications.totalUnits.toLocaleString()}{" "}
+                        unidades
+                      </div>
+                    </div>
+
+                    <Separator />
+
+                    {/* Quantity Selector */}
+                    <div>
+                      <Label
+                        htmlFor="quantity"
+                        className="text-base font-medium"
+                      >
+                        Cantidad de Contenedores
+                      </Label>
+                      <div className="flex items-center space-x-3 mt-2">
+                        <Select
+                          value={selectedQuantity.toString()}
+                          onValueChange={(value) =>
+                            setSelectedQuantity(parseInt(value))
+                          }
+                        >
+                          <SelectTrigger className="w-32">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {[1, 2, 5, 10, 20, 50].map((qty) => (
+                              <SelectItem key={qty} value={qty.toString()}>
+                                {qty}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+
+                        {getAppliedDiscount() && (
+                          <Badge className="bg-green-100 text-green-800">
+                            -{getAppliedDiscount()?.discount}% descuento
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Total Calculation */}
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <div className="flex justify-between items-center">
+                        <span className="font-medium">Total:</span>
+                        <span className="text-2xl font-bold text-zlc-blue-600">
+                          ${calculateTotal().toLocaleString()}
+                        </span>
+                      </div>
+                      {getAppliedDiscount() && (
+                        <div className="text-sm text-green-600 mt-1">
+                          Ahorro: $
                           {(
                             product.pricing.pricePerContainer *
                               selectedQuantity -
                             calculateTotal()
                           ).toLocaleString()}
-                        </span>
-                      </div>
-                    )}
-                    <Separator />
-                    <div className="flex justify-between font-bold text-lg">
-                      <span>Total:</span>
-                      <span>USD {calculateTotal().toLocaleString()}</span>
+                        </div>
+                      )}
                     </div>
                   </div>
+                </CardContent>
+              </Card>
 
-                  <div className="space-y-2">
+              {/* Action Buttons */}
+              <Card>
+                <CardContent className="p-6">
                   <div className="space-y-3">
                     <Button
                       onClick={handleAddToCart}
@@ -645,7 +397,10 @@ export default function ProductDetail() {
                         id: product.id,
                         title: product.title,
                         description: product.description,
-                        containerSize: product.specifications.containerType.includes("20") ? "20'" : "40'",
+                        containerSize:
+                          product.specifications.containerType.includes("20")
+                            ? "20'"
+                            : "40'",
                         moq: product.specifications.totalUnits,
                         priceRange: {
                           min: product.pricing.pricePerContainer,
@@ -663,7 +418,6 @@ export default function ProductDetail() {
                       supplierName={product.supplier.name}
                       onRFQCreated={(rfqId) => {
                         console.log("RFQ created:", rfqId);
-                        // Optionally navigate to RFQ page or show success message
                       }}
                     >
                       <Button
@@ -679,7 +433,7 @@ export default function ProductDetail() {
 
                   <Button
                     variant="outline"
-                    className="w-full h-10"
+                    className="w-full h-10 mt-3"
                     asChild
                   >
                     <Link to="/cart">
@@ -687,298 +441,170 @@ export default function ProductDetail() {
                       Ver Carrito
                     </Link>
                   </Button>
-                </div>
-                </CardContent>
-              </Card>
-
-              {/* Custom Quote */}
-              <Card>
-                <CardHeader>
-                  <CardTitle
-                    className="flex items-center justify-between cursor-pointer"
-                    onClick={() => setShowCustomQuote(!showCustomQuote)}
-                  >
-                    <div className="flex items-center">
-                      <FileText className="w-5 h-5 mr-2 text-zlc-blue-600" />
-                      Cotización Personalizada
-                    </div>
-                    {showCustomQuote ? (
-                      <ChevronUp className="w-4 h-4" />
-                    ) : (
-                      <ChevronDown className="w-4 h-4" />
-                    )}
-                  </CardTitle>
-                </CardHeader>
-                {showCustomQuote && (
-                  <CardContent className="space-y-4">
-                    <div>
-                      <Label>Mix de Tallas/Colores Deseado</Label>
-                      <Textarea placeholder="Ej: 40% M-L en blanco, 30% XL en negro..." />
-                    </div>
-                    <div>
-                      <Label>Plazo Deseado</Label>
-                      <Input placeholder="Ej: 30 días máximo" />
-                    </div>
-                    <div>
-                      <Label>Requisitos Adicionales</Label>
-                      <Textarea placeholder="Empaque personalizado, etiquetas, etc." />
-                    </div>
-                    <Button variant="outline" className="w-full">
-                      Enviar Solicitud
-                    </Button>
-                  </CardContent>
-                )}
-              </Card>
-
-              {/* Documentation */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <Download className="w-5 h-5 mr-2 text-zlc-blue-600" />
-                    Documentación B2B
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <Button variant="outline" className="w-full justify-between">
-                    <span>Factura Comercial Proforma</span>
-                    <Download className="w-4 h-4" />
-                  </Button>
-                  <Button variant="outline" className="w-full justify-between">
-                    <span>Packing List de Ejemplo</span>
-                    <Download className="w-4 h-4" />
-                  </Button>
-                  <Button variant="outline" className="w-full justify-between">
-                    <span>Datos Aduaneros</span>
-                    <Download className="w-4 h-4" />
-                  </Button>
-                  <Button variant="outline" className="w-full justify-between">
-                    <span>Plantillas de Contratos</span>
-                    <Download className="w-4 h-4" />
-                  </Button>
-
-                  <div className="pt-3 border-t">
-                    <Button
-                      variant="link"
-                      className="w-full text-zlc-blue-600 p-0"
-                    >
-                      <Users className="w-4 h-4 mr-2" />
-                      Consultar a Iris (Asesora Aduanera)
-                    </Button>
-                  </div>
                 </CardContent>
               </Card>
             </div>
           </div>
 
-              {/* Volume Pricing Section */}
-              <VolumePricingTable
-                productId={product.id}
-                onPricingChange={(calculation) => {
-                  console.log("Pricing changed:", calculation);
-                  // Update pricing display or state
-                }}
-                defaultQuantity={1}
-              />
+          <div className="space-y-8">
+            {/* Volume Pricing Section */}
+            <VolumePricingTable
+              productId={product.id}
+              onPricingChange={(calculation) => {
+                console.log("Pricing changed:", calculation);
+              }}
+              defaultQuantity={1}
+            />
 
-              {/* Information Tabs */}
-              <Card>
-                <CardContent className="p-0">
-                  <Tabs defaultValue="details" className="w-full">
-                    <TabsList className="grid w-full grid-cols-4">
-                      <TabsTrigger value="details">Detalles</TabsTrigger>
-                      <TabsTrigger value="reviews">Reseñas</TabsTrigger>
-                      <TabsTrigger value="qa">Preguntas</TabsTrigger>
-                      <TabsTrigger value="return">Devoluciones</TabsTrigger>
-                    </TabsList>
-              <TabsContent value="details" className="mt-6">
-                <Card>
-                  <CardContent className="p-6">
-                    <h3 className="text-lg font-semibold mb-4">
-                      Especificaciones Extendidas
-                    </h3>
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div>
-                        <h4 className="font-medium mb-2">
-                          Materiales y Composición
-                        </h4>
-                        <ul className="text-sm text-gray-600 space-y-1">
-                          <li>• Algodón 100% peinado de fibra larga</li>
-                          <li>• Gramaje: 180gsm (+/- 5%)</li>
-                          <li>• Mangla con elastano incluido</li>
-                          <li>• Etiquetas de cuidado incluidas</li>
-                        </ul>
-                      </div>
-                      <div>
-                        <h4 className="font-medium mb-2">
-                          Proceso de Manufactura
-                        </h4>
-                        <ul className="text-sm text-gray-600 space-y-1">
-                          <li>• Preencogido por vapor controlado</li>
-                          <li>• Tintura reactiva para solidez</li>
-                          <li>• Control de calidad ISO 9001:2015</li>
-                          <li>• Proceso libre de químicos nocivos</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
+            {/* Information Tabs */}
+            <Card>
+              <CardContent className="p-0">
+                <Tabs defaultValue="details" className="w-full">
+                  <TabsList className="grid w-full grid-cols-4">
+                    <TabsTrigger value="details">Detalles</TabsTrigger>
+                    <TabsTrigger value="reviews">Reseñas</TabsTrigger>
+                    <TabsTrigger value="qa">Preguntas</TabsTrigger>
+                    <TabsTrigger value="return">Devoluciones</TabsTrigger>
+                  </TabsList>
 
-              <TabsContent value="reviews" className="mt-6">
-                <Card>
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between mb-6">
-                      <h3 className="text-lg font-semibold">
-                        Reseñas de Empresas
-                      </h3>
-                      <div className="flex items-center space-x-2">
-                        <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                        <span className="font-medium">4.8</span>
-                        <span className="text-gray-500">(24 reseñas)</span>
-                      </div>
-                    </div>
+                  <TabsContent value="details" className="mt-6">
+                    <Card>
+                      <CardContent className="p-6">
+                        <h3 className="text-lg font-semibold mb-4">
+                          Especificaciones del Producto
+                        </h3>
+                        <div className="grid md:grid-cols-2 gap-6">
+                          <div>
+                            <h4 className="font-semibold mb-2">Material</h4>
+                            <p className="text-gray-600 mb-4">
+                              {product.specifications.material}
+                            </p>
 
-                    <div className="space-y-4">
-                      {[
-                        {
-                          company: "Distribuidora Central",
-                          country: "Costa Rica",
-                          rating: 5,
-                          comment:
-                            "Excelente calidad y tiempos de entrega cumplidos. Recomendamos al 100%.",
-                          date: "2 semanas atrás",
-                        },
-                        {
-                          company: "Textiles del Norte",
-                          country: "Guatemala",
-                          rating: 5,
-                          comment:
-                            "La calidad superó nuestras expectativas. Cliente satisfecho.",
-                          date: "1 mes atrás",
-                        },
-                      ].map((review, index) => (
-                        <div key={index} className="border-b pb-4">
-                          <div className="flex items-center justify-between mb-2">
-                            <div>
-                              <span className="font-medium">
-                                {review.company}
-                              </span>
-                              <span className="text-gray-500 text-sm ml-2">
-                                ({review.country})
-                              </span>
+                            <h4 className="font-semibold mb-2">
+                              Colores Disponibles
+                            </h4>
+                            <div className="flex flex-wrap gap-2">
+                              {product.specifications.colors.map((color) => (
+                                <Badge key={color} variant="outline">
+                                  {color}
+                                </Badge>
+                              ))}
                             </div>
-                            <div className="flex items-center space-x-1">
-                              {[...Array(review.rating)].map((_, i) => (
-                                <Star
-                                  key={i}
-                                  className="w-4 h-4 fill-yellow-400 text-yellow-400"
-                                />
+
+                            <h4 className="font-semibold mb-2 mt-4">
+                              Tallas Disponibles
+                            </h4>
+                            <div className="flex flex-wrap gap-2">
+                              {product.specifications.sizes.map((size) => (
+                                <Badge key={size} variant="outline">
+                                  {size}
+                                </Badge>
                               ))}
                             </div>
                           </div>
-                          <p className="text-gray-700 text-sm">
-                            {review.comment}
-                          </p>
-                          <span className="text-xs text-gray-500">
-                            {review.date}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
 
-              <TabsContent value="qa" className="mt-6">
-                <Card>
-                  <CardContent className="p-6">
-                    <h3 className="text-lg font-semibold mb-4">
-                      Preguntas y Respuestas
-                    </h3>
-                    <div className="space-y-4">
-                      {[
-                        {
-                          question:
-                            "¿Qué documentación incluyen para importación?",
-                          answer:
-                            "Incluimos factura comercial, packing list, certificado de origen y todos los documentos aduaneros necesarios.",
-                          date: "3 días atrás",
-                        },
-                        {
-                          question:
-                            "¿Es posible modificar la mezcla de colores?",
-                          answer:
-                            "Sí, podemos ajustar la distribución de colores según sus necesidades específicas.",
-                          date: "1 semana atrás",
-                        },
-                      ].map((qa, index) => (
-                        <div key={index} className="border-b pb-4">
-                          <div className="flex items-start space-x-2 mb-2">
-                            <HelpCircle className="w-5 h-5 text-zlc-blue-600 mt-0.5" />
-                            <div className="flex-1">
-                              <p className="font-medium">{qa.question}</p>
-                              <p className="text-gray-700 mt-1">{qa.answer}</p>
-                              <span className="text-xs text-gray-500">
-                                {qa.date}
-                              </span>
+                          <div>
+                            <div className="space-y-3">
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">
+                                  Cantidad total:
+                                </span>
+                                <span className="font-medium">
+                                  {product.specifications.totalUnits.toLocaleString()}{" "}
+                                  unidades
+                                </span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">
+                                  Peso bruto:
+                                </span>
+                                <span className="font-medium">
+                                  {product.specifications.grossWeight}
+                                </span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">
+                                  Peso neto:
+                                </span>
+                                <span className="font-medium">
+                                  {product.specifications.netWeight}
+                                </span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600">
+                                  Contenedor:
+                                </span>
+                                <span className="font-medium">
+                                  {product.specifications.containerType}
+                                </span>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      ))}
-                    </div>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
 
-                    <div className="mt-6 pt-4 border-t">
-                      <Button variant="outline" className="w-full">
-                        Hacer una Pregunta
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
+                  <TabsContent value="reviews" className="mt-6">
+                    <Card>
+                      <CardContent className="p-6">
+                        <h3 className="text-lg font-semibold mb-4">
+                          Reseñas de Compradores
+                        </h3>
+                        <div className="text-center py-8 text-gray-500">
+                          <Star className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                          <p>Aún no hay reseñas para este producto</p>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
 
-              <TabsContent value="policy" className="mt-6">
-                <Card>
-                  <CardContent className="p-6">
-                    <h3 className="text-lg font-semibold mb-4">
-                      Política de Devolución B2B
-                    </h3>
-                    <div className="space-y-4 text-sm text-gray-700">
-                      <div>
-                        <h4 className="font-medium text-gray-900 mb-2">
-                          Condiciones de Devolución
-                        </h4>
-                        <ul className="space-y-1">
-                          <li>• Devoluciones aceptadas dentro de 30 días</li>
-                          <li>• Producto debe estar en condición original</li>
-                          <li>
-                            • Gastos de envío de devolución a cargo del
-                            comprador
-                          </li>
-                          <li>• Inspección requerida antes del reembolso</li>
-                        </ul>
-                      </div>
+                  <TabsContent value="qa" className="mt-6">
+                    <Card>
+                      <CardContent className="p-6">
+                        <h3 className="text-lg font-semibold mb-4">
+                          Preguntas y Respuestas
+                        </h3>
+                        <div className="text-center py-8 text-gray-500">
+                          <HelpCircle className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                          <p>No hay preguntas sobre este producto</p>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
 
-                      <div>
-                        <h4 className="font-medium text-gray-900 mb-2">
-                          Garantía de Calidad
-                        </h4>
-                        <ul className="space-y-1">
-                          <li>
-                            • Garantía de 6 meses contra defectos de manufactura
-                          </li>
-                          <li>• Reemplazo gratuito por defectos probados</li>
-                          <li>• Certificación de calidad incluida</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
+                  <TabsContent value="return" className="mt-6">
+                    <Card>
+                      <CardContent className="p-6">
+                        <h3 className="text-lg font-semibold mb-4">
+                          Política de Devoluciones
+                        </h3>
+                        <div className="space-y-4">
+                          <div>
+                            <h4 className="font-medium text-gray-900 mb-2">
+                              Garantía de Calidad
+                            </h4>
+                            <ul className="space-y-1">
+                              <li>
+                                • Garantía de 6 meses contra defectos de
+                                manufactura
+                              </li>
+                              <li>
+                                • Reemplazo gratuito por defectos probados
+                              </li>
+                              <li>• Certificación de calidad incluida</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+                </Tabs>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </main>
-
     </div>
   );
 }
