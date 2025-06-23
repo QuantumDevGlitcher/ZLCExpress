@@ -27,7 +27,7 @@ import {
 import { formatDistanceToNow, format } from "date-fns";
 import { es } from "date-fns/locale";
 
-export function OfferHistory() {
+function OfferHistory() {
   const { offerHistory } = useB2B();
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
