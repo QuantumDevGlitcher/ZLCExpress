@@ -60,7 +60,7 @@ interface IrisConsultation {
   urgency: "low" | "medium" | "high";
 }
 
-export function CustomsSupport() {
+function CustomsSupport() {
   const [selectedStep, setSelectedStep] = useState<number>(1);
   const [consultation, setConsultation] = useState<IrisConsultation>({
     name: "",
