@@ -76,6 +76,9 @@ const App = () => (
                     path="/contract-templates"
                     element={<ContractTemplates />}
                   />
+                  <Route path="/offer-history" element={<OfferHistory />} />
+                  <Route path="/communications" element={<Communications />} />
+                  <Route path="/customs-support" element={<CustomsSupport />} />
 
                   {/* Placeholder routes for navigation links */}
                   <Route
