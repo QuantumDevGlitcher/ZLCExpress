@@ -32,6 +32,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Navigation } from "@/components/Navigation";
+import { VolumePricingTable } from "@/components/VolumePricingTable";
+import { RFQRequestDialog } from "@/components/RFQRequestDialog";
 import {
   ArrowLeft,
   Heart,
