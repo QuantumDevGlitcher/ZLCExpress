@@ -101,6 +101,11 @@ const initialState: B2BState = {
   contractTemplates: [],
   generatedContracts: [],
   containerSpecs: [],
+  chatThreads: [],
+  notifications: [],
+  offerHistory: [],
+  stockAlerts: [],
+  stockAlertTriggers: [],
 };
 
 function b2bReducer(state: B2BState, action: B2BAction): B2BState {
