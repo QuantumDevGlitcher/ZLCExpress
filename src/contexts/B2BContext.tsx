@@ -1295,6 +1295,30 @@ export function B2BProvider({ children }: { children: ReactNode }) {
         generatePackingList,
         generateCertificateOfOrigin,
         generateBillOfLading,
+
+        // Module 8: Advanced Communication and Negotiation
+        chatThreads: state.chatThreads,
+        notifications: state.notifications,
+        offerHistory: state.offerHistory,
+        stockAlerts: state.stockAlerts,
+        stockAlertTriggers: state.stockAlertTriggers,
+
+        // Chat Functions
+        sendChatMessage,
+        markChatMessageAsRead,
+        createChatThread,
+
+        // Notification Functions
+        markNotificationAsRead,
+        markAllNotificationsAsRead,
+        deleteNotification,
+        handleNotificationAction,
+
+        // Stock Alert Functions
+        createStockAlert,
+        updateStockAlert,
+        deleteStockAlert,
+        testStockAlert,
       }}
     >
       {children}
