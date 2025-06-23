@@ -397,3 +397,5 @@ function Communications() {
     </div>
   );
 }
+
+export default Communications;
