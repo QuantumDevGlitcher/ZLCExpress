@@ -385,6 +385,34 @@ interface B2BContextType {
   generatePackingList: (orderId: string) => Promise<string>;
   generateCertificateOfOrigin: (orderId: string) => Promise<string>;
   generateBillOfLading: (orderId: string) => Promise<string>;
+
+  // Module 8: Advanced Communication and Negotiation
+  chatThreads: ChatThread[];
+  notifications: Notification[];
+  offerHistory: OfferHistoryItem[];
+  stockAlerts: StockAlert[];
+  stockAlertTriggers: StockAlertTrigger[];
+
+  // Chat Functions
+  sendChatMessage: (
+    threadId: string,
+    content: string,
+    attachments: File[],
+  ) => void;
+  markChatMessageAsRead: (messageId: string) => void;
+  createChatThread: (rfqId: string, participants: ChatParticipant[]) => void;
+
+  // Notification Functions
+  markNotificationAsRead: (notificationId: string) => void;
+  markAllNotificationsAsRead: () => void;
+  deleteNotification: (notificationId: string) => void;
+  handleNotificationAction: (notification: Notification) => void;
+
+  // Stock Alert Functions
+  createStockAlert: (alertData: Partial<StockAlert>) => void;
+  updateStockAlert: (alertId: string, alertData: Partial<StockAlert>) => void;
+  deleteStockAlert: (alertId: string) => void;
+  testStockAlert: (alertId: string) => void;
 }
 
 interface PricingCalculation {
