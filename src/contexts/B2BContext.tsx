@@ -11,6 +11,13 @@ import {
   ContractTemplate,
   GeneratedContract,
   ContainerSpecs,
+  ChatThread,
+  ChatMessage,
+  ChatParticipant,
+  Notification,
+  OfferHistoryItem,
+  StockAlert,
+  StockAlertTrigger,
 } from "@/types";
 
 interface B2BState {
