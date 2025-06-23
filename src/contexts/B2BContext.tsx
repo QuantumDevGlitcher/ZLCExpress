@@ -70,7 +70,26 @@ type B2BAction =
   | { type: "SET_CONTRACT_TEMPLATES"; payload: ContractTemplate[] }
   | { type: "SET_GENERATED_CONTRACTS"; payload: GeneratedContract[] }
   | { type: "ADD_GENERATED_CONTRACT"; payload: GeneratedContract }
-  | { type: "SET_CONTAINER_SPECS"; payload: ContainerSpecs[] };
+  | { type: "SET_CONTAINER_SPECS"; payload: ContainerSpecs[] }
+  | { type: "SET_CHAT_THREADS"; payload: ChatThread[] }
+  | {
+      type: "ADD_CHAT_MESSAGE";
+      payload: { threadId: string; message: ChatMessage };
+    }
+  | { type: "MARK_MESSAGE_READ"; payload: string }
+  | { type: "SET_NOTIFICATIONS"; payload: Notification[] }
+  | { type: "MARK_NOTIFICATION_READ"; payload: string }
+  | { type: "MARK_ALL_NOTIFICATIONS_READ" }
+  | { type: "DELETE_NOTIFICATION"; payload: string }
+  | { type: "SET_OFFER_HISTORY"; payload: OfferHistoryItem[] }
+  | { type: "SET_STOCK_ALERTS"; payload: StockAlert[] }
+  | { type: "ADD_STOCK_ALERT"; payload: StockAlert }
+  | {
+      type: "UPDATE_STOCK_ALERT";
+      payload: { id: string; updates: Partial<StockAlert> };
+    }
+  | { type: "DELETE_STOCK_ALERT"; payload: string }
+  | { type: "SET_STOCK_ALERT_TRIGGERS"; payload: StockAlertTrigger[] };
 
 const initialState: B2BState = {
   volumePricing: [],
