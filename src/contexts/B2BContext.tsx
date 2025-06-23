@@ -985,6 +985,285 @@ export function B2BProvider({ children }: { children: ReactNode }) {
     return `/documents/bill-lading-${orderId}.pdf`;
   };
 
+  // Module 8: Advanced Communication and Negotiation Functions
+  const sendChatMessage = (
+    threadId: string,
+    content: string,
+    attachments: File[],
+  ) => {
+    const newMessage: ChatMessage = {
+      id: `msg-${Date.now()}`,
+      rfqId: threadId.replace("thread-", "rfq-"),
+      senderId: "user_123", // Current user ID
+      senderName: "Usuario Actual",
+      senderRole: "buyer",
+      content,
+      timestamp: new Date(),
+      attachments: attachments.map((file, index) => ({
+        id: `att-${Date.now()}-${index}`,
+        name: file.name,
+        type: file.type,
+        size: file.size,
+        url: URL.createObjectURL(file),
+        uploadedAt: new Date(),
+      })),
+      isRead: false,
+      messageType: "text",
+    };
+
+    dispatch({
+      type: "ADD_CHAT_MESSAGE",
+      payload: { threadId, message: newMessage },
+    });
+  };
+
+  const markChatMessageAsRead = (messageId: string) => {
+    dispatch({ type: "MARK_MESSAGE_READ", payload: messageId });
+  };
+
+  const createChatThread = (rfqId: string, participants: ChatParticipant[]) => {
+    const newThread: ChatThread = {
+      id: `thread-${Date.now()}`,
+      rfqId,
+      participants,
+      messages: [],
+      lastActivity: new Date(),
+      isActive: true,
+      unreadCount: 0,
+    };
+
+    dispatch({
+      type: "SET_CHAT_THREADS",
+      payload: [...state.chatThreads, newThread],
+    });
+  };
+
+  const markNotificationAsRead = (notificationId: string) => {
+    dispatch({ type: "MARK_NOTIFICATION_READ", payload: notificationId });
+  };
+
+  const markAllNotificationsAsRead = () => {
+    dispatch({ type: "MARK_ALL_NOTIFICATIONS_READ" });
+  };
+
+  const deleteNotification = (notificationId: string) => {
+    dispatch({ type: "DELETE_NOTIFICATION", payload: notificationId });
+  };
+
+  const handleNotificationAction = (notification: Notification) => {
+    if (notification.actionUrl) {
+      window.location.href = notification.actionUrl;
+    }
+    markNotificationAsRead(notification.id);
+  };
+
+  const createStockAlert = (alertData: Partial<StockAlert>) => {
+    const newAlert: StockAlert = {
+      id: `alert-${Date.now()}`,
+      productId: alertData.productId || `product-${Date.now()}`,
+      productName: alertData.productName || "Producto",
+      alertType: alertData.alertType || "back_in_stock",
+      isActive: true,
+      createdAt: new Date(),
+      criteria: alertData.criteria || {},
+      notificationMethod: alertData.notificationMethod || ["platform"],
+      ...alertData,
+    };
+
+    dispatch({ type: "ADD_STOCK_ALERT", payload: newAlert });
+  };
+
+  const updateStockAlert = (
+    alertId: string,
+    alertData: Partial<StockAlert>,
+  ) => {
+    dispatch({
+      type: "UPDATE_STOCK_ALERT",
+      payload: { id: alertId, updates: alertData },
+    });
+  };
+
+  const deleteStockAlert = (alertId: string) => {
+    dispatch({ type: "DELETE_STOCK_ALERT", payload: alertId });
+  };
+
+  const testStockAlert = (alertId: string) => {
+    const alert = state.stockAlerts.find((a) => a.id === alertId);
+    if (alert) {
+      const testTrigger: StockAlertTrigger = {
+        id: `trigger-${Date.now()}`,
+        alertId,
+        productId: alert.productId,
+        triggerType: "stock_available",
+        message: `Alerta de prueba para ${alert.productName}`,
+        timestamp: new Date(),
+        data: {
+          availableQuantity: 10,
+          currentPrice: 5000,
+        },
+      };
+
+      dispatch({
+        type: "SET_STOCK_ALERT_TRIGGERS",
+        payload: [...state.stockAlertTriggers, testTrigger],
+      });
+
+      // Create notification
+      const notification: Notification = {
+        id: `notif-${Date.now()}`,
+        type: "stock_alert",
+        title: "Alerta de Stock Activada",
+        message: testTrigger.message,
+        timestamp: new Date(),
+        isRead: false,
+        priority: "medium",
+        relatedId: alert.productId,
+      };
+
+      dispatch({
+        type: "SET_NOTIFICATIONS",
+        payload: [...state.notifications, notification],
+      });
+    }
+  };
+
+  // Initialize mock data for Module 8
+  React.useEffect(() => {
+    // Mock chat threads
+    const mockChatThreads: ChatThread[] = [
+      {
+        id: "thread-1",
+        rfqId: "rfq-1",
+        participants: [
+          {
+            id: "user_123",
+            name: "Juan Pérez",
+            role: "buyer",
+            isOnline: true,
+            lastSeen: new Date(),
+          },
+          {
+            id: "supplier_456",
+            name: "Carlos Mendoza",
+            role: "supplier",
+            isOnline: false,
+            lastSeen: new Date(Date.now() - 3600000),
+          },
+        ],
+        messages: [
+          {
+            id: "msg-1",
+            rfqId: "rfq-1",
+            senderId: "supplier_456",
+            senderName: "Carlos Mendoza",
+            senderRole: "supplier",
+            content:
+              "Hola, hemos revisado su RFQ y tenemos algunas preguntas sobre las especificaciones.",
+            timestamp: new Date(Date.now() - 7200000),
+            attachments: [],
+            isRead: false,
+            messageType: "text",
+          },
+        ],
+        lastActivity: new Date(Date.now() - 7200000),
+        isActive: true,
+        unreadCount: 1,
+      },
+    ];
+
+    // Mock notifications
+    const mockNotifications: Notification[] = [
+      {
+        id: "notif-1",
+        type: "rfq_update",
+        title: "Nueva cotización recibida",
+        message:
+          "Textiles Modernos S.A. ha enviado una cotización para su RFQ #20240001",
+        timestamp: new Date(Date.now() - 1800000),
+        isRead: false,
+        priority: "high",
+        relatedId: "rfq-1",
+        actionUrl: "/my-rfqs",
+        actionText: "Ver cotización",
+      },
+      {
+        id: "notif-2",
+        type: "stock_alert",
+        title: "Producto disponible",
+        message: 'El lote "Café Premium Colombia" está nuevamente disponible',
+        timestamp: new Date(Date.now() - 3600000),
+        isRead: false,
+        priority: "medium",
+        relatedId: "product-coffee",
+      },
+    ];
+
+    // Mock offer history
+    const mockOfferHistory: OfferHistoryItem[] = [
+      {
+        id: "offer-1",
+        rfqId: "rfq-1",
+        productName: "Camisas Polo Premium - Lote Mixto",
+        supplierName: "Textiles Modernos S.A.",
+        offerType: "initial",
+        status: "negotiating",
+        containerQuantity: 3,
+        unitPrice: 7650,
+        totalPrice: 22950,
+        currency: "USD",
+        validUntil: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+        terms: {
+          incoterm: "CIF",
+          paymentTerms: "T/T 30% adelanto, 70% contra B/L",
+          deliveryDate: new Date(Date.now() + 21 * 24 * 60 * 60 * 1000),
+          specialConditions: "Contenedor refrigerado requerido",
+        },
+        documents: [],
+        negotiationHistory: [
+          {
+            id: "nego-1",
+            timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000),
+            action: "offer_made",
+            actor: "supplier",
+            actorName: "Carlos Mendoza",
+            changes: [
+              {
+                field: "precio_unitario",
+                oldValue: 8000,
+                newValue: 7650,
+                reason: "Descuento por volumen",
+              },
+            ],
+            notes: "Oferta inicial con descuento por 3 contenedores",
+          },
+        ],
+      },
+    ];
+
+    // Mock stock alerts
+    const mockStockAlerts: StockAlert[] = [
+      {
+        id: "alert-1",
+        productId: "product-coffee",
+        productName: "Café Premium Colombia 20'",
+        alertType: "back_in_stock",
+        isActive: true,
+        createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+        criteria: {
+          minQuantity: 5,
+        },
+        notificationMethod: ["email", "platform"],
+      },
+    ];
+
+    dispatch({ type: "SET_CHAT_THREADS", payload: mockChatThreads });
+    dispatch({ type: "SET_NOTIFICATIONS", payload: mockNotifications });
+    dispatch({ type: "SET_OFFER_HISTORY", payload: mockOfferHistory });
+    dispatch({ type: "SET_STOCK_ALERTS", payload: mockStockAlerts });
+    dispatch({ type: "SET_STOCK_ALERT_TRIGGERS", payload: [] });
+  }, []);
+
   return (
     <B2BContext.Provider
       value={{
