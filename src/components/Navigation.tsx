@@ -295,6 +295,25 @@ export function Navigation({ className }: NavigationProps) {
                         {item.label}
                       </Link>
                     ))}
+
+                    {/* B2B Menu in Mobile */}
+                    <div className="border-t pt-4 mt-4">
+                      <h4 className="text-sm font-medium text-gray-900 mb-2 px-3">
+                        <Building2 className="inline mr-2 h-4 w-4" />
+                        B2B Tools
+                      </h4>
+                      {b2bMenuItems.map((item) => (
+                        <Link
+                          key={item.href}
+                          to={item.href}
+                          onClick={() => setIsSheetOpen(false)}
+                          className="flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-zlc-gray-100 ml-4"
+                        >
+                          <item.icon className="mr-3 h-4 w-4" />
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
                   </nav>
 
                   {/* Mobile Language & Currency */}
