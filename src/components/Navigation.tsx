@@ -33,6 +33,11 @@ import {
   Settings,
   ShoppingCart,
   User,
+  MessageSquare,
+  FileText,
+  Shield,
+  Bell,
+  TrendingUp,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
