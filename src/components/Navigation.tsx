@@ -62,6 +62,15 @@ const mainMenuItems = [
   { label: "Marco Legal", href: "/legal", icon: Scale },
 ];
 
+const b2bMenuItems = [
+  { label: "Mis RFQs", href: "/my-rfqs", icon: FileText },
+  { label: "Historial de Ofertas", href: "/offer-history", icon: TrendingUp },
+  { label: "Comunicaciones", href: "/communications", icon: MessageSquare },
+  { label: "Términos de Pago", href: "/payment-terms", icon: Settings },
+  { label: "Contratos", href: "/contract-templates", icon: Scale },
+  { label: "Aduana ZLC", href: "/customs-support", icon: Shield },
+];
+
 interface NavigationProps {
   className?: string;
 }
