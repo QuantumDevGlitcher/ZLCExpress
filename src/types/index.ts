@@ -389,3 +389,273 @@ export interface OrderHistoryReport {
   date: Date;
   status: string;
 }
+
+// Module 7: B2B/Wholesale Container Functionalities Types
+export interface VolumePricing {
+  id: string;
+  productId: string;
+  containerType: "20'" | "40'";
+  tiers: PricingTier[];
+  basePrice: number;
+  currency: string;
+  validFrom: Date;
+  validUntil?: Date;
+}
+
+export interface PricingTier {
+  minQuantity: number;
+  maxQuantity?: number;
+  pricePerContainer: number;
+  discountPercentage: number;
+  discountLabel: string; // e.g., "5% off", "Volume discount"
+}
+
+export interface RFQ {
+  id: string;
+  rfqNumber: string;
+  productId: string;
+  productTitle: string;
+  supplierId: string;
+  supplierName: string;
+  buyerId: string;
+  buyerCompany: string;
+  containerQuantity: number;
+  containerType: "20'" | "40'";
+  incoterm: "FOB" | "CIF" | "CFR" | "EXW";
+  estimatedDeliveryDate: Date;
+  logisticsComments?: string;
+  specialRequirements?: string;
+  status:
+    | "draft"
+    | "sent"
+    | "pending"
+    | "quoted"
+    | "counter_offer"
+    | "accepted"
+    | "rejected"
+    | "expired";
+  createdAt: Date;
+  updatedAt: Date;
+  validUntil: Date;
+  quotes: RFQQuote[];
+  documents: RFQDocument[];
+}
+
+export interface RFQQuote {
+  id: string;
+  rfqId: string;
+  supplierId: string;
+  quoteNumber: string;
+  unitPrice: number;
+  totalPrice: number;
+  currency: string;
+  incoterm: "FOB" | "CIF" | "CFR" | "EXW";
+  leadTime: number; // days
+  validUntil: Date;
+  paymentTerms: string;
+  specialConditions?: string;
+  isCounterOffer: boolean;
+  status: "draft" | "sent" | "accepted" | "rejected" | "expired";
+  createdAt: Date;
+}
+
+export interface RFQDocument {
+  id: string;
+  rfqId: string;
+  type:
+    | "rfq_form"
+    | "quote_response"
+    | "technical_specs"
+    | "certifications"
+    | "samples";
+  title: string;
+  fileName: string;
+  fileUrl: string;
+  uploadedBy: string;
+  uploadedAt: Date;
+}
+
+export interface PaymentTerms {
+  id: string;
+  type: "tt" | "lc" | "credit";
+  description: string;
+  advancePercentage?: number; // for T/T
+  balanceTerms?: string;
+  creditDays?: number; // for Net 30, Net 60
+  lcRequirements?: LCRequirements;
+  isActive: boolean;
+}
+
+export interface LCRequirements {
+  minAmount: number;
+  maxAmount: number;
+  requiredDocuments: string[];
+  bankRequirements: string[];
+  specialConditions?: string[];
+}
+
+export interface CreditLine {
+  id: string;
+  companyId: string;
+  totalLimit: number;
+  availableLimit: number;
+  usedLimit: number;
+  currency: string;
+  approvedDate: Date;
+  expiryDate: Date;
+  interestRate?: number;
+  status: "active" | "suspended" | "expired" | "pending_approval";
+  creditHistory: CreditTransaction[];
+}
+
+export interface CreditTransaction {
+  id: string;
+  creditLineId: string;
+  orderId?: string;
+  type: "credit_used" | "payment_received" | "credit_adjustment";
+  amount: number;
+  description: string;
+  transactionDate: Date;
+  balanceAfter: number;
+}
+
+export interface FreightQuote {
+  id: string;
+  origin: string;
+  destination: string;
+  containerType: "20'" | "40'";
+  quantity: number;
+  serviceType: "standard" | "express" | "refrigerated";
+  includeInsurance: boolean;
+  quotes: FreightOption[];
+  requestedAt: Date;
+  validUntil: Date;
+}
+
+export interface FreightOption {
+  id: string;
+  providerId: string;
+  providerName: string;
+  serviceType: string;
+  cost: number;
+  currency: string;
+  transitTime: number; // days
+  insuranceCost?: number;
+  totalCost: number;
+  conditions: string[];
+  rating: number;
+}
+
+export interface ContainerSpecs {
+  type: "20'" | "40'";
+  category: "dry" | "refrigerated" | "open_top" | "flat_rack";
+  maxGrossWeight: number; // kg
+  tareWeight: number; // kg
+  maxPayload: number; // kg
+  internalLength: number; // meters
+  internalWidth: number; // meters
+  internalHeight: number; // meters
+  volume: number; // cubic meters
+  temperatureRange?: {
+    min: number;
+    max: number;
+  };
+}
+
+export interface SupplierVerification {
+  id: string;
+  supplierId: string;
+  zlcLicenseNumber?: string;
+  zlcLicenseExpiry?: Date;
+  verificationStatus: "pending" | "verified" | "rejected" | "expired";
+  certifications: SupplierCertification[];
+  verificationDate?: Date;
+  verifiedBy?: string;
+  verificationNotes?: string;
+  verificationLevel: "basic" | "standard" | "premium" | "authorized";
+}
+
+export interface SupplierCertification {
+  id: string;
+  type:
+    | "ISO_9001"
+    | "ISO_14001"
+    | "BSCI"
+    | "SEDEX"
+    | "FSC"
+    | "CE"
+    | "FDA"
+    | "other";
+  certificationNumber: string;
+  issuedBy: string;
+  issuedDate: Date;
+  expiryDate: Date;
+  documentUrl?: string;
+  verified: boolean;
+}
+
+export interface ContractTemplate {
+  id: string;
+  type: "sales_contract" | "purchase_agreement" | "service_contract";
+  title: string;
+  description: string;
+  templateContent: string; // HTML or markdown content
+  incotermSupport: string[]; // Supported incoterms
+  jurisdiction: string;
+  language: "es" | "en" | "pt";
+  version: string;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface GeneratedContract {
+  id: string;
+  contractNumber: string;
+  templateId: string;
+  rfqId?: string;
+  orderId?: string;
+  buyerCompanyId: string;
+  supplierCompanyId: string;
+  contractContent: string;
+  variables: Record<string, any>; // Template variables filled
+  status: "draft" | "pending_signatures" | "signed" | "executed" | "terminated";
+  createdAt: Date;
+  signedAt?: Date;
+  signedBy: ContractSignature[];
+  documents: ContractDocument[];
+}
+
+export interface ContractSignature {
+  partyType: "buyer" | "supplier";
+  signedBy: string;
+  signedAt: Date;
+  ipAddress?: string;
+  digitalSignature?: string;
+}
+
+export interface ContractDocument {
+  id: string;
+  contractId: string;
+  type:
+    | "legal_existence"
+    | "insurance_policy"
+    | "import_permit"
+    | "power_of_attorney"
+    | "other";
+  title: string;
+  fileName: string;
+  fileUrl: string;
+  uploadedBy: string;
+  uploadedAt: Date;
+  verified: boolean;
+  expiryDate?: Date;
+}
+
+export interface DocumentGenerator {
+  generateProformaInvoice: (rfq: RFQ, quote: RFQQuote) => Promise<string>;
+  generateCommercialInvoice: (order: Order) => Promise<string>;
+  generatePackingList: (order: Order) => Promise<string>;
+  generateCertificateOfOrigin: (order: Order) => Promise<string>;
+  generateBillOfLading: (order: Order, shipping: any) => Promise<string>;
+}
