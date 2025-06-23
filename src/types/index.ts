@@ -659,3 +659,143 @@ export interface DocumentGenerator {
   generateCertificateOfOrigin: (order: Order) => Promise<string>;
   generateBillOfLading: (order: Order, shipping: any) => Promise<string>;
 }
+
+// Module 8: Advanced Communication and Negotiation
+export interface ChatMessage {
+  id: string;
+  rfqId: string;
+  senderId: string;
+  senderName: string;
+  senderRole: "buyer" | "supplier";
+  content: string;
+  timestamp: Date;
+  attachments: ChatAttachment[];
+  isRead: boolean;
+  messageType: "text" | "file" | "offer" | "system";
+}
+
+export interface ChatAttachment {
+  id: string;
+  name: string;
+  type: string;
+  size: number;
+  url: string;
+  uploadedAt: Date;
+}
+
+export interface ChatThread {
+  id: string;
+  rfqId: string;
+  participants: ChatParticipant[];
+  messages: ChatMessage[];
+  lastActivity: Date;
+  isActive: boolean;
+  unreadCount: number;
+}
+
+export interface ChatParticipant {
+  id: string;
+  name: string;
+  role: "buyer" | "supplier";
+  avatar?: string;
+  isOnline: boolean;
+  lastSeen: Date;
+}
+
+export interface Notification {
+  id: string;
+  type:
+    | "rfq_update"
+    | "stock_alert"
+    | "chat_message"
+    | "offer_received"
+    | "contract_update";
+  title: string;
+  message: string;
+  timestamp: Date;
+  isRead: boolean;
+  priority: "low" | "medium" | "high" | "urgent";
+  relatedId?: string; // RFQ ID, Product ID, etc.
+  actionUrl?: string;
+  actionText?: string;
+}
+
+export interface OfferHistoryItem {
+  id: string;
+  rfqId: string;
+  productName: string;
+  supplierName: string;
+  offerType: "initial" | "counter_offer" | "final";
+  status: "pending" | "accepted" | "rejected" | "expired" | "negotiating";
+  containerQuantity: number;
+  unitPrice: number;
+  totalPrice: number;
+  currency: string;
+  validUntil: Date;
+  createdAt: Date;
+  terms: {
+    incoterm: string;
+    paymentTerms: string;
+    deliveryDate: Date;
+    specialConditions?: string;
+  };
+  documents: RFQDocument[];
+  negotiationHistory: NegotiationStep[];
+}
+
+export interface NegotiationStep {
+  id: string;
+  timestamp: Date;
+  action:
+    | "offer_made"
+    | "counter_offer"
+    | "price_adjustment"
+    | "terms_modified"
+    | "accepted"
+    | "rejected";
+  actor: "buyer" | "supplier";
+  actorName: string;
+  changes: {
+    field: string;
+    oldValue: any;
+    newValue: any;
+    reason?: string;
+  }[];
+  notes?: string;
+}
+
+export interface StockAlert {
+  id: string;
+  productId: string;
+  productName: string;
+  alertType: "back_in_stock" | "low_stock" | "similar_product" | "price_drop";
+  isActive: boolean;
+  createdAt: Date;
+  lastTriggered?: Date;
+  criteria: {
+    minQuantity?: number;
+    maxPrice?: number;
+    specifications?: string[];
+    region?: string;
+  };
+  notificationMethod: ("email" | "platform" | "sms")[];
+}
+
+export interface StockAlertTrigger {
+  id: string;
+  alertId: string;
+  productId: string;
+  triggerType:
+    | "stock_available"
+    | "quantity_threshold"
+    | "price_change"
+    | "similar_found";
+  message: string;
+  timestamp: Date;
+  data: {
+    availableQuantity?: number;
+    currentPrice?: number;
+    estimatedAvailability?: Date;
+    similarProducts?: string[];
+  };
+}
