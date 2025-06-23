@@ -24,6 +24,7 @@ import OrderDetail from "./pages/OrderDetail";
 import CompanyProfile from "./pages/CompanyProfile";
 import MyRFQs from "./pages/MyRFQs";
 import PaymentTerms from "./pages/PaymentTerms";
+import ContractTemplates from "./pages/ContractTemplates";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -71,6 +72,10 @@ const App = () => (
                   {/* B2B/Wholesale Routes - Module 7 */}
                   <Route path="/my-rfqs" element={<MyRFQs />} />
                   <Route path="/payment-terms" element={<PaymentTerms />} />
+                  <Route
+                    path="/contract-templates"
+                    element={<ContractTemplates />}
+                  />
 
                   {/* Placeholder routes for navigation links */}
                   <Route
