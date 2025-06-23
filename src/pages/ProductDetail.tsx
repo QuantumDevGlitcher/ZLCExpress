@@ -628,14 +628,39 @@ export default function ProductDetail() {
                   </div>
 
                   <div className="space-y-2">
+                  <div className="space-y-3">
                     <Button
                       onClick={handleAddToCart}
-                      className="w-full bg-zlc-blue-600 hover:bg-zlc-blue-700 h-12"
+                      className="w-full btn-professional"
+                      size="lg"
                     >
-                      <Package className="w-4 h-4 mr-2" />
+                      <ShoppingCart className="mr-2 h-4 w-4" />
                       Agregar al Carrito
                     </Button>
-                    <Button variant="outline" className="w-full h-10" asChild>
+
+                    <RFQRequestDialog
+                      product={mockProduct}
+                      supplierId="supplier-1"
+                      supplierName="Textiles Modernos S.A."
+                      onRFQCreated={(rfqId) => {
+                        console.log("RFQ created:", rfqId);
+                        // Optionally navigate to RFQ page or show success message
+                      }}
+                    >
+                      <Button
+                        variant="outline"
+                        className="w-full border-zlc-blue-600 text-zlc-blue-600 hover:bg-zlc-blue-50"
+                        size="lg"
+                      >
+                        <FileText className="mr-2 h-4 w-4" />
+                        Solicitar Cotización (RFQ)
+                      </Button>
+                    </RFQRequestDialog>
+                  </div>
+                      variant="outline"
+                      className="w-full h-10"
+                      asChild
+                    >
                       <Link to="/cart">
                         <Send className="w-4 h-4 mr-2" />
                         Ver Carrito
@@ -724,16 +749,26 @@ export default function ProductDetail() {
             </div>
           </div>
 
-          {/* Information Tabs */}
-          <div className="mt-8">
-            <Tabs defaultValue="details" className="w-full">
-              <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="details">Detalles</TabsTrigger>
-                <TabsTrigger value="reviews">Reseñas</TabsTrigger>
-                <TabsTrigger value="qa">Preguntas</TabsTrigger>
-                <TabsTrigger value="policy">Política</TabsTrigger>
-              </TabsList>
+              {/* Volume Pricing Section */}
+              <VolumePricingTable
+                productId={mockProduct.id}
+                onPricingChange={(calculation) => {
+                  console.log("Pricing changed:", calculation);
+                  // Update pricing display or state
+                }}
+                defaultQuantity={1}
+              />
 
+              {/* Information Tabs */}
+              <Card>
+                <CardContent className="p-0">
+                  <Tabs defaultValue="details" className="w-full">
+                    <TabsList className="grid w-full grid-cols-4">
+                      <TabsTrigger value="details">Detalles</TabsTrigger>
+                      <TabsTrigger value="reviews">Reseñas</TabsTrigger>
+                      <TabsTrigger value="qa">Preguntas</TabsTrigger>
+                      <TabsTrigger value="return">Devoluciones</TabsTrigger>
+                    </TabsList>
               <TabsContent value="details" className="mt-6">
                 <Card>
                   <CardContent className="p-6">
