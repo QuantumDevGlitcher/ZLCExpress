@@ -32,6 +32,13 @@ interface B2BState {
   generatedContracts: GeneratedContract[];
   containerSpecs: ContainerSpecs[];
   selectedPricing?: VolumePricing;
+
+  // Module 8: Advanced Communication and Negotiation
+  chatThreads: ChatThread[];
+  notifications: Notification[];
+  offerHistory: OfferHistoryItem[];
+  stockAlerts: StockAlert[];
+  stockAlertTriggers: StockAlertTrigger[];
 }
 
 type B2BAction =
