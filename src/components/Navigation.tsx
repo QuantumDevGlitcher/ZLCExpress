@@ -125,6 +125,34 @@ export function Navigation({ className }: NavigationProps) {
                   </NavigationMenuLink>
                 </NavigationMenuItem>
               ))}
+
+              {/* B2B Dropdown Menu */}
+              <NavigationMenuItem>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      className="h-10 px-4 py-2 text-sm font-medium"
+                    >
+                      <Building2 className="mr-2 h-4 w-4" />
+                      B2B
+                      <ChevronDown className="ml-2 h-3 w-3" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" className="w-56">
+                    <DropdownMenuLabel>Herramientas B2B</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    {b2bMenuItems.map((item) => (
+                      <DropdownMenuItem key={item.href} asChild>
+                        <Link to={item.href} className="w-full">
+                          <item.icon className="mr-2 h-4 w-4" />
+                          {item.label}
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
 
