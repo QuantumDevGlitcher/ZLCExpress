@@ -660,3 +660,5 @@ function OfferHistory() {
     </div>
   );
 }
+
+export default OfferHistory;
