@@ -398,6 +398,9 @@ export default function Register() {
   const [availableStates, setAvailableStates] = useState<string[]>([]);
   const [availableCities, setAvailableCities] = useState<string[]>([]);
 
+  // Email validation warning state
+  const [emailWarning, setEmailWarning] = useState(false);
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
