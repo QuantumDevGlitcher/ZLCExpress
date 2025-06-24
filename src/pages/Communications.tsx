@@ -71,7 +71,10 @@ function Communications() {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="min-h-screen bg-white">
+      <Navigation />
+      <main className="pt-14 sm:pt-16 md:pt-20">
+        <div className="container mx-auto p-6 space-y-6">
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
