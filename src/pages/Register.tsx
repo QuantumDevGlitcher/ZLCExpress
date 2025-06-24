@@ -435,6 +435,19 @@ export default function Register() {
   };
 
   const nextStep = () => {
+    // Special validation for step 2 (email field)
+    if (currentStep === 2) {
+      const emailValue = form.getValues("email");
+      if (!emailValue || !emailValue.includes("@")) {
+        setEmailWarning(true);
+        // Auto-hide warning after 3 seconds
+        setTimeout(() => {
+          setEmailWarning(false);
+        }, 3000);
+        return; // Don't advance to next step
+      }
+    }
+
     if (currentStep < steps.length) {
       setCurrentStep(currentStep + 1);
     }
