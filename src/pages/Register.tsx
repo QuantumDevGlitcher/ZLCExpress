@@ -443,6 +443,47 @@ export default function Register() {
     }
   };
 
+  // Geographic cascade functions
+  const handleCountryChange = (country: string) => {
+    setSelectedCountry(country);
+    setSelectedState("");
+    setAvailableCities([]);
+    form.setValue("fiscalCountry", country);
+    form.setValue("state", "");
+    form.setValue("city", "");
+
+    if (geographicData[country as keyof typeof geographicData]) {
+      setAvailableStates(
+        Object.keys(
+          geographicData[country as keyof typeof geographicData].states,
+        ),
+      );
+    } else {
+      setAvailableStates([]);
+    }
+  };
+
+  const handleStateChange = (state: string) => {
+    setSelectedState(state);
+    form.setValue("state", state);
+    form.setValue("city", "");
+
+    if (
+      selectedCountry &&
+      geographicData[selectedCountry as keyof typeof geographicData]
+    ) {
+      const countryData =
+        geographicData[selectedCountry as keyof typeof geographicData];
+      setAvailableCities(countryData.states[state] || []);
+    } else {
+      setAvailableCities([]);
+    }
+  };
+
+  const handleCityChange = (city: string) => {
+    form.setValue("city", city);
+  };
+
   const canProceed = () => {
     const fieldsToValidate = getFieldsForStep(currentStep);
     return fieldsToValidate.every((field) => {
