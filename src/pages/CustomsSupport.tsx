@@ -32,6 +32,7 @@ import {
   Award,
   Building2,
 } from "lucide-react";
+import { Navigation } from "@/components/Navigation";
 
 interface DocumentTemplate {
   id: string;
