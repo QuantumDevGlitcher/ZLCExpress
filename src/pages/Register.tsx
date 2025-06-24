@@ -782,21 +782,52 @@ export default function Register() {
                         )}
                       />
 
-                      <div className="grid gap-6 md:grid-cols-3">
-                        <FormField
-                          control={form.control}
-                          name="city"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Ciudad *</FormLabel>
-                              <FormControl>
-                                <Input placeholder="Ej: San José" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
+                      {/* País - Estado - Ciudad in correct order */}
+                      <FormField
+                        control={form.control}
+                        name="fiscalCountry"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>País *</FormLabel>
+                            <FormControl>
+                              <Select
+                                value={field.value}
+                                onValueChange={(value) => {
+                                  field.onChange(value);
+                                  handleCountryChange(value);
+                                }}
+                              >
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Seleccione un país" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {Object.keys(geographicData).map(
+                                    (country) => (
+                                      <SelectItem key={country} value={country}>
+                                        {country}
+                                      </SelectItem>
+                                    ),
+                                  )}
+                                  {/* Add other Central American countries without full data */}
+                                  <SelectItem value="El Salvador">
+                                    El Salvador
+                                  </SelectItem>
+                                  <SelectItem value="Honduras">
+                                    Honduras
+                                  </SelectItem>
+                                  <SelectItem value="Nicaragua">
+                                    Nicaragua
+                                  </SelectItem>
+                                  <SelectItem value="Belice">Belice</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
+                      <div className="grid gap-6 md:grid-cols-2">
                         <FormField
                           control={form.control}
                           name="state"
@@ -804,7 +835,36 @@ export default function Register() {
                             <FormItem>
                               <FormLabel>Estado/Provincia *</FormLabel>
                               <FormControl>
-                                <Input placeholder="Ej: San José" {...field} />
+                                <Select
+                                  value={field.value}
+                                  onValueChange={(value) => {
+                                    field.onChange(value);
+                                    handleStateChange(value);
+                                  }}
+                                  disabled={
+                                    !selectedCountry ||
+                                    availableStates.length === 0
+                                  }
+                                >
+                                  <SelectTrigger>
+                                    <SelectValue
+                                      placeholder={
+                                        !selectedCountry
+                                          ? "Primero seleccione un país"
+                                          : availableStates.length === 0
+                                            ? "No hay datos disponibles"
+                                            : "Seleccione estado/provincia"
+                                      }
+                                    />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {availableStates.map((state) => (
+                                      <SelectItem key={state} value={state}>
+                                        {state}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -813,12 +873,41 @@ export default function Register() {
 
                         <FormField
                           control={form.control}
-                          name="postalCode"
+                          name="city"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>C��digo Postal *</FormLabel>
+                              <FormLabel>Ciudad *</FormLabel>
                               <FormControl>
-                                <Input placeholder="Ej: 10101" {...field} />
+                                <Select
+                                  value={field.value}
+                                  onValueChange={(value) => {
+                                    field.onChange(value);
+                                    handleCityChange(value);
+                                  }}
+                                  disabled={
+                                    !selectedState ||
+                                    availableCities.length === 0
+                                  }
+                                >
+                                  <SelectTrigger>
+                                    <SelectValue
+                                      placeholder={
+                                        !selectedState
+                                          ? "Primero seleccione estado/provincia"
+                                          : availableCities.length === 0
+                                            ? "No hay datos disponibles"
+                                            : "Seleccione ciudad"
+                                      }
+                                    />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {availableCities.map((city) => (
+                                      <SelectItem key={city} value={city}>
+                                        {city}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -828,17 +917,12 @@ export default function Register() {
 
                       <FormField
                         control={form.control}
-                        name="fiscalCountry"
+                        name="postalCode"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>País *</FormLabel>
+                            <FormLabel>Código Postal *</FormLabel>
                             <FormControl>
-                              <SearchableCountrySelect
-                                value={field.value}
-                                onValueChange={field.onChange}
-                                placeholder="Seleccione un país"
-                                countriesByRegion={countriesByRegion}
-                              />
+                              <Input placeholder="Ej: 10101" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
