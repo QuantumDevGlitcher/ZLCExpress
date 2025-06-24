@@ -58,7 +58,7 @@ const formSchema = z
     contactName: z.string().min(2, "El nombre de contacto es requerido"),
     contactPosition: z.string().min(2, "El cargo es requerido"),
     email: z.string().email("Ingrese un email válido"),
-    phone: z.string().min(8, "Ingrese un número de teléfono v��lido"),
+    phone: z.string().min(8, "Ingrese un número de teléfono válido"),
     street: z.string().min(5, "La dirección es requerida"),
     city: z.string().min(2, "La ciudad es requerida"),
     state: z.string().min(2, "El estado/provincia es requerido"),
@@ -220,7 +220,7 @@ export default function Register() {
     <div className="min-h-screen bg-zlc-gray-50">
       <Navigation />
 
-      <div className="container-section py-12">
+      <div className="container-section pt-20 pb-12">
         <div className="mx-auto max-w-4xl">
           {/* Header */}
           <div className="text-center mb-8">
