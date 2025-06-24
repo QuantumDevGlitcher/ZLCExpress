@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
+import { Navigation } from "@/components/Navigation";
 
 function Communications() {
   const {
