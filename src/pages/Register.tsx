@@ -745,6 +745,13 @@ export default function Register() {
                                   placeholder="nombre@empresa.com"
                                   {...field}
                                   required
+                                  onChange={(e) => {
+                                    field.onChange(e);
+                                    // Hide warning when user starts typing
+                                    if (emailWarning) {
+                                      setEmailWarning(false);
+                                    }
+                                  }}
                                 />
                               </FormControl>
                               <FormDescription>
@@ -752,6 +759,25 @@ export default function Register() {
                                 su empresa
                               </FormDescription>
                               <FormMessage />
+
+                              {/* Email validation warning */}
+                              {emailWarning && (
+                                <div className="relative">
+                                  <div className="absolute top-2 left-0 right-0 z-10">
+                                    <div className="bg-red-500 text-white px-4 py-3 rounded-lg shadow-lg border border-red-600 relative animate-in fade-in duration-300">
+                                      <div className="flex items-center gap-2">
+                                        <AlertCircle className="h-4 w-4" />
+                                        <span className="text-sm font-medium">
+                                          Por favor ingrese un email válido que
+                                          contenga "@"
+                                        </span>
+                                      </div>
+                                      {/* Arrow pointing up to the input */}
+                                      <div className="absolute -top-2 left-4 w-0 h-0 border-l-4 border-r-4 border-b-4 border-l-transparent border-r-transparent border-b-red-500"></div>
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
                             </FormItem>
                           )}
                         />
