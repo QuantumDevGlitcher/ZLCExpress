@@ -726,12 +726,14 @@ export default function Register() {
                               <FormControl>
                                 <Input
                                   type="email"
-                                  placeholder="juan.perez@empresa.com"
+                                  placeholder="nombre@empresa.com"
                                   {...field}
+                                  required
                                 />
                               </FormControl>
                               <FormDescription>
-                                Use el email corporativo de su empresa
+                                Debe incluir "@" - Use el email corporativo de
+                                su empresa
                               </FormDescription>
                               <FormMessage />
                             </FormItem>
@@ -814,7 +816,7 @@ export default function Register() {
                           name="postalCode"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Código Postal *</FormLabel>
+                              <FormLabel>C��digo Postal *</FormLabel>
                               <FormControl>
                                 <Input placeholder="Ej: 10101" {...field} />
                               </FormControl>
