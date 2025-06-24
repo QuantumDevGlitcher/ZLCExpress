@@ -337,7 +337,10 @@ function CustomsSupport() {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-8">
+    <div className="min-h-screen bg-white">
+      <Navigation />
+      <main className="pt-14 sm:pt-16 md:pt-20">
+        <div className="container mx-auto p-6 space-y-8">
       {/* Header Section */}
       <div className="text-center space-y-4">
         <div className="flex items-center justify-center gap-3 mb-4">
