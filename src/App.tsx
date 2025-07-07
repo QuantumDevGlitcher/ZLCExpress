@@ -124,6 +124,10 @@ const App = () => (
                     path="/supplier/shipments/:id"
                     element={<SupplierShipmentDetail />}
                   />
+                  <Route
+                    path="/supplier/tracking"
+                    element={<SupplierTracking />}
+                  />
 
                   {/* Placeholder routes for navigation links */}
                   <Route
