@@ -220,6 +220,42 @@ export default function Login() {
             </p>
           </div>
 
+          {/* ============================================ */}
+          {/* DEMO CREDENTIALS DISPLAY - FOR DEVELOPMENT ONLY */}
+          {/* TODO: REMOVE THIS SECTION BEFORE PRODUCTION */}
+          {/* ============================================ */}
+          <Card className="mb-6 border-amber-200 bg-amber-50">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm text-amber-800 flex items-center gap-2">
+                <AlertCircle className="h-4 w-4" />
+                Credenciales Demo - Solo Desarrollo
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <div className="text-xs text-amber-700 space-y-2">
+                <div>
+                  <strong>Compradores:</strong>
+                  <div className="ml-2">
+                    • comprador@demo.com / demo123 (verificado)
+                    <br />• comprador.pendiente@demo.com / demo123 (pendiente)
+                  </div>
+                </div>
+                <div>
+                  <strong>Proveedores:</strong>
+                  <div className="ml-2">
+                    • proveedor@demo.com / demo123 (verificado)
+                    <br />
+                    • proveedor.pendiente@demo.com / demo123 (pendiente)
+                    <br />• proveedor.rechazado@demo.com / demo123 (rechazado)
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          {/* ============================================ */}
+          {/* END DEMO CREDENTIALS DISPLAY SECTION */}
+          {/* ============================================ */}
+
           {/* Status Alert */}
           {accountStatus && <div className="mb-6">{getStatusAlert()}</div>}
 
