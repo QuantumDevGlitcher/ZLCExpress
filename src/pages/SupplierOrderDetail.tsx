@@ -806,6 +806,15 @@ const SupplierOrderDetail = () => {
                     <DollarSign className="h-5 w-5" />
                     Resumen Financiero
                   </CardTitle>
+                  {paymentReceived && (
+                    <Badge
+                      variant="default"
+                      className="bg-green-100 text-green-800 w-fit"
+                    >
+                      <CheckCircle className="h-3 w-3 mr-1" />
+                      Anticipo Recibido
+                    </Badge>
+                  )}
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div className="flex justify-between">
