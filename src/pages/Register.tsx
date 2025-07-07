@@ -616,6 +616,30 @@ export default function Register() {
     form.setValue("city", city);
   };
 
+  // Supplier-specific functions
+  const handleCertificationChange = (
+    certification: string,
+    checked: boolean,
+  ) => {
+    if (checked) {
+      setSelectedCertifications([...selectedCertifications, certification]);
+    } else {
+      setSelectedCertifications(
+        selectedCertifications.filter((c) => c !== certification),
+      );
+    }
+  };
+
+  const handleFileUpload = (files: FileList | null) => {
+    if (files) {
+      setUploadedDocuments([...uploadedDocuments, ...Array.from(files)]);
+    }
+  };
+
+  const removeDocument = (index: number) => {
+    setUploadedDocuments(uploadedDocuments.filter((_, i) => i !== index));
+  };
+
   const canProceed = () => {
     const fieldsToValidate = getFieldsForStep(currentStep);
     return fieldsToValidate.every((field) => {
@@ -764,7 +788,7 @@ export default function Register() {
                           name="country"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>País de Operación *</FormLabel>
+                              <FormLabel>Pa��s de Operación *</FormLabel>
                               <FormControl>
                                 <SearchableCountrySelect
                                   value={field.value}
