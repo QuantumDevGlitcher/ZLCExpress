@@ -91,6 +91,14 @@ const App = () => (
                     path="/supplier/dashboard"
                     element={<SupplierDashboard />}
                   />
+                  <Route
+                    path="/supplier/products"
+                    element={<SupplierProducts />}
+                  />
+                  <Route
+                    path="/supplier/products/new"
+                    element={<SupplierCreateProduct />}
+                  />
 
                   {/* Placeholder routes for navigation links */}
                   <Route
