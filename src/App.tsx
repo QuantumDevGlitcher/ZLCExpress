@@ -84,6 +84,12 @@ const App = () => (
                   <Route path="/communications" element={<Communications />} />
                   <Route path="/customs-support" element={<CustomsSupport />} />
 
+                  {/* Supplier Dashboard Routes */}
+                  <Route
+                    path="/supplier/dashboard"
+                    element={<SupplierDashboard />}
+                  />
+
                   {/* Placeholder routes for navigation links */}
                   <Route
                     path="/how-it-works"
