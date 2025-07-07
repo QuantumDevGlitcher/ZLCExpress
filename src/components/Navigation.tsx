@@ -298,18 +298,61 @@ export function Navigation({ className }: NavigationProps) {
                   <DropdownMenuContent align="end" className="w-56">
                     <DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>
-                      <ShoppingCart className="mr-2 h-4 w-4" />
-                      Dashboard
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Package className="mr-2 h-4 w-4" />
-                      Mis Pedidos
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Settings className="mr-2 h-4 w-4" />
-                      Configuración
-                    </DropdownMenuItem>
+                    {userType === "supplier" ? (
+                      <>
+                        <DropdownMenuItem asChild>
+                          <Link to="/supplier/dashboard">
+                            <Home className="mr-2 h-4 w-4" />
+                            Mi Panel
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link to="/supplier/profile">
+                            <Building2 className="mr-2 h-4 w-4" />
+                            Mi Perfil
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link to="/supplier/products">
+                            <Package className="mr-2 h-4 w-4" />
+                            Mis Lotes
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link to="/supplier/orders">
+                            <ShoppingCart className="mr-2 h-4 w-4" />
+                            Mis Órdenes
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link to="/supplier/settings">
+                            <Settings className="mr-2 h-4 w-4" />
+                            Configuración
+                          </Link>
+                        </DropdownMenuItem>
+                      </>
+                    ) : (
+                      <>
+                        <DropdownMenuItem asChild>
+                          <Link to="/">
+                            <ShoppingCart className="mr-2 h-4 w-4" />
+                            Dashboard
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link to="/my-orders">
+                            <Package className="mr-2 h-4 w-4" />
+                            Mis Pedidos
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link to="/company-profile">
+                            <Settings className="mr-2 h-4 w-4" />
+                            Configuración
+                          </Link>
+                        </DropdownMenuItem>
+                      </>
+                    )}
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={() => setIsLoggedIn(false)}>
                       Cerrar Sesión
