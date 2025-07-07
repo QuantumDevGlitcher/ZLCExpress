@@ -79,6 +79,77 @@ const formSchema = z
 
 type FormValues = z.infer<typeof formSchema>;
 
+// Supplier-specific form schema
+const supplierFormSchema = z
+  .object({
+    nombreEmpresa: z
+      .string()
+      .min(2, "El nombre de la empresa debe tener al menos 2 caracteres"),
+    ruc: z.string().min(5, "El número de RUC es requerido"),
+    sectorIndustria: z.string().min(1, "Seleccione un sector"),
+    certificaciones: z.array(z.string()).optional(),
+    nombreContacto: z.string().min(2, "El nombre de contacto es requerido"),
+    cargo: z.string().min(2, "El cargo es requerido"),
+    emailCorporativo: z.string().email("Ingrese un email válido"),
+    telefonoContacto: z.string().min(8, "Ingrese un número de teléfono válido"),
+    direccion: z.string().min(5, "La dirección es requerida"),
+    provincia: z.string().min(2, "La provincia es requerida"),
+    ciudad: z.string().min(2, "La ciudad es requerida"),
+    codigoPostal: z.string().optional(),
+    password: z
+      .string()
+      .min(8, "La contraseña debe tener al menos 8 caracteres"),
+    confirmPassword: z.string(),
+    acceptTerms: z
+      .boolean()
+      .refine((val) => val === true, "Debe aceptar los términos y condiciones"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Las contraseñas no coinciden",
+    path: ["confirmPassword"],
+  });
+
+type SupplierFormValues = z.infer<typeof supplierFormSchema>;
+
+// Supplier-specific data
+const sectoresIndustria = [
+  "Textiles y Confección",
+  "Calzado y Marroquinería",
+  "Metalurgia y Metalmecánica",
+  "Alimentos y Bebidas",
+  "Productos Químicos",
+  "Electrónicos y Tecnología",
+  "Muebles y Decoración",
+  "Juguetes y Entretenimiento",
+  "Cosméticos y Cuidado Personal",
+  "Artesanías y Manualidades",
+  "Otros",
+];
+
+const certificacionesDisponibles = [
+  "ISO 9001 - Gestión de Calidad",
+  "ISO 14001 - Gestión Ambiental",
+  "BSCI - Business Social Compliance Initiative",
+  "SEDEX - Supplier Ethical Data Exchange",
+  "Licencia ZLC - Zona Libre de Colón",
+  "FDA - Administración de Alimentos y Medicamentos",
+  "CE - Conformidad Europea",
+  "FSC - Forest Stewardship Council",
+];
+
+const provinciasPanel = [
+  "Panamá",
+  "Colón",
+  "Chiriquí",
+  "Coclé",
+  "Darién",
+  "Herrera",
+  "Los Santos",
+  "Veraguas",
+];
+
+type FormValues = z.infer<typeof formSchema>;
+
 // Geographic data structure for cascading dropdowns
 const geographicData = {
   "Costa Rica": {
