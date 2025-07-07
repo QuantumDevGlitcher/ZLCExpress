@@ -217,8 +217,8 @@ export function Navigation({ className }: NavigationProps) {
 
           {/* Right side controls */}
           <div className="flex items-center space-x-4">
-            {/* Cart Dropdown */}
-            <CartDropdown />
+            {/* Cart Dropdown - Only for Buyers */}
+            {userType === "buyer" && <CartDropdown />}
             {/* Language & Currency Selector */}
             <div className="hidden lg:flex items-center space-x-2">
               <DropdownMenu>
