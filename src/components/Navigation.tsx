@@ -73,6 +73,19 @@ const b2bMenuItems = [
   { label: "Aduana ZLC", href: "/customs-support", icon: Shield },
 ];
 
+const supplierMenuItems = [
+  { label: "Mi Panel", href: "/supplier/dashboard", icon: Home },
+  { label: "Mi Perfil", href: "/supplier/profile", icon: Building2 },
+  { label: "Mis Lotes", href: "/supplier/products", icon: Package },
+  { label: "Cotizaciones RFQ", href: "/supplier/rfqs", icon: FileText },
+  { label: "Órdenes Proforma", href: "/supplier/orders", icon: ShoppingCart },
+  { label: "Envíos y Logística", href: "/supplier/shipments", icon: Truck },
+  { label: "Mensajería", href: "/supplier/messages", icon: MessageSquare },
+  { label: "Reportes y Ventas", href: "/supplier/reports", icon: BarChart3 },
+  { label: "Aduana y Docs", href: "/supplier/customs", icon: Shield },
+  { label: "Configuraciones", href: "/supplier/settings", icon: Settings },
+];
+
 interface NavigationProps {
   className?: string;
 }
