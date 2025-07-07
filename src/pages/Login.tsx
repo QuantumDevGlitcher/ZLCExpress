@@ -135,8 +135,7 @@ export default function Login() {
             navigate("/"); // Redirect to main buyer dashboard/homepage
           } else if (matchingCredential.type === "supplier") {
             console.log("Redirecting to supplier dashboard...");
-            // TODO: Create supplier dashboard route
-            navigate("/"); // For now redirect to homepage, later create supplier dashboard
+            navigate("/supplier/dashboard"); // Redirect to supplier dashboard
           }
         } else {
           // Account pending verification or rejected
@@ -481,7 +480,7 @@ export default function Login() {
           {/* Support Link */}
           <div className="text-center mt-4">
             <p className="text-xs text-zlc-gray-500">
-              ��Problemas para acceder?{" "}
+              ¿Problemas para acceder?{" "}
               <Link
                 to="/support"
                 className="text-zlc-blue-600 hover:text-zlc-blue-800 hover:underline"
