@@ -230,6 +230,36 @@ const SupplierOrderDetail = () => {
     return documents.filter((doc) => doc.required).every((doc) => doc.uploaded);
   };
 
+  const getProductionStatusByProgress = (progress: number) => {
+    if (progress === 0) return "Pago recibido, preparando materia prima";
+    if (progress <= 25) return "Corte y confección en marcha";
+    if (progress <= 50) return "Embalaje en proceso";
+    if (progress <= 75) return "Paletas listas, esperando transporte interno";
+    if (progress === 100) return "Listo para embarcar";
+    return "En producción";
+  };
+
+  const handlePaymentConfirmation = () => {
+    setPaymentReceived(true);
+    setShowPaymentConfirmation(false);
+    toast({
+      title: "Pago Confirmado",
+      description:
+        "El anticipo ha sido marcado como recibido. El comprador será notificado que la producción ha iniciado.",
+    });
+  };
+
+  const handleProductionUpdate = (newProgress: number) => {
+    setProductionProgress(newProgress);
+    const newStatus = getProductionStatusByProgress(newProgress);
+    setProductionStatus(newStatus);
+
+    toast({
+      title: "Producción Actualizada",
+      description: `Progreso actualizado a ${newProgress}%. El comprador será notificado automáticamente.`,
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
