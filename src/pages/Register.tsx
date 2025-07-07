@@ -802,11 +802,13 @@ export default function Register() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <Form {...form}>
-                    <form
-                      onSubmit={form.handleSubmit(onSubmit)}
-                      className="space-y-6"
-                    >
+                  {/* Buyer Form */}
+                  {userType === "buyer" && (
+                    <Form {...form}>
+                      <form
+                        onSubmit={form.handleSubmit(onSubmit)}
+                        className="space-y-6"
+                      >
                       {/* Step 1: Company Information */}
                       {currentStep === 1 && (
                         <div className="space-y-6">
