@@ -91,12 +91,23 @@ interface NavigationProps {
 }
 
 export function Navigation({ className }: NavigationProps) {
+  const location = useLocation();
   const [selectedLanguage, setSelectedLanguage] = useState(languages[0]);
   const [selectedCurrency, setSelectedCurrency] = useState(currencies[0]);
   const [isLoggedIn, setIsLoggedIn] = useState(false); // This would come from auth context
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   const companyStatus = "verified"; // This would come from auth context
+
+  // ============================================
+  // USER TYPE DETECTION - FOR DEVELOPMENT ONLY
+  // TODO: REPLACE WITH REAL AUTH CONTEXT
+  // ============================================
+  const isSupplierRoute = location.pathname.startsWith("/supplier");
+  const userType = isSupplierRoute ? "supplier" : "buyer";
+  // ============================================
+  // END USER TYPE DETECTION SECTION
+  // ============================================
 
   return (
     <header
