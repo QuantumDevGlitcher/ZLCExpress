@@ -164,10 +164,15 @@ const SupplierRFQs = () => {
         <div className="container mx-auto px-4 py-6">
           {/* Header */}
           <div className="mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">
-              Cotizaciones (RFQ) Recibidas
-            </h1>
-            <p className="text-gray-600 mt-1">
+            <div className="flex items-center justify-between mb-4">
+              <h1 className="text-2xl font-bold text-gray-900">
+                Cotizaciones (RFQ) Recibidas
+              </h1>
+              <Button variant="outline" asChild>
+                <Link to="/supplier/dashboard">← Volver al Panel</Link>
+              </Button>
+            </div>
+            <p className="text-gray-600">
               Gestiona las solicitudes de cotización de tus compradores
             </p>
           </div>
