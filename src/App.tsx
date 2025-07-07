@@ -134,6 +134,10 @@ const App = () => (
                     path="/supplier/profile"
                     element={<SupplierProfile />}
                   />
+                  <Route
+                    path="/supplier/reports"
+                    element={<SupplierReports />}
+                  />
 
                   {/* Placeholder routes for navigation links */}
                   <Route
