@@ -125,6 +125,12 @@ const SupplierOrderDetail = () => {
   const [uploadingDocument, setUploadingDocument] = useState<string | null>(
     null,
   );
+  const [productionProgress, setProductionProgress] = useState(0);
+  const [productionStatus, setProductionStatus] = useState(
+    "Pago recibido, preparando materia prima",
+  );
+  const [paymentReceived, setPaymentReceived] = useState(false);
+  const [showPaymentConfirmation, setShowPaymentConfirmation] = useState(false);
 
   const getStatusVariant = (status: string) => {
     switch (status) {
