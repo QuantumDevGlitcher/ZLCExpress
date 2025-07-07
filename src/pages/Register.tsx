@@ -389,6 +389,7 @@ const steps = [
 ];
 
 export default function Register() {
+  const [userType, setUserType] = useState<"buyer" | "supplier" | null>(null);
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -400,6 +401,12 @@ export default function Register() {
 
   // Email validation warning state
   const [emailWarning, setEmailWarning] = useState(false);
+
+  // Supplier-specific state
+  const [selectedCertifications, setSelectedCertifications] = useState<
+    string[]
+  >([]);
+  const [uploadedDocuments, setUploadedDocuments] = useState<File[]>([]);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
