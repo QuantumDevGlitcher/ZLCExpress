@@ -749,591 +749,599 @@ export default function Register() {
 
               {/* Progress Steps */}
               <div className="mb-8">
-            <div className="flex items-center justify-between mb-4">
-              {steps.map((step, index) => (
-                <div key={step.id} className="flex items-center">
-                  <div
-                    className={`flex h-10 w-10 items-center justify-center rounded-full border-2 ${
-                      currentStep >= step.id
-                        ? "border-zlc-blue-600 bg-zlc-blue-600 text-white"
-                        : "border-zlc-gray-300 bg-white text-zlc-gray-400"
-                    }`}
-                  >
-                    {currentStep > step.id ? (
-                      <CheckCircle className="h-5 w-5" />
-                    ) : (
-                      <step.icon className="h-5 w-5" />
-                    )}
-                  </div>
-                  {index < steps.length - 1 && (
-                    <div className="ml-2 mr-2 h-px flex-1 bg-zlc-gray-300" />
-                  )}
+                <div className="flex items-center justify-between mb-4">
+                  {steps.map((step, index) => (
+                    <div key={step.id} className="flex items-center">
+                      <div
+                        className={`flex h-10 w-10 items-center justify-center rounded-full border-2 ${
+                          currentStep >= step.id
+                            ? "border-zlc-blue-600 bg-zlc-blue-600 text-white"
+                            : "border-zlc-gray-300 bg-white text-zlc-gray-400"
+                        }`}
+                      >
+                        {currentStep > step.id ? (
+                          <CheckCircle className="h-5 w-5" />
+                        ) : (
+                          <step.icon className="h-5 w-5" />
+                        )}
+                      </div>
+                      {index < steps.length - 1 && (
+                        <div className="ml-2 mr-2 h-px flex-1 bg-zlc-gray-300" />
+                      )}
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-            <Progress value={progress} className="h-2" />
-            <div className="mt-2 text-center">
-              <span className="text-sm text-zlc-gray-600">
-                Paso {currentStep} de {steps.length}:{" "}
-                {steps[currentStep - 1].title}
-              </span>
-            </div>
-          </div>
+                <Progress value={progress} className="h-2" />
+                <div className="mt-2 text-center">
+                  <span className="text-sm text-zlc-gray-600">
+                    Paso {currentStep} de {steps.length}:{" "}
+                    {steps[currentStep - 1].title}
+                  </span>
+                </div>
+              </div>
 
-          {/* Form */}
-          <Card className="shadow-soft-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center text-xl">
-                {(() => {
-                  const StepIcon = steps[currentStep - 1].icon;
-                  return (
-                    <StepIcon className="mr-2 h-6 w-6 text-zlc-blue-600" />
-                  );
-                })()}
-                {steps[currentStep - 1].title}
-              </CardTitle>
-              <CardDescription>
-                {currentStep === 1 && "Información básica de su empresa"}
-                {currentStep === 2 &&
-                  "Datos de la persona de contacto principal"}
-                {currentStep === 3 && "Dirección fiscal de la empresa"}
-                {currentStep === 4 &&
-                  "Configure su contraseña y acepte los términos"}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className="space-y-6"
-                >
-                  {/* Step 1: Company Information */}
-                  {currentStep === 1 && (
-                    <div className="space-y-6">
-                      <FormField
-                        control={form.control}
-                        name="companyName"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Nombre de la Empresa *</FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder="Ej: Importadora del Caribe S.A."
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={form.control}
-                        name="taxId"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>
-                              Número de Registro Fiscal (NIT/RUC) *
-                            </FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder="Ej: 3-101-123456"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormDescription>
-                              Ingrese el número de identificación tributaria de
-                              su empresa
-                            </FormDescription>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <div className="grid gap-6 md:grid-cols-2">
-                        <FormField
-                          control={form.control}
-                          name="country"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Pa��s de Operación *</FormLabel>
-                              <FormControl>
-                                <SearchableCountrySelect
-                                  value={field.value}
-                                  onValueChange={field.onChange}
-                                  placeholder="Seleccione un país"
-                                  countriesByRegion={countriesByRegion}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={form.control}
-                          name="sector"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Sector o Industria *</FormLabel>
-                              <Select
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                              >
+              {/* Form */}
+              <Card className="shadow-soft-lg">
+                <CardHeader>
+                  <CardTitle className="flex items-center text-xl">
+                    {(() => {
+                      const StepIcon = steps[currentStep - 1].icon;
+                      return (
+                        <StepIcon className="mr-2 h-6 w-6 text-zlc-blue-600" />
+                      );
+                    })()}
+                    {steps[currentStep - 1].title}
+                  </CardTitle>
+                  <CardDescription>
+                    {currentStep === 1 && "Información básica de su empresa"}
+                    {currentStep === 2 &&
+                      "Datos de la persona de contacto principal"}
+                    {currentStep === 3 && "Dirección fiscal de la empresa"}
+                    {currentStep === 4 &&
+                      "Configure su contraseña y acepte los términos"}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <Form {...form}>
+                    <form
+                      onSubmit={form.handleSubmit(onSubmit)}
+                      className="space-y-6"
+                    >
+                      {/* Step 1: Company Information */}
+                      {currentStep === 1 && (
+                        <div className="space-y-6">
+                          <FormField
+                            control={form.control}
+                            name="companyName"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Nombre de la Empresa *</FormLabel>
                                 <FormControl>
-                                  <SelectTrigger>
-                                    <SelectValue placeholder="Seleccione un sector" />
-                                  </SelectTrigger>
+                                  <Input
+                                    placeholder="Ej: Importadora del Caribe S.A."
+                                    {...field}
+                                  />
                                 </FormControl>
-                                <SelectContent>
-                                  {sectors.map((sector) => (
-                                    <SelectItem key={sector} value={sector}>
-                                      {sector}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                    </div>
-                  )}
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
 
-                  {/* Step 2: Contact Information */}
-                  {currentStep === 2 && (
-                    <div className="space-y-6">
-                      <div className="grid gap-6 md:grid-cols-2">
-                        <FormField
-                          control={form.control}
-                          name="contactName"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Nombre Completo *</FormLabel>
-                              <FormControl>
-                                <Input
-                                  placeholder="Ej: Juan Carlos Pérez"
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
+                          <FormField
+                            control={form.control}
+                            name="taxId"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>
+                                  Número de Registro Fiscal (NIT/RUC) *
+                                </FormLabel>
+                                <FormControl>
+                                  <Input
+                                    placeholder="Ej: 3-101-123456"
+                                    {...field}
+                                  />
+                                </FormControl>
+                                <FormDescription>
+                                  Ingrese el número de identificación tributaria
+                                  de su empresa
+                                </FormDescription>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
 
-                        <FormField
-                          control={form.control}
-                          name="contactPosition"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Cargo *</FormLabel>
-                              <FormControl>
-                                <Input
-                                  placeholder="Ej: Gerente de Compras"
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-
-                      <div className="grid gap-6 md:grid-cols-2">
-                        <FormField
-                          control={form.control}
-                          name="email"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Email Corporativo *</FormLabel>
-                              <FormControl>
-                                <Input
-                                  type="email"
-                                  placeholder="nombre@empresa.com"
-                                  {...field}
-                                  required
-                                  onChange={(e) => {
-                                    field.onChange(e);
-                                    // Hide warning when user starts typing
-                                    if (emailWarning) {
-                                      setEmailWarning(false);
-                                    }
-                                  }}
-                                />
-                              </FormControl>
-                              <FormDescription>
-                                Debe incluir "@" - Use el email corporativo de
-                                su empresa
-                              </FormDescription>
-                              <FormMessage />
-
-                              {/* Email validation warning */}
-                              {emailWarning && (
-                                <div className="relative">
-                                  <div className="absolute top-2 left-0 right-0 z-10">
-                                    <div className="bg-red-500 text-white px-4 py-3 rounded-lg shadow-lg border border-red-600 relative animate-in fade-in duration-300">
-                                      <div className="flex items-center gap-2">
-                                        <AlertCircle className="h-4 w-4" />
-                                        <span className="text-sm font-medium">
-                                          Por favor ingrese un email válido que
-                                          contenga "@"
-                                        </span>
-                                      </div>
-                                      {/* Arrow pointing up to the input */}
-                                      <div className="absolute -top-2 left-4 w-0 h-0 border-l-4 border-r-4 border-b-4 border-l-transparent border-r-transparent border-b-red-500"></div>
-                                    </div>
-                                  </div>
-                                </div>
+                          <div className="grid gap-6 md:grid-cols-2">
+                            <FormField
+                              control={form.control}
+                              name="country"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Pa��s de Operación *</FormLabel>
+                                  <FormControl>
+                                    <SearchableCountrySelect
+                                      value={field.value}
+                                      onValueChange={field.onChange}
+                                      placeholder="Seleccione un país"
+                                      countriesByRegion={countriesByRegion}
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
                               )}
-                            </FormItem>
-                          )}
-                        />
+                            />
 
-                        <FormField
-                          control={form.control}
-                          name="phone"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Teléfono *</FormLabel>
-                              <FormControl>
-                                <Input
-                                  placeholder="+506 2234-5678"
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Step 3: Fiscal Address */}
-                  {currentStep === 3 && (
-                    <div className="space-y-6">
-                      <FormField
-                        control={form.control}
-                        name="street"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Dirección *</FormLabel>
-                            <FormControl>
-                              <Textarea
-                                placeholder="Ej: Calle 15, Avenida 3-5, Edificio Corporativo, Oficina 502"
-                                className="resize-none"
-                                rows={3}
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      {/* País - Estado - Ciudad in correct order */}
-                      <FormField
-                        control={form.control}
-                        name="fiscalCountry"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>País *</FormLabel>
-                            <FormControl>
-                              <Select
-                                value={field.value}
-                                onValueChange={(value) => {
-                                  field.onChange(value);
-                                  handleCountryChange(value);
-                                }}
-                              >
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Seleccione un país" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  {Object.keys(geographicData).map(
-                                    (country) => (
-                                      <SelectItem key={country} value={country}>
-                                        {country}
-                                      </SelectItem>
-                                    ),
-                                  )}
-                                  {/* Add other Central American countries without full data */}
-                                  <SelectItem value="El Salvador">
-                                    El Salvador
-                                  </SelectItem>
-                                  <SelectItem value="Honduras">
-                                    Honduras
-                                  </SelectItem>
-                                  <SelectItem value="Nicaragua">
-                                    Nicaragua
-                                  </SelectItem>
-                                  <SelectItem value="Belice">Belice</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <div className="grid gap-6 md:grid-cols-2">
-                        <FormField
-                          control={form.control}
-                          name="state"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Estado/Provincia *</FormLabel>
-                              <FormControl>
-                                <Select
-                                  value={field.value}
-                                  onValueChange={(value) => {
-                                    field.onChange(value);
-                                    handleStateChange(value);
-                                  }}
-                                  disabled={
-                                    !selectedCountry ||
-                                    availableStates.length === 0
-                                  }
-                                >
-                                  <SelectTrigger>
-                                    <SelectValue
-                                      placeholder={
-                                        !selectedCountry
-                                          ? "Primero seleccione un país"
-                                          : availableStates.length === 0
-                                            ? "No hay datos disponibles"
-                                            : "Seleccione estado/provincia"
-                                      }
-                                    />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    {availableStates.map((state) => (
-                                      <SelectItem key={state} value={state}>
-                                        {state}
-                                      </SelectItem>
-                                    ))}
-                                  </SelectContent>
-                                </Select>
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={form.control}
-                          name="city"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Ciudad *</FormLabel>
-                              <FormControl>
-                                <Select
-                                  value={field.value}
-                                  onValueChange={(value) => {
-                                    field.onChange(value);
-                                    handleCityChange(value);
-                                  }}
-                                  disabled={
-                                    !selectedState ||
-                                    availableCities.length === 0
-                                  }
-                                >
-                                  <SelectTrigger>
-                                    <SelectValue
-                                      placeholder={
-                                        !selectedState
-                                          ? "Primero seleccione estado/provincia"
-                                          : availableCities.length === 0
-                                            ? "No hay datos disponibles"
-                                            : "Seleccione ciudad"
-                                      }
-                                    />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    {availableCities.map((city) => (
-                                      <SelectItem key={city} value={city}>
-                                        {city}
-                                      </SelectItem>
-                                    ))}
-                                  </SelectContent>
-                                </Select>
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-
-                      <FormField
-                        control={form.control}
-                        name="postalCode"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Código Postal *</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Ej: 10101" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  )}
-
-                  {/* Step 4: Security and Terms */}
-                  {currentStep === 4 && (
-                    <div className="space-y-6">
-                      <div className="grid gap-6 md:grid-cols-2">
-                        <FormField
-                          control={form.control}
-                          name="password"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Contraseña *</FormLabel>
-                              <FormControl>
-                                <Input
-                                  type="password"
-                                  placeholder="Mínimo 8 caracteres"
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormDescription>
-                                Use una contraseña segura con al menos 8
-                                caracteres
-                              </FormDescription>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={form.control}
-                          name="confirmPassword"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Confirmar Contraseña *</FormLabel>
-                              <FormControl>
-                                <Input
-                                  type="password"
-                                  placeholder="Repita la contraseña"
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-
-                      <Separator />
-
-                      <div className="space-y-4">
-                        <div className="rounded-lg bg-zlc-blue-50 p-4">
-                          <div className="flex items-start space-x-3">
-                            <AlertCircle className="h-5 w-5 text-zlc-blue-600 mt-0.5" />
-                            <div className="text-sm">
-                              <p className="font-medium text-zlc-blue-900 mb-1">
-                                Proceso de Verificación
-                              </p>
-                              <p className="text-zlc-blue-700">
-                                Su empresa será verificada manualmente antes de
-                                obtener acceso completo a la plataforma. Este
-                                proceso puede tomar de 1-3 días hábiles.
-                              </p>
-                            </div>
+                            <FormField
+                              control={form.control}
+                              name="sector"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Sector o Industria *</FormLabel>
+                                  <Select
+                                    onValueChange={field.onChange}
+                                    defaultValue={field.value}
+                                  >
+                                    <FormControl>
+                                      <SelectTrigger>
+                                        <SelectValue placeholder="Seleccione un sector" />
+                                      </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                      {sectors.map((sector) => (
+                                        <SelectItem key={sector} value={sector}>
+                                          {sector}
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
                           </div>
                         </div>
+                      )}
 
-                        <FormField
-                          control={form.control}
-                          name="acceptTerms"
-                          render={({ field }) => (
-                            <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                              <FormControl>
-                                <Checkbox
-                                  checked={field.value}
-                                  onCheckedChange={field.onChange}
-                                />
-                              </FormControl>
-                              <div className="space-y-1 leading-none">
-                                <FormLabel className="text-sm">
-                                  Acepto los{" "}
-                                  <Link
-                                    to="/terms"
-                                    className="text-zlc-blue-600 underline hover:text-zlc-blue-800"
-                                  >
-                                    Términos y Condiciones
-                                  </Link>{" "}
-                                  y la{" "}
-                                  <Link
-                                    to="/privacy"
-                                    className="text-zlc-blue-600 underline hover:text-zlc-blue-800"
-                                  >
-                                    Política de Privacidad
-                                  </Link>
-                                  , incluyendo las cláusulas específicas sobre
-                                  la Zona Libre de Colón.
-                                </FormLabel>
+                      {/* Step 2: Contact Information */}
+                      {currentStep === 2 && (
+                        <div className="space-y-6">
+                          <div className="grid gap-6 md:grid-cols-2">
+                            <FormField
+                              control={form.control}
+                              name="contactName"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Nombre Completo *</FormLabel>
+                                  <FormControl>
+                                    <Input
+                                      placeholder="Ej: Juan Carlos Pérez"
+                                      {...field}
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+
+                            <FormField
+                              control={form.control}
+                              name="contactPosition"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Cargo *</FormLabel>
+                                  <FormControl>
+                                    <Input
+                                      placeholder="Ej: Gerente de Compras"
+                                      {...field}
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+
+                          <div className="grid gap-6 md:grid-cols-2">
+                            <FormField
+                              control={form.control}
+                              name="email"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Email Corporativo *</FormLabel>
+                                  <FormControl>
+                                    <Input
+                                      type="email"
+                                      placeholder="nombre@empresa.com"
+                                      {...field}
+                                      required
+                                      onChange={(e) => {
+                                        field.onChange(e);
+                                        // Hide warning when user starts typing
+                                        if (emailWarning) {
+                                          setEmailWarning(false);
+                                        }
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormDescription>
+                                    Debe incluir "@" - Use el email corporativo
+                                    de su empresa
+                                  </FormDescription>
+                                  <FormMessage />
+
+                                  {/* Email validation warning */}
+                                  {emailWarning && (
+                                    <div className="relative">
+                                      <div className="absolute top-2 left-0 right-0 z-10">
+                                        <div className="bg-red-500 text-white px-4 py-3 rounded-lg shadow-lg border border-red-600 relative animate-in fade-in duration-300">
+                                          <div className="flex items-center gap-2">
+                                            <AlertCircle className="h-4 w-4" />
+                                            <span className="text-sm font-medium">
+                                              Por favor ingrese un email válido
+                                              que contenga "@"
+                                            </span>
+                                          </div>
+                                          {/* Arrow pointing up to the input */}
+                                          <div className="absolute -top-2 left-4 w-0 h-0 border-l-4 border-r-4 border-b-4 border-l-transparent border-r-transparent border-b-red-500"></div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+                                </FormItem>
+                              )}
+                            />
+
+                            <FormField
+                              control={form.control}
+                              name="phone"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Teléfono *</FormLabel>
+                                  <FormControl>
+                                    <Input
+                                      placeholder="+506 2234-5678"
+                                      {...field}
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Step 3: Fiscal Address */}
+                      {currentStep === 3 && (
+                        <div className="space-y-6">
+                          <FormField
+                            control={form.control}
+                            name="street"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Dirección *</FormLabel>
+                                <FormControl>
+                                  <Textarea
+                                    placeholder="Ej: Calle 15, Avenida 3-5, Edificio Corporativo, Oficina 502"
+                                    className="resize-none"
+                                    rows={3}
+                                    {...field}
+                                  />
+                                </FormControl>
                                 <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          {/* País - Estado - Ciudad in correct order */}
+                          <FormField
+                            control={form.control}
+                            name="fiscalCountry"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>País *</FormLabel>
+                                <FormControl>
+                                  <Select
+                                    value={field.value}
+                                    onValueChange={(value) => {
+                                      field.onChange(value);
+                                      handleCountryChange(value);
+                                    }}
+                                  >
+                                    <SelectTrigger>
+                                      <SelectValue placeholder="Seleccione un país" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {Object.keys(geographicData).map(
+                                        (country) => (
+                                          <SelectItem
+                                            key={country}
+                                            value={country}
+                                          >
+                                            {country}
+                                          </SelectItem>
+                                        ),
+                                      )}
+                                      {/* Add other Central American countries without full data */}
+                                      <SelectItem value="El Salvador">
+                                        El Salvador
+                                      </SelectItem>
+                                      <SelectItem value="Honduras">
+                                        Honduras
+                                      </SelectItem>
+                                      <SelectItem value="Nicaragua">
+                                        Nicaragua
+                                      </SelectItem>
+                                      <SelectItem value="Belice">
+                                        Belice
+                                      </SelectItem>
+                                    </SelectContent>
+                                  </Select>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <div className="grid gap-6 md:grid-cols-2">
+                            <FormField
+                              control={form.control}
+                              name="state"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Estado/Provincia *</FormLabel>
+                                  <FormControl>
+                                    <Select
+                                      value={field.value}
+                                      onValueChange={(value) => {
+                                        field.onChange(value);
+                                        handleStateChange(value);
+                                      }}
+                                      disabled={
+                                        !selectedCountry ||
+                                        availableStates.length === 0
+                                      }
+                                    >
+                                      <SelectTrigger>
+                                        <SelectValue
+                                          placeholder={
+                                            !selectedCountry
+                                              ? "Primero seleccione un país"
+                                              : availableStates.length === 0
+                                                ? "No hay datos disponibles"
+                                                : "Seleccione estado/provincia"
+                                          }
+                                        />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        {availableStates.map((state) => (
+                                          <SelectItem key={state} value={state}>
+                                            {state}
+                                          </SelectItem>
+                                        ))}
+                                      </SelectContent>
+                                    </Select>
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+
+                            <FormField
+                              control={form.control}
+                              name="city"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Ciudad *</FormLabel>
+                                  <FormControl>
+                                    <Select
+                                      value={field.value}
+                                      onValueChange={(value) => {
+                                        field.onChange(value);
+                                        handleCityChange(value);
+                                      }}
+                                      disabled={
+                                        !selectedState ||
+                                        availableCities.length === 0
+                                      }
+                                    >
+                                      <SelectTrigger>
+                                        <SelectValue
+                                          placeholder={
+                                            !selectedState
+                                              ? "Primero seleccione estado/provincia"
+                                              : availableCities.length === 0
+                                                ? "No hay datos disponibles"
+                                                : "Seleccione ciudad"
+                                          }
+                                        />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        {availableCities.map((city) => (
+                                          <SelectItem key={city} value={city}>
+                                            {city}
+                                          </SelectItem>
+                                        ))}
+                                      </SelectContent>
+                                    </Select>
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+
+                          <FormField
+                            control={form.control}
+                            name="postalCode"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Código Postal *</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="Ej: 10101" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      )}
+
+                      {/* Step 4: Security and Terms */}
+                      {currentStep === 4 && (
+                        <div className="space-y-6">
+                          <div className="grid gap-6 md:grid-cols-2">
+                            <FormField
+                              control={form.control}
+                              name="password"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Contraseña *</FormLabel>
+                                  <FormControl>
+                                    <Input
+                                      type="password"
+                                      placeholder="Mínimo 8 caracteres"
+                                      {...field}
+                                    />
+                                  </FormControl>
+                                  <FormDescription>
+                                    Use una contraseña segura con al menos 8
+                                    caracteres
+                                  </FormDescription>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+
+                            <FormField
+                              control={form.control}
+                              name="confirmPassword"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Confirmar Contraseña *</FormLabel>
+                                  <FormControl>
+                                    <Input
+                                      type="password"
+                                      placeholder="Repita la contraseña"
+                                      {...field}
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+
+                          <Separator />
+
+                          <div className="space-y-4">
+                            <div className="rounded-lg bg-zlc-blue-50 p-4">
+                              <div className="flex items-start space-x-3">
+                                <AlertCircle className="h-5 w-5 text-zlc-blue-600 mt-0.5" />
+                                <div className="text-sm">
+                                  <p className="font-medium text-zlc-blue-900 mb-1">
+                                    Proceso de Verificación
+                                  </p>
+                                  <p className="text-zlc-blue-700">
+                                    Su empresa será verificada manualmente antes
+                                    de obtener acceso completo a la plataforma.
+                                    Este proceso puede tomar de 1-3 días
+                                    hábiles.
+                                  </p>
+                                </div>
                               </div>
-                            </FormItem>
+                            </div>
+
+                            <FormField
+                              control={form.control}
+                              name="acceptTerms"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value}
+                                      onCheckedChange={field.onChange}
+                                    />
+                                  </FormControl>
+                                  <div className="space-y-1 leading-none">
+                                    <FormLabel className="text-sm">
+                                      Acepto los{" "}
+                                      <Link
+                                        to="/terms"
+                                        className="text-zlc-blue-600 underline hover:text-zlc-blue-800"
+                                      >
+                                        Términos y Condiciones
+                                      </Link>{" "}
+                                      y la{" "}
+                                      <Link
+                                        to="/privacy"
+                                        className="text-zlc-blue-600 underline hover:text-zlc-blue-800"
+                                      >
+                                        Política de Privacidad
+                                      </Link>
+                                      , incluyendo las cláusulas específicas
+                                      sobre la Zona Libre de Colón.
+                                    </FormLabel>
+                                    <FormMessage />
+                                  </div>
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Navigation Buttons */}
+                      <div className="flex items-center justify-between pt-6 border-t">
+                        <div className="flex items-center space-x-4">
+                          {currentStep > 1 && (
+                            <Button
+                              type="button"
+                              variant="outline"
+                              onClick={prevStep}
+                            >
+                              <ArrowLeft className="mr-2 h-4 w-4" />
+                              Anterior
+                            </Button>
                           )}
-                        />
+
+                          <Link
+                            to="/login"
+                            className="text-sm text-zlc-gray-600 hover:text-zlc-blue-600"
+                          >
+                            ¿Ya tiene una cuenta? Iniciar sesión
+                          </Link>
+                        </div>
+
+                        <div>
+                          {currentStep < steps.length ? (
+                            <Button
+                              type="button"
+                              onClick={nextStep}
+                              disabled={!canProceed()}
+                              className="bg-zlc-blue-800 hover:bg-zlc-blue-900"
+                            >
+                              Siguiente
+                              <ArrowRight className="ml-2 h-4 w-4" />
+                            </Button>
+                          ) : (
+                            <Button
+                              type="submit"
+                              disabled={isSubmitting || !form.formState.isValid}
+                              className="bg-zlc-blue-800 hover:bg-zlc-blue-900"
+                            >
+                              {isSubmitting
+                                ? "Registrando..."
+                                : "Registrar Empresa"}
+                            </Button>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  )}
-
-                  {/* Navigation Buttons */}
-                  <div className="flex items-center justify-between pt-6 border-t">
-                    <div className="flex items-center space-x-4">
-                      {currentStep > 1 && (
-                        <Button
-                          type="button"
-                          variant="outline"
-                          onClick={prevStep}
-                        >
-                          <ArrowLeft className="mr-2 h-4 w-4" />
-                          Anterior
-                        </Button>
-                      )}
-
-                      <Link
-                        to="/login"
-                        className="text-sm text-zlc-gray-600 hover:text-zlc-blue-600"
-                      >
-                        ¿Ya tiene una cuenta? Iniciar sesión
-                      </Link>
-                    </div>
-
-                    <div>
-                      {currentStep < steps.length ? (
-                        <Button
-                          type="button"
-                          onClick={nextStep}
-                          disabled={!canProceed()}
-                          className="bg-zlc-blue-800 hover:bg-zlc-blue-900"
-                        >
-                          Siguiente
-                          <ArrowRight className="ml-2 h-4 w-4" />
-                        </Button>
-                      ) : (
-                        <Button
-                          type="submit"
-                          disabled={isSubmitting || !form.formState.isValid}
-                          className="bg-zlc-blue-800 hover:bg-zlc-blue-900"
-                        >
-                          {isSubmitting
-                            ? "Registrando..."
-                            : "Registrar Empresa"}
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                </form>
-              </Form>
-            </CardContent>
-          </Card>
+                    </form>
+                  </Form>
+                </CardContent>
+              </Card>
+            </>
+          )}
         </div>
       </div>
     </div>
