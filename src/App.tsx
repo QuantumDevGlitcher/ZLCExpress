@@ -29,6 +29,8 @@ import OfferHistory from "./pages/OfferHistory";
 import Communications from "./pages/Communications";
 import CustomsSupport from "./pages/CustomsSupport";
 import SupplierDashboard from "./pages/SupplierDashboard";
+import SupplierProducts from "./pages/SupplierProducts";
+import SupplierCreateProduct from "./pages/SupplierCreateProduct";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
