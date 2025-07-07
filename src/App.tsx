@@ -33,6 +33,8 @@ import SupplierProducts from "./pages/SupplierProducts";
 import SupplierCreateProduct from "./pages/SupplierCreateProduct";
 import SupplierRFQs from "./pages/SupplierRFQs";
 import SupplierRFQResponse from "./pages/SupplierRFQResponse";
+import SupplierOrders from "./pages/SupplierOrders";
+import SupplierOrderDetail from "./pages/SupplierOrderDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
