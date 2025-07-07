@@ -101,6 +101,11 @@ const App = () => (
                     path="/supplier/products/new"
                     element={<SupplierCreateProduct />}
                   />
+                  <Route path="/supplier/rfqs" element={<SupplierRFQs />} />
+                  <Route
+                    path="/supplier/rfqs/:id/respond"
+                    element={<SupplierRFQResponse />}
+                  />
 
                   {/* Placeholder routes for navigation links */}
                   <Route
