@@ -102,26 +102,57 @@ export default function Login() {
   const onSubmit = async (values: FormValues) => {
     setIsSubmitting(true);
     setLoginError("");
+    setAccountStatus(null);
 
     try {
-      // Simulate API call
+      // Simulate API call delay
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
-      // Simulate different account states for demo
-      const demoEmail = values.email.toLowerCase();
-      if (demoEmail.includes("pending")) {
-        setAccountStatus("pending");
-      } else if (demoEmail.includes("rejected")) {
-        setAccountStatus("rejected");
-      } else if (demoEmail.includes("admin")) {
-        setAccountStatus("verified");
-        // Would redirect to dashboard
-        console.log("Login successful - redirect to dashboard");
+      // ============================================
+      // HARDCODED DEMO LOGIN VALIDATION - FOR DEVELOPMENT ONLY
+      // TODO: REPLACE WITH REAL API AUTHENTICATION
+      // ============================================
+      const inputEmail = values.email.toLowerCase().trim();
+      const inputPassword = values.password.trim();
+
+      // Find matching demo credential
+      const matchingCredential = Object.values(DEMO_CREDENTIALS).find(
+        (cred) =>
+          cred.email.toLowerCase() === inputEmail &&
+          cred.password === inputPassword,
+      );
+
+      if (matchingCredential) {
+        console.log(
+          `Demo login successful for ${matchingCredential.type} with status ${matchingCredential.status}`,
+        );
+
+        // Handle different account statuses
+        if (matchingCredential.status === "verified") {
+          // Successful login - redirect to appropriate dashboard
+          if (matchingCredential.type === "buyer") {
+            console.log("Redirecting to buyer dashboard...");
+            navigate("/"); // Redirect to main buyer dashboard/homepage
+          } else if (matchingCredential.type === "supplier") {
+            console.log("Redirecting to supplier dashboard...");
+            // TODO: Create supplier dashboard route
+            navigate("/"); // For now redirect to homepage, later create supplier dashboard
+          }
+        } else {
+          // Account pending verification or rejected
+          setAccountStatus(matchingCredential.status);
+        }
       } else {
+        // No matching credentials found
         setLoginError("Email o contraseña incorrectos");
+        console.log("Demo login failed - invalid credentials");
       }
+      // ============================================
+      // END HARDCODED LOGIN VALIDATION SECTION
+      // ============================================
     } catch (error) {
       setLoginError("Error de conexión. Inténtelo nuevamente.");
+      console.error("Login error:", error);
     } finally {
       setIsSubmitting(false);
     }
