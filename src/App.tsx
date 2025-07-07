@@ -129,6 +129,10 @@ const App = () => (
                     path="/supplier/tracking"
                     element={<SupplierTracking />}
                   />
+                  <Route
+                    path="/supplier/profile"
+                    element={<SupplierProfile />}
+                  />
 
                   {/* Placeholder routes for navigation links */}
                   <Route
