@@ -679,6 +679,56 @@ export default function Register() {
             </p>
           </div>
 
+          {/* User Type Selection */}
+          {!userType && (
+            <div className="mb-8">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-center">
+                    ¿Qué tipo de usuario es usted?
+                  </CardTitle>
+                  <CardDescription className="text-center">
+                    Seleccione el tipo de cuenta que desea crear
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <Button
+                      variant="outline"
+                      className="h-24 p-6 border-2 hover:border-zlc-blue-600 hover:bg-zlc-blue-50"
+                      onClick={() => setUserType("buyer")}
+                    >
+                      <div className="flex flex-col items-center gap-3">
+                        <User className="h-8 w-8 text-zlc-blue-600" />
+                        <div>
+                          <h3 className="font-semibold">Soy Comprador</h3>
+                          <p className="text-sm text-gray-600">
+                            Busco productos al por mayor
+                          </p>
+                        </div>
+                      </div>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="h-24 p-6 border-2 hover:border-zlc-blue-600 hover:bg-zlc-blue-50"
+                      onClick={() => setUserType("supplier")}
+                    >
+                      <div className="flex flex-col items-center gap-3">
+                        <Building2 className="h-8 w-8 text-zlc-blue-600" />
+                        <div>
+                          <h3 className="font-semibold">Soy Proveedor</h3>
+                          <p className="text-sm text-gray-600">
+                            Vendo productos desde ZLC
+                          </p>
+                        </div>
+                      </div>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
           {/* Progress Steps */}
           <div className="mb-8">
             <div className="flex items-center justify-between mb-4">
