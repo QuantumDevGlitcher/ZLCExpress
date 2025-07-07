@@ -28,6 +28,7 @@ import ContractTemplates from "./pages/ContractTemplates";
 import OfferHistory from "./pages/OfferHistory";
 import Communications from "./pages/Communications";
 import CustomsSupport from "./pages/CustomsSupport";
+import SupplierDashboard from "./pages/SupplierDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
