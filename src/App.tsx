@@ -37,6 +37,7 @@ import SupplierOrders from "./pages/SupplierOrders";
 import SupplierOrderDetail from "./pages/SupplierOrderDetail";
 import SupplierShipments from "./pages/SupplierShipments";
 import SupplierShipmentDetail from "./pages/SupplierShipmentDetail";
+import SupplierTracking from "./pages/SupplierTracking";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
