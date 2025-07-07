@@ -501,6 +501,27 @@ export default function Register() {
     },
   });
 
+  const supplierForm = useForm<SupplierFormValues>({
+    resolver: zodResolver(supplierFormSchema),
+    defaultValues: {
+      nombreEmpresa: "",
+      ruc: "",
+      sectorIndustria: "",
+      certificaciones: [],
+      nombreContacto: "",
+      cargo: "",
+      emailCorporativo: "",
+      telefonoContacto: "",
+      direccion: "",
+      provincia: "",
+      ciudad: "",
+      codigoPostal: "",
+      password: "",
+      confirmPassword: "",
+      acceptTerms: false,
+    },
+  });
+
   const progress = (currentStep / steps.length) * 100;
 
   const onSubmit = async (values: FormValues) => {
