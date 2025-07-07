@@ -915,6 +915,48 @@ const SupplierOrderDetail = () => {
                 </CardContent>
               </Card>
 
+              {/* Production Status Summary */}
+              {paymentReceived && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Package className="h-5 w-5" />
+                      Estado de Producción
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="text-center">
+                      <div className="text-3xl font-bold text-blue-600 mb-1">
+                        {productionProgress}%
+                      </div>
+                      <Progress
+                        value={productionProgress}
+                        className="h-2 mb-2"
+                      />
+                      <p className="text-sm text-gray-600">
+                        {productionStatus}
+                      </p>
+                    </div>
+
+                    {productionProgress === 100 ? (
+                      <div className="bg-green-50 border border-green-200 rounded-md p-3 text-center">
+                        <CheckCircle className="h-6 w-6 text-green-600 mx-auto mb-1" />
+                        <p className="text-sm font-medium text-green-800">
+                          Listo para Embarque
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="bg-blue-50 border border-blue-200 rounded-md p-3 text-center">
+                        <Clock className="h-6 w-6 text-blue-600 mx-auto mb-1" />
+                        <p className="text-sm font-medium text-blue-800">
+                          En Producción
+                        </p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              )}
+
               {/* Quick Actions */}
               <Card>
                 <CardHeader>
