@@ -232,22 +232,106 @@ export default function Login() {
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-0">
-              <div className="text-xs text-amber-700 space-y-2">
-                <div>
-                  <strong>Compradores:</strong>
-                  <div className="ml-2">
-                    • comprador@demo.com / demo123 (verificado)
-                    <br />• comprador.pendiente@demo.com / demo123 (pendiente)
-                  </div>
+              <div className="space-y-3">
+                <div className="text-xs text-amber-700">
+                  <strong>Credenciales disponibles:</strong>
                 </div>
-                <div>
-                  <strong>Proveedores:</strong>
-                  <div className="ml-2">
-                    • proveedor@demo.com / demo123 (verificado)
-                    <br />
-                    • proveedor.pendiente@demo.com / demo123 (pendiente)
-                    <br />• proveedor.rechazado@demo.com / demo123 (rechazado)
-                  </div>
+
+                {/* Quick Login Buttons */}
+                <div className="grid grid-cols-1 gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="text-xs h-8 justify-start"
+                    onClick={() => {
+                      form.setValue("email", DEMO_CREDENTIALS.buyer.email);
+                      form.setValue(
+                        "password",
+                        DEMO_CREDENTIALS.buyer.password,
+                      );
+                    }}
+                  >
+                    🛒 Comprador Verificado
+                  </Button>
+
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="text-xs h-8 justify-start"
+                    onClick={() => {
+                      form.setValue(
+                        "email",
+                        DEMO_CREDENTIALS.buyerPending.email,
+                      );
+                      form.setValue(
+                        "password",
+                        DEMO_CREDENTIALS.buyerPending.password,
+                      );
+                    }}
+                  >
+                    ⏳ Comprador Pendiente
+                  </Button>
+
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="text-xs h-8 justify-start"
+                    onClick={() => {
+                      form.setValue("email", DEMO_CREDENTIALS.supplier.email);
+                      form.setValue(
+                        "password",
+                        DEMO_CREDENTIALS.supplier.password,
+                      );
+                    }}
+                  >
+                    🏭 Proveedor Verificado
+                  </Button>
+
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="text-xs h-8 justify-start"
+                    onClick={() => {
+                      form.setValue(
+                        "email",
+                        DEMO_CREDENTIALS.supplierPending.email,
+                      );
+                      form.setValue(
+                        "password",
+                        DEMO_CREDENTIALS.supplierPending.password,
+                      );
+                    }}
+                  >
+                    ⏳ Proveedor Pendiente
+                  </Button>
+
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="text-xs h-8 justify-start"
+                    onClick={() => {
+                      form.setValue(
+                        "email",
+                        DEMO_CREDENTIALS.supplierRejected.email,
+                      );
+                      form.setValue(
+                        "password",
+                        DEMO_CREDENTIALS.supplierRejected.password,
+                      );
+                    }}
+                  >
+                    ❌ Proveedor Rechazado
+                  </Button>
+                </div>
+
+                <div className="text-xs text-amber-600 mt-2">
+                  Haz clic en cualquier botón para auto-completar las
+                  credenciales
                 </div>
               </div>
             </CardContent>
@@ -397,7 +481,7 @@ export default function Login() {
           {/* Support Link */}
           <div className="text-center mt-4">
             <p className="text-xs text-zlc-gray-500">
-              ¿Problemas para acceder?{" "}
+              ��Problemas para acceder?{" "}
               <Link
                 to="/support"
                 className="text-zlc-blue-600 hover:text-zlc-blue-800 hover:underline"
