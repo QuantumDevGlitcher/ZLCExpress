@@ -550,7 +550,10 @@ export default function Register() {
   const nextStep = () => {
     // Special validation for step 2 (email field)
     if (currentStep === 2) {
-      const emailValue = form.getValues("email");
+      const emailValue =
+        userType === "supplier"
+          ? supplierForm.getValues("emailCorporativo")
+          : form.getValues("email");
       if (!emailValue || !emailValue.includes("@")) {
         setEmailWarning(true);
         // Auto-hide warning after 3 seconds
