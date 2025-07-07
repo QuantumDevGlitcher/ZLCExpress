@@ -54,16 +54,20 @@ const productFormSchema = z.object({
   name: z.string().min(3, "El nombre debe tener al menos 3 caracteres"),
   code: z.string().min(5, "El código debe tener al menos 5 caracteres"),
   category: z.string().min(1, "Seleccione una categoría"),
-  description: z.string().min(20, "La descripción debe tener al menos 20 caracteres"),
-  
+  description: z
+    .string()
+    .min(20, "La descripción debe tener al menos 20 caracteres"),
+
   // Container Specifications
   containerType: z.enum(["20GP", "40HQ", "40HC"]),
-  unitsPerContainer: z.number().min(1, "Debe especificar unidades por contenedor"),
+  unitsPerContainer: z
+    .number()
+    .min(1, "Debe especificar unidades por contenedor"),
   grossWeight: z.number().min(1, "Peso bruto requerido"),
   netWeight: z.number().min(1, "Peso neto requerido"),
   volume: z.number().min(0.1, "Volumen requerido"),
   packagingType: z.string().min(1, "Tipo de empaquetado requerido"),
-  
+
   // Pricing and Incoterms
   pricePerContainer: z.number().min(1, "Precio por contenedor requerido"),
   unitPrice: z.number().min(0.01, "Precio unitario requerido"),
@@ -73,7 +77,7 @@ const productFormSchema = z.object({
   packagingTime: z.number().min(1, "Tiempo de embalaje requerido"),
   moq: z.number().min(1, "MOQ debe ser al menos 1"),
   stockContainers: z.number().min(0, "Stock no puede ser negativo"),
-  
+
   // Additional Options
   isNegotiable: z.boolean(),
   allowsCustomOrders: z.boolean(),
@@ -97,14 +101,14 @@ export default function SupplierCreateProduct() {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   // File uploads
   const [productImages, setProductImages] = useState<UploadedFile[]>([]);
   const [qualityDocuments, setQualityDocuments] = useState<UploadedFile[]>([]);
-  
+
   // Volume discounts
   const [volumeDiscounts, setVolumeDiscounts] = useState<VolumeDiscount[]>([
-    { minQuantity: 2, discountPercentage: 5 }
+    { minQuantity: 2, discountPercentage: 5 },
   ]);
 
   const form = useForm<ProductFormValues>({
@@ -163,7 +167,7 @@ export default function SupplierCreateProduct() {
     "40HQ": {
       name: "40' HQ (High Cube)",
       dimensions: "12.03 x 2.35 x 2.70 m",
-      volume: "76.3 m³", 
+      volume: "76.3 m³",
       maxWeight: "26,700 kg",
     },
     "40HC": {
@@ -211,18 +215,25 @@ export default function SupplierCreateProduct() {
   };
 
   const addVolumeDiscount = () => {
-    setVolumeDiscounts([...volumeDiscounts, { minQuantity: 0, discountPercentage: 0 }]);
+    setVolumeDiscounts([
+      ...volumeDiscounts,
+      { minQuantity: 0, discountPercentage: 0 },
+    ]);
   };
 
   const removeVolumeDiscount = (index: number) => {
     setVolumeDiscounts(volumeDiscounts.filter((_, i) => i !== index));
   };
 
-  const updateVolumeDiscount = (index: number, field: keyof VolumeDiscount, value: number) => {
+  const updateVolumeDiscount = (
+    index: number,
+    field: keyof VolumeDiscount,
+    value: number,
+  ) => {
     setVolumeDiscounts(
       volumeDiscounts.map((discount, i) =>
-        i === index ? { ...discount, [field]: value } : discount
-      )
+        i === index ? { ...discount, [field]: value } : discount,
+      ),
     );
   };
 
@@ -240,27 +251,27 @@ export default function SupplierCreateProduct() {
 
   const onSubmit = async (values: ProductFormValues, asDraft = false) => {
     setIsSubmitting(true);
-    
+
     try {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      
+
       const productData = {
         ...values,
         images: productImages,
         qualityDocuments: qualityDocuments,
         volumeDiscounts: volumeDiscounts,
-        status: asDraft ? 'draft' : 'active',
+        status: asDraft ? "draft" : "active",
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-      
-      console.log('Product created:', productData);
-      
+
+      console.log("Product created:", productData);
+
       // Navigate back to products list
-      navigate('/supplier/products');
+      navigate("/supplier/products");
     } catch (error) {
-      console.error('Error creating product:', error);
+      console.error("Error creating product:", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -281,8 +292,12 @@ export default function SupplierCreateProduct() {
               </Link>
             </Button>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Crear Nuevo Lote</h1>
-              <p className="text-gray-600">Complete la información de su producto por contenedor</p>
+              <h1 className="text-3xl font-bold text-gray-900">
+                Crear Nuevo Lote
+              </h1>
+              <p className="text-gray-600">
+                Complete la información de su producto por contenedor
+              </p>
             </div>
           </div>
 
@@ -321,7 +336,9 @@ export default function SupplierCreateProduct() {
                   <span
                     key={step.id}
                     className={`text-sm ${
-                      currentStep >= step.id ? "text-blue-600 font-medium" : "text-gray-500"
+                      currentStep >= step.id
+                        ? "text-blue-600 font-medium"
+                        : "text-gray-500"
                     }`}
                   >
                     {step.title}
@@ -337,12 +354,14 @@ export default function SupplierCreateProduct() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <steps.find(s => s.id === currentStep)?.icon className="h-5 w-5" />
-                    {steps.find(s => s.id === currentStep)?.title}
+                    {React.createElement(
+                      steps.find((s) => s.id === currentStep)?.icon || Package,
+                      { className: "h-5 w-5" },
+                    )}
+                    {steps.find((s) => s.id === currentStep)?.title}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
-
                   {/* Step 1: Basic Data */}
                   {currentStep === 1 && (
                     <div className="space-y-6">
@@ -354,7 +373,10 @@ export default function SupplierCreateProduct() {
                             <FormItem>
                               <FormLabel>Nombre del Lote *</FormLabel>
                               <FormControl>
-                                <Input placeholder="Ej: Camisetas 100% Algodón Premium" {...field} />
+                                <Input
+                                  placeholder="Ej: Camisetas 100% Algodón Premium"
+                                  {...field}
+                                />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -368,7 +390,10 @@ export default function SupplierCreateProduct() {
                             <FormItem>
                               <FormLabel>Código Interno *</FormLabel>
                               <FormControl>
-                                <Input placeholder="Ej: CAM-ALG-20GP-0500" {...field} />
+                                <Input
+                                  placeholder="Ej: CAM-ALG-20GP-0500"
+                                  {...field}
+                                />
                               </FormControl>
                               <FormDescription>
                                 Código único para identificar este lote
@@ -386,7 +411,10 @@ export default function SupplierCreateProduct() {
                           <FormItem>
                             <FormLabel>Categoría *</FormLabel>
                             <FormControl>
-                              <Select value={field.value} onValueChange={field.onChange}>
+                              <Select
+                                value={field.value}
+                                onValueChange={field.onChange}
+                              >
                                 <SelectTrigger>
                                   <SelectValue placeholder="Seleccione una categoría" />
                                 </SelectTrigger>
@@ -418,7 +446,8 @@ export default function SupplierCreateProduct() {
                               />
                             </FormControl>
                             <FormDescription>
-                              Incluya detalles como cantidades, tallas, colores, materiales, etc.
+                              Incluya detalles como cantidades, tallas, colores,
+                              materiales, etc.
                             </FormDescription>
                             <FormMessage />
                           </FormItem>
@@ -427,11 +456,14 @@ export default function SupplierCreateProduct() {
 
                       {/* Product Images */}
                       <div>
-                        <Label className="text-base font-medium">Fotos del Producto *</Label>
+                        <Label className="text-base font-medium">
+                          Fotos del Producto *
+                        </Label>
                         <p className="text-sm text-gray-600 mb-3">
-                          Mínimo 3 fotos: producto, ejemplo de contenedor, empaquetado
+                          Mínimo 3 fotos: producto, ejemplo de contenedor,
+                          empaquetado
                         </p>
-                        
+
                         <Input
                           type="file"
                           multiple
@@ -464,7 +496,9 @@ export default function SupplierCreateProduct() {
                         {productImages.length < 3 && (
                           <div className="flex items-center gap-2 mt-2 text-orange-600">
                             <AlertCircle className="h-4 w-4" />
-                            <span className="text-sm">Se requieren al menos 3 imágenes</span>
+                            <span className="text-sm">
+                              Se requieren al menos 3 imágenes
+                            </span>
                           </div>
                         )}
                       </div>
@@ -481,21 +515,29 @@ export default function SupplierCreateProduct() {
                           <FormItem>
                             <FormLabel>Tipo de Contenedor *</FormLabel>
                             <FormControl>
-                              <Select value={field.value} onValueChange={field.onChange}>
+                              <Select
+                                value={field.value}
+                                onValueChange={field.onChange}
+                              >
                                 <SelectTrigger>
                                   <SelectValue placeholder="Seleccione tipo de contenedor" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                  {Object.entries(containerSpecs).map(([key, spec]) => (
-                                    <SelectItem key={key} value={key}>
-                                      <div>
-                                        <div className="font-medium">{spec.name}</div>
-                                        <div className="text-xs text-gray-500">
-                                          {spec.dimensions} • {spec.volume} • Max: {spec.maxWeight}
+                                  {Object.entries(containerSpecs).map(
+                                    ([key, spec]) => (
+                                      <SelectItem key={key} value={key}>
+                                        <div>
+                                          <div className="font-medium">
+                                            {spec.name}
+                                          </div>
+                                          <div className="text-xs text-gray-500">
+                                            {spec.dimensions} • {spec.volume} •
+                                            Max: {spec.maxWeight}
+                                          </div>
                                         </div>
-                                      </div>
-                                    </SelectItem>
-                                  ))}
+                                      </SelectItem>
+                                    ),
+                                  )}
                                 </SelectContent>
                               </Select>
                             </FormControl>
@@ -510,13 +552,19 @@ export default function SupplierCreateProduct() {
                           name="unitsPerContainer"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Unidades por Contenedor (MOQ) *</FormLabel>
+                              <FormLabel>
+                                Unidades por Contenedor (MOQ) *
+                              </FormLabel>
                               <FormControl>
                                 <Input
                                   type="number"
                                   placeholder="Ej: 5000"
                                   {...field}
-                                  onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                                  onChange={(e) =>
+                                    field.onChange(
+                                      parseInt(e.target.value) || 0,
+                                    )
+                                  }
                                 />
                               </FormControl>
                               <FormMessage />
@@ -531,7 +579,10 @@ export default function SupplierCreateProduct() {
                             <FormItem>
                               <FormLabel>Tipo de Empaquetado *</FormLabel>
                               <FormControl>
-                                <Input placeholder="Ej: Paletas de madera, cajas de cartón" {...field} />
+                                <Input
+                                  placeholder="Ej: Paletas de madera, cajas de cartón"
+                                  {...field}
+                                />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -552,7 +603,11 @@ export default function SupplierCreateProduct() {
                                   step="0.1"
                                   placeholder="Ej: 15000"
                                   {...field}
-                                  onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                                  onChange={(e) =>
+                                    field.onChange(
+                                      parseFloat(e.target.value) || 0,
+                                    )
+                                  }
                                 />
                               </FormControl>
                               <FormMessage />
@@ -572,7 +627,11 @@ export default function SupplierCreateProduct() {
                                   step="0.1"
                                   placeholder="Ej: 12500"
                                   {...field}
-                                  onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                                  onChange={(e) =>
+                                    field.onChange(
+                                      parseFloat(e.target.value) || 0,
+                                    )
+                                  }
                                 />
                               </FormControl>
                               <FormMessage />
@@ -592,7 +651,11 @@ export default function SupplierCreateProduct() {
                                   step="0.1"
                                   placeholder="Ej: 30.5"
                                   {...field}
-                                  onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                                  onChange={(e) =>
+                                    field.onChange(
+                                      parseFloat(e.target.value) || 0,
+                                    )
+                                  }
                                 />
                               </FormControl>
                               <FormMessage />
@@ -607,10 +670,46 @@ export default function SupplierCreateProduct() {
                             Especificaciones del Contenedor Seleccionado
                           </h4>
                           <div className="text-sm text-blue-700">
-                            <p><strong>Tipo:</strong> {containerSpecs[form.watch("containerType") as keyof typeof containerSpecs]?.name}</p>
-                            <p><strong>Dimensiones:</strong> {containerSpecs[form.watch("containerType") as keyof typeof containerSpecs]?.dimensions}</p>
-                            <p><strong>Volumen máximo:</strong> {containerSpecs[form.watch("containerType") as keyof typeof containerSpecs]?.volume}</p>
-                            <p><strong>Peso máximo:</strong> {containerSpecs[form.watch("containerType") as keyof typeof containerSpecs]?.maxWeight}</p>
+                            <p>
+                              <strong>Tipo:</strong>{" "}
+                              {
+                                containerSpecs[
+                                  form.watch(
+                                    "containerType",
+                                  ) as keyof typeof containerSpecs
+                                ]?.name
+                              }
+                            </p>
+                            <p>
+                              <strong>Dimensiones:</strong>{" "}
+                              {
+                                containerSpecs[
+                                  form.watch(
+                                    "containerType",
+                                  ) as keyof typeof containerSpecs
+                                ]?.dimensions
+                              }
+                            </p>
+                            <p>
+                              <strong>Volumen máximo:</strong>{" "}
+                              {
+                                containerSpecs[
+                                  form.watch(
+                                    "containerType",
+                                  ) as keyof typeof containerSpecs
+                                ]?.volume
+                              }
+                            </p>
+                            <p>
+                              <strong>Peso máximo:</strong>{" "}
+                              {
+                                containerSpecs[
+                                  form.watch(
+                                    "containerType",
+                                  ) as keyof typeof containerSpecs
+                                ]?.maxWeight
+                              }
+                            </p>
                           </div>
                         </div>
                       )}
@@ -633,7 +732,11 @@ export default function SupplierCreateProduct() {
                                   step="0.01"
                                   placeholder="Ej: 12500"
                                   {...field}
-                                  onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                                  onChange={(e) =>
+                                    field.onChange(
+                                      parseFloat(e.target.value) || 0,
+                                    )
+                                  }
                                 />
                               </FormControl>
                               <FormMessage />
@@ -646,14 +749,20 @@ export default function SupplierCreateProduct() {
                           name="unitPrice"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Precio Unitario Equivalente *</FormLabel>
+                              <FormLabel>
+                                Precio Unitario Equivalente *
+                              </FormLabel>
                               <FormControl>
                                 <Input
                                   type="number"
                                   step="0.01"
                                   placeholder="Ej: 2.50"
                                   {...field}
-                                  onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                                  onChange={(e) =>
+                                    field.onChange(
+                                      parseFloat(e.target.value) || 0,
+                                    )
+                                  }
                                 />
                               </FormControl>
                               <FormDescription>
@@ -673,13 +782,20 @@ export default function SupplierCreateProduct() {
                             <FormItem>
                               <FormLabel>Moneda *</FormLabel>
                               <FormControl>
-                                <Select value={field.value} onValueChange={field.onChange}>
+                                <Select
+                                  value={field.value}
+                                  onValueChange={field.onChange}
+                                >
                                   <SelectTrigger>
                                     <SelectValue placeholder="Seleccione moneda" />
                                   </SelectTrigger>
                                   <SelectContent>
-                                    <SelectItem value="USD">USD - Dólar Estadounidense</SelectItem>
-                                    <SelectItem value="EUR">EUR - Euro</SelectItem>
+                                    <SelectItem value="USD">
+                                      USD - Dólar Estadounidense
+                                    </SelectItem>
+                                    <SelectItem value="EUR">
+                                      EUR - Euro
+                                    </SelectItem>
                                   </SelectContent>
                                 </Select>
                               </FormControl>
@@ -695,12 +811,17 @@ export default function SupplierCreateProduct() {
                             <FormItem>
                               <FormLabel>Incoterm Ofrecido *</FormLabel>
                               <FormControl>
-                                <Select value={field.value} onValueChange={field.onChange}>
+                                <Select
+                                  value={field.value}
+                                  onValueChange={field.onChange}
+                                >
                                   <SelectTrigger>
                                     <SelectValue placeholder="Seleccione Incoterm" />
                                   </SelectTrigger>
                                   <SelectContent>
-                                    <SelectItem value="FOB ZLC">FOB ZLC</SelectItem>
+                                    <SelectItem value="FOB ZLC">
+                                      FOB ZLC
+                                    </SelectItem>
                                     <SelectItem value="CIF">CIF</SelectItem>
                                     <SelectItem value="EXW">EXW</SelectItem>
                                   </SelectContent>
@@ -719,13 +840,19 @@ export default function SupplierCreateProduct() {
                           name="productionTime"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Tiempo de Producción (días) *</FormLabel>
+                              <FormLabel>
+                                Tiempo de Producción (días) *
+                              </FormLabel>
                               <FormControl>
                                 <Input
                                   type="number"
                                   placeholder="Ej: 20"
                                   {...field}
-                                  onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                                  onChange={(e) =>
+                                    field.onChange(
+                                      parseInt(e.target.value) || 0,
+                                    )
+                                  }
                                 />
                               </FormControl>
                               <FormMessage />
@@ -744,7 +871,11 @@ export default function SupplierCreateProduct() {
                                   type="number"
                                   placeholder="Ej: 5"
                                   {...field}
-                                  onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                                  onChange={(e) =>
+                                    field.onChange(
+                                      parseInt(e.target.value) || 0,
+                                    )
+                                  }
                                 />
                               </FormControl>
                               <FormMessage />
@@ -753,11 +884,15 @@ export default function SupplierCreateProduct() {
                         />
 
                         <div className="flex flex-col">
-                          <Label className="text-sm font-medium mb-2">Tiempo Total Estimado</Label>
+                          <Label className="text-sm font-medium mb-2">
+                            Tiempo Total Estimado
+                          </Label>
                           <div className="h-10 bg-gray-50 border rounded-md flex items-center px-3">
                             <Calendar className="h-4 w-4 mr-2 text-gray-500" />
                             <span className="text-sm">
-                              {(form.watch("productionTime") || 0) + (form.watch("packagingTime") || 0)} días
+                              {(form.watch("productionTime") || 0) +
+                                (form.watch("packagingTime") || 0)}{" "}
+                              días
                             </span>
                           </div>
                         </div>
@@ -766,7 +901,9 @@ export default function SupplierCreateProduct() {
                       {/* Volume Discounts */}
                       <div>
                         <div className="flex items-center justify-between mb-3">
-                          <Label className="text-base font-medium">Descuentos por Volumen</Label>
+                          <Label className="text-base font-medium">
+                            Descuentos por Volumen
+                          </Label>
                           <Button
                             type="button"
                             variant="outline"
@@ -780,27 +917,42 @@ export default function SupplierCreateProduct() {
 
                         <div className="space-y-3">
                           {volumeDiscounts.map((discount, index) => (
-                            <div key={index} className="flex items-center gap-3 p-3 border rounded-lg">
+                            <div
+                              key={index}
+                              className="flex items-center gap-3 p-3 border rounded-lg"
+                            >
                               <div className="flex-1 grid grid-cols-2 gap-3">
                                 <div>
-                                  <Label className="text-xs">Cantidad Mínima</Label>
+                                  <Label className="text-xs">
+                                    Cantidad Mínima
+                                  </Label>
                                   <Input
                                     type="number"
                                     placeholder="Ej: 2"
                                     value={discount.minQuantity || ""}
                                     onChange={(e) =>
-                                      updateVolumeDiscount(index, "minQuantity", parseInt(e.target.value) || 0)
+                                      updateVolumeDiscount(
+                                        index,
+                                        "minQuantity",
+                                        parseInt(e.target.value) || 0,
+                                      )
                                     }
                                   />
                                 </div>
                                 <div>
-                                  <Label className="text-xs">Descuento (%)</Label>
+                                  <Label className="text-xs">
+                                    Descuento (%)
+                                  </Label>
                                   <Input
                                     type="number"
                                     placeholder="Ej: 5"
                                     value={discount.discountPercentage || ""}
                                     onChange={(e) =>
-                                      updateVolumeDiscount(index, "discountPercentage", parseFloat(e.target.value) || 0)
+                                      updateVolumeDiscount(
+                                        index,
+                                        "discountPercentage",
+                                        parseFloat(e.target.value) || 0,
+                                      )
                                     }
                                   />
                                 </div>
@@ -831,7 +983,11 @@ export default function SupplierCreateProduct() {
                                   type="number"
                                   placeholder="Ej: 1"
                                   {...field}
-                                  onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                                  onChange={(e) =>
+                                    field.onChange(
+                                      parseInt(e.target.value) || 0,
+                                    )
+                                  }
                                 />
                               </FormControl>
                               <FormDescription>
@@ -847,13 +1003,19 @@ export default function SupplierCreateProduct() {
                           name="stockContainers"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Stock Disponible (Contenedores) *</FormLabel>
+                              <FormLabel>
+                                Stock Disponible (Contenedores) *
+                              </FormLabel>
                               <FormControl>
                                 <Input
                                   type="number"
                                   placeholder="Ej: 10"
                                   {...field}
-                                  onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                                  onChange={(e) =>
+                                    field.onChange(
+                                      parseInt(e.target.value) || 0,
+                                    )
+                                  }
                                 />
                               </FormControl>
                               <FormDescription>
@@ -883,11 +1045,10 @@ export default function SupplierCreateProduct() {
                                 />
                               </FormControl>
                               <div className="space-y-1 leading-none">
-                                <FormLabel>
-                                  Habilitar "Negociable"
-                                </FormLabel>
+                                <FormLabel>Habilitar "Negociable"</FormLabel>
                                 <FormDescription>
-                                  Permite que los compradores envíen ofertas y negocien precios
+                                  Permite que los compradores envíen ofertas y
+                                  negocien precios
                                 </FormDescription>
                               </div>
                             </FormItem>
@@ -910,7 +1071,8 @@ export default function SupplierCreateProduct() {
                                   Habilitar "Orden Personalizada"
                                 </FormLabel>
                                 <FormDescription>
-                                  Acepta mezclas de tallas, cambios de especificación y personalizaciones
+                                  Acepta mezclas de tallas, cambios de
+                                  especificación y personalizaciones
                                 </FormDescription>
                               </div>
                             </FormItem>
@@ -920,11 +1082,14 @@ export default function SupplierCreateProduct() {
 
                       {/* Quality Documentation */}
                       <div>
-                        <Label className="text-base font-medium">Documentación de Calidad</Label>
+                        <Label className="text-base font-medium">
+                          Documentación de Calidad
+                        </Label>
                         <p className="text-sm text-gray-600 mb-3">
-                          Adjunte certificados ISO, certificados de origen, fichas técnicas, etc.
+                          Adjunte certificados ISO, certificados de origen,
+                          fichas técnicas, etc.
                         </p>
-                        
+
                         <Input
                           type="file"
                           multiple
@@ -936,10 +1101,15 @@ export default function SupplierCreateProduct() {
                         {qualityDocuments.length > 0 && (
                           <div className="space-y-2">
                             {qualityDocuments.map((doc) => (
-                              <div key={doc.id} className="flex items-center justify-between p-3 border rounded-lg">
+                              <div
+                                key={doc.id}
+                                className="flex items-center justify-between p-3 border rounded-lg"
+                              >
                                 <div className="flex items-center gap-3">
                                   <FileText className="h-5 w-5 text-gray-500" />
-                                  <span className="text-sm font-medium">{doc.name}</span>
+                                  <span className="text-sm font-medium">
+                                    {doc.name}
+                                  </span>
                                 </div>
                                 <Button
                                   type="button"
@@ -957,43 +1127,64 @@ export default function SupplierCreateProduct() {
 
                       {/* Summary */}
                       <div className="p-4 bg-gray-50 border rounded-lg">
-                        <h4 className="font-medium text-gray-900 mb-3">Resumen del Lote</h4>
+                        <h4 className="font-medium text-gray-900 mb-3">
+                          Resumen del Lote
+                        </h4>
                         <div className="grid grid-cols-2 gap-4 text-sm">
                           <div>
                             <span className="text-gray-600">Nombre:</span>
-                            <span className="ml-2 font-medium">{form.watch("name") || "Sin especificar"}</span>
+                            <span className="ml-2 font-medium">
+                              {form.watch("name") || "Sin especificar"}
+                            </span>
                           </div>
                           <div>
                             <span className="text-gray-600">Código:</span>
-                            <span className="ml-2 font-medium">{form.watch("code") || "Sin especificar"}</span>
+                            <span className="ml-2 font-medium">
+                              {form.watch("code") || "Sin especificar"}
+                            </span>
                           </div>
                           <div>
                             <span className="text-gray-600">Contenedor:</span>
                             <span className="ml-2 font-medium">
-                              {containerSpecs[form.watch("containerType") as keyof typeof containerSpecs]?.name || "Sin especificar"}
+                              {containerSpecs[
+                                form.watch(
+                                  "containerType",
+                                ) as keyof typeof containerSpecs
+                              ]?.name || "Sin especificar"}
                             </span>
                           </div>
                           <div>
                             <span className="text-gray-600">Precio:</span>
                             <span className="ml-2 font-medium">
-                              ${form.watch("pricePerContainer")?.toLocaleString() || 0} {form.watch("currency")} {form.watch("incoterm")}
+                              $
+                              {form
+                                .watch("pricePerContainer")
+                                ?.toLocaleString() || 0}{" "}
+                              {form.watch("currency")} {form.watch("incoterm")}
                             </span>
                           </div>
                           <div>
-                            <span className="text-gray-600">Unidades/Contenedor:</span>
-                            <span className="ml-2 font-medium">{form.watch("unitsPerContainer")?.toLocaleString() || 0}</span>
+                            <span className="text-gray-600">
+                              Unidades/Contenedor:
+                            </span>
+                            <span className="ml-2 font-medium">
+                              {form
+                                .watch("unitsPerContainer")
+                                ?.toLocaleString() || 0}
+                            </span>
                           </div>
                           <div>
                             <span className="text-gray-600">Tiempo Total:</span>
                             <span className="ml-2 font-medium">
-                              {(form.watch("productionTime") || 0) + (form.watch("packagingTime") || 0)} días
+                              {(form.watch("productionTime") || 0) +
+                                (form.watch("packagingTime") || 0)}{" "}
+                              días
                             </span>
                           </div>
                         </div>
                       </div>
                     </div>
                   )}
-
                 </CardContent>
               </Card>
 
