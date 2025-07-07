@@ -31,6 +31,8 @@ import CustomsSupport from "./pages/CustomsSupport";
 import SupplierDashboard from "./pages/SupplierDashboard";
 import SupplierProducts from "./pages/SupplierProducts";
 import SupplierCreateProduct from "./pages/SupplierCreateProduct";
+import SupplierRFQs from "./pages/SupplierRFQs";
+import SupplierRFQResponse from "./pages/SupplierRFQResponse";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
