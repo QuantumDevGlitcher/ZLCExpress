@@ -729,8 +729,26 @@ export default function Register() {
             </div>
           )}
 
-          {/* Progress Steps */}
-          <div className="mb-8">
+          {/* Registration Forms */}
+          {userType && (
+            <>
+              {/* Back to User Selection */}
+              <div className="mb-6">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setUserType(null);
+                    setCurrentStep(1);
+                  }}
+                  className="flex items-center gap-2"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                  Cambiar tipo de usuario
+                </Button>
+              </div>
+
+              {/* Progress Steps */}
+              <div className="mb-8">
             <div className="flex items-center justify-between mb-4">
               {steps.map((step, index) => (
                 <div key={step.id} className="flex items-center">
