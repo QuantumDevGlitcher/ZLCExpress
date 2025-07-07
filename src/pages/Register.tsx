@@ -528,9 +528,23 @@ export default function Register() {
     setIsSubmitting(true);
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 2000));
-    console.log("Form submitted:", values);
+    console.log("Buyer form submitted:", values);
     setIsSubmitting(false);
     // Here you would typically redirect to a success page or dashboard
+  };
+
+  const onSupplierSubmit = async (values: SupplierFormValues) => {
+    setIsSubmitting(true);
+    // Simulate API call with supplier data
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    console.log("Supplier form submitted:", {
+      ...values,
+      paisOperacion: "Panamá", // Hidden field
+      paisDireccion: "Panamá", // Hidden field
+      documentosAdjuntos: uploadedDocuments,
+    });
+    setIsSubmitting(false);
+    // Redirect to verification pending page
   };
 
   const nextStep = () => {
