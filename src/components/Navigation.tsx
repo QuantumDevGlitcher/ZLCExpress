@@ -38,6 +38,8 @@ import {
   Shield,
   Bell,
   TrendingUp,
+  BarChart3,
+  Truck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
