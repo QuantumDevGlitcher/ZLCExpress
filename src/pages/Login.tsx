@@ -41,12 +41,55 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export default function Login() {
+  const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState("");
   const [accountStatus, setAccountStatus] = useState<
     "pending" | "verified" | "rejected" | null
   >(null);
+
+  // ============================================
+  // HARDCODED DEMO CREDENTIALS - FOR DEVELOPMENT ONLY
+  // TODO: REMOVE THIS SECTION BEFORE PRODUCTION
+  // ============================================
+  const DEMO_CREDENTIALS = {
+    // Buyer accounts
+    buyer: {
+      email: "comprador@demo.com",
+      password: "demo123",
+      type: "buyer" as const,
+      status: "verified" as const,
+    },
+    buyerPending: {
+      email: "comprador.pendiente@demo.com",
+      password: "demo123",
+      type: "buyer" as const,
+      status: "pending" as const,
+    },
+    // Supplier accounts
+    supplier: {
+      email: "proveedor@demo.com",
+      password: "demo123",
+      type: "supplier" as const,
+      status: "verified" as const,
+    },
+    supplierPending: {
+      email: "proveedor.pendiente@demo.com",
+      password: "demo123",
+      type: "supplier" as const,
+      status: "pending" as const,
+    },
+    supplierRejected: {
+      email: "proveedor.rechazado@demo.com",
+      password: "demo123",
+      type: "supplier" as const,
+      status: "rejected" as const,
+    },
+  };
+  // ============================================
+  // END HARDCODED CREDENTIALS SECTION
+  // ============================================
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
