@@ -589,6 +589,212 @@ const SupplierOrderDetail = () => {
                   )}
                 </CardContent>
               </Card>
+
+              {/* Payment Confirmation Section */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <DollarSign className="h-5 w-5" />
+                    Confirmación de Pago Anticipado
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {!paymentReceived ? (
+                    <div className="space-y-4">
+                      <div className="bg-orange-50 border border-orange-200 rounded-md p-4">
+                        <div className="flex items-center gap-2 text-orange-800 mb-2">
+                          <Clock className="h-5 w-5" />
+                          <span className="font-medium">
+                            Esperando Comprobante de Pago
+                          </span>
+                        </div>
+                        <p className="text-sm text-orange-700 mb-3">
+                          El comprador debe subir el comprobante de
+                          transferencia del anticipo ($
+                          {orderData.advanceAmount.toLocaleString()}) desde su
+                          panel "Mis Pagos".
+                        </p>
+                        <p className="text-xs text-orange-600">
+                          Vencimiento:{" "}
+                          {orderData.advancePaymentDue.toLocaleDateString()}
+                        </p>
+                      </div>
+
+                      <div className="border-2 border-dashed border-gray-300 rounded-md p-4 text-center">
+                        <Receipt className="mx-auto h-8 w-8 text-gray-400 mb-2" />
+                        <p className="text-sm text-gray-600 mb-3">
+                          Cuando recibas la confirmación bancaria del anticipo,
+                          marca el pago como recibido
+                        </p>
+                        <Button
+                          onClick={() => setShowPaymentConfirmation(true)}
+                          className="bg-green-600 hover:bg-green-700"
+                        >
+                          <CheckCircle className="h-4 w-4 mr-2" />
+                          Marcar Pago Recibido
+                        </Button>
+                      </div>
+
+                      {showPaymentConfirmation && (
+                        <div className="bg-yellow-50 border border-yellow-200 rounded-md p-4">
+                          <div className="flex items-center gap-2 text-yellow-800 mb-2">
+                            <AlertCircle className="h-5 w-5" />
+                            <span className="font-medium">
+                              Confirmar Recepción de Pago
+                            </span>
+                          </div>
+                          <p className="text-sm text-yellow-700 mb-3">
+                            ¿Confirmas que has recibido la transferencia
+                            bancaria del anticipo de $
+                            {orderData.advanceAmount.toLocaleString()}{" "}
+                            {orderData.currency}?
+                          </p>
+                          <div className="flex gap-2">
+                            <Button
+                              size="sm"
+                              onClick={handlePaymentConfirmation}
+                              className="bg-green-600 hover:bg-green-700"
+                            >
+                              Sí, Confirmar
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => setShowPaymentConfirmation(false)}
+                            >
+                              Cancelar
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="bg-green-50 border border-green-200 rounded-md p-4">
+                      <div className="flex items-center gap-2 text-green-800 mb-2">
+                        <CheckCircle className="h-5 w-5" />
+                        <span className="font-medium">
+                          Pago Anticipado Confirmado
+                        </span>
+                      </div>
+                      <p className="text-sm text-green-700">
+                        Anticipo de ${orderData.advanceAmount.toLocaleString()}{" "}
+                        {orderData.currency} confirmado. El comprador ha sido
+                        notificado que la producción ha iniciado.
+                      </p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Production Tracking Section */}
+              {paymentReceived && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Package className="h-5 w-5" />
+                      Seguimiento de Producción
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium">
+                          Progreso de Producción
+                        </span>
+                        <span className="text-2xl font-bold text-blue-600">
+                          {productionProgress}%
+                        </span>
+                      </div>
+                      <Progress value={productionProgress} className="h-3" />
+                      <p className="text-sm text-gray-600 bg-gray-50 p-2 rounded">
+                        Estado actual: {productionStatus}
+                      </p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">
+                        Actualizar Progreso
+                      </Label>
+                      <div className="grid grid-cols-5 gap-2">
+                        {[0, 25, 50, 75, 100].map((progress) => (
+                          <Button
+                            key={progress}
+                            size="sm"
+                            variant={
+                              productionProgress === progress
+                                ? "default"
+                                : "outline"
+                            }
+                            onClick={() => handleProductionUpdate(progress)}
+                            className="text-xs"
+                          >
+                            {progress}%
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">
+                        Estados de Producción
+                      </Label>
+                      <div className="space-y-1 text-xs">
+                        <div
+                          className={`p-2 rounded ${productionProgress >= 0 ? "bg-blue-50 text-blue-800" : "bg-gray-50 text-gray-600"}`}
+                        >
+                          <span className="font-medium">0%:</span> Pago
+                          recibido, preparando materia prima
+                        </div>
+                        <div
+                          className={`p-2 rounded ${productionProgress >= 25 ? "bg-blue-50 text-blue-800" : "bg-gray-50 text-gray-600"}`}
+                        >
+                          <span className="font-medium">25%:</span> Corte y
+                          confección en marcha
+                        </div>
+                        <div
+                          className={`p-2 rounded ${productionProgress >= 50 ? "bg-blue-50 text-blue-800" : "bg-gray-50 text-gray-600"}`}
+                        >
+                          <span className="font-medium">50%:</span> Embalaje en
+                          proceso
+                        </div>
+                        <div
+                          className={`p-2 rounded ${productionProgress >= 75 ? "bg-blue-50 text-blue-800" : "bg-gray-50 text-gray-600"}`}
+                        >
+                          <span className="font-medium">75%:</span> Paletas
+                          listas, esperando transporte interno
+                        </div>
+                        <div
+                          className={`p-2 rounded ${productionProgress === 100 ? "bg-green-50 text-green-800" : "bg-gray-50 text-gray-600"}`}
+                        >
+                          <span className="font-medium">100%:</span> Listo para
+                          embarcar
+                        </div>
+                      </div>
+                    </div>
+
+                    {productionProgress === 100 && (
+                      <div className="bg-green-50 border border-green-200 rounded-md p-4">
+                        <div className="flex items-center gap-2 text-green-800 mb-2">
+                          <CheckCircle className="h-5 w-5" />
+                          <span className="font-medium">
+                            Producción Completada
+                          </span>
+                        </div>
+                        <p className="text-sm text-green-700 mb-3">
+                          La producción está lista para embarque. El comprador
+                          será notificado.
+                        </p>
+                        <Button
+                          size="sm"
+                          className="bg-green-600 hover:bg-green-700"
+                        >
+                          Proceder a Embarque
+                        </Button>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              )}
             </div>
 
             {/* Sidebar */}
