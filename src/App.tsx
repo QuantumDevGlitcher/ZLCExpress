@@ -40,6 +40,7 @@ import SupplierShipmentDetail from "./pages/SupplierShipmentDetail";
 import SupplierTracking from "./pages/SupplierTracking";
 import SupplierProfile from "./pages/SupplierProfile";
 import SupplierReports from "./pages/SupplierReports";
+import SupplierCustoms from "./pages/SupplierCustoms";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
