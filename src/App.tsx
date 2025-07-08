@@ -41,6 +41,7 @@ import SupplierTracking from "./pages/SupplierTracking";
 import SupplierProfile from "./pages/SupplierProfile";
 import SupplierReports from "./pages/SupplierReports";
 import SupplierCustoms from "./pages/SupplierCustoms";
+import SupplierMessages from "./pages/SupplierMessages";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
