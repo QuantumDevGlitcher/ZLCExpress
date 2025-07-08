@@ -149,6 +149,10 @@ const App = () => (
                     path="/supplier/messages"
                     element={<SupplierMessages />}
                   />
+                  <Route
+                    path="/supplier/settings"
+                    element={<SupplierSettings />}
+                  />
 
                   {/* Placeholder routes for navigation links */}
                   <Route
