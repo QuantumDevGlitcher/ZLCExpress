@@ -324,7 +324,7 @@ export default function MyRFQs() {
                   <Label htmlFor="search">Buscar</Label>
                   <div className="relative">
                     <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                    <Input
+                    <Input 
                       id="search"
                       placeholder="Nº RFQ, producto o proveedor..."
                       value={filters.searchTerm}
@@ -334,7 +334,7 @@ export default function MyRFQs() {
                           searchTerm: e.target.value,
                         }))
                       }
-                      className="pl-10"
+                      className="pl-10 border border-black bg-white"
                     />
                   </div>
                 </div>
@@ -350,7 +350,7 @@ export default function MyRFQs() {
                       }))
                     }
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="border border-black bg-white">
                       <SelectValue placeholder="Todos los estados" />
                     </SelectTrigger>
                     <SelectContent>
@@ -776,7 +776,7 @@ export default function MyRFQs() {
                                             <Label htmlFor="counterSpecialConditions">
                                               Condiciones Especiales
                                             </Label>
-                                            <Textarea
+                                            <input
                                               id="counterSpecialConditions"
                                               value={
                                                 counterOfferData.specialConditions

@@ -78,8 +78,6 @@ const formSchema = z
     path: ["confirmPassword"],
   });
 
-type FormValues = z.infer<typeof formSchema>;
-
 // Supplier-specific form schema
 const supplierFormSchema = z
   .object({
@@ -454,7 +452,7 @@ const sectors = [
 ];
 
 const steps = [
-  { id: 1, title: "Información de la Empresa", icon: Building2 },
+  { id: 1, title: "Informaci��n de la Empresa", icon: Building2 },
   { id: 2, title: "Contacto Principal", icon: User },
   { id: 3, title: "Dirección Fiscal", icon: MapPin },
   { id: 4, title: "Seguridad y Términos", icon: Shield },
@@ -683,7 +681,7 @@ export default function Register() {
           {/* User Type Selection */}
           {!userType && (
             <div className="mb-8">
-              <Card>
+              <Card className="bg-white border border-zlc-gray-200 shadow-sm rounded-xl">
                 <CardHeader>
                   <CardTitle className="text-center">
                     ¿Qué tipo de usuario es usted?
@@ -693,10 +691,10 @@ export default function Register() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid gap-4 md:grid-cols-2">
+                  <div className="grid gap-4 md:grid-cols-2 ">
                     <Button
                       variant="outline"
-                      className="h-24 p-6 border-2 hover:border-zlc-blue-600 hover:bg-zlc-blue-50"
+                      className="h-24 p-6 border-2 hover:border-zlc-blue-600 hover:bg-zlc-blue-50 "
                       onClick={() => setUserType("buyer")}
                     >
                       <div className="flex flex-col items-center gap-3">
@@ -750,31 +748,32 @@ export default function Register() {
 
               {/* Progress Steps */}
               <div className="mb-8">
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center justify-between mb-4 ">
                   {steps.map((step, index) => (
-                    <div key={step.id} className="flex items-center">
+                    <div key={step.id} className="flex items-center ">
                       <div
-                        className={`flex h-10 w-10 items-center justify-center rounded-full border-2 ${
+                        className={`flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all duration-300  ${
                           currentStep >= step.id
-                            ? "border-zlc-blue-600 bg-zlc-blue-600 text-white"
-                            : "border-zlc-gray-300 bg-white text-zlc-gray-400"
+                            ? "border-gray-300 bg-blue-600 text-white"
+                            : "border-gray-300 bg-blue-600 text-white"
                         }`}
                       >
                         {currentStep > step.id ? (
-                          <CheckCircle className="h-5 w-5" />
+                          <CheckCircle className="h-5 w-5 " />
                         ) : (
-                          <step.icon className="h-5 w-5" />
+                          <step.icon className="h-5 w-5 " />
                         )}
                       </div>
                       {index < steps.length - 1 && (
-                        <div className="ml-2 mr-2 h-px flex-1 bg-zlc-gray-300" />
+                        <div className="ml-2 mr-2 h-px flex-1 bg-gray-300" />
                       )}
                     </div>
                   ))}
                 </div>
-                <Progress value={progress} className="h-2" />
-                <div className="mt-2 text-center">
-                  <span className="text-sm text-zlc-gray-600">
+
+                <Progress value={progress} className="h-2 bg-blue-600 " />
+                <div className="mt-2 text-center ">
+                  <span className="text-sm text-gray-600  ">
                     Paso {currentStep} de {steps.length}:{" "}
                     {steps[currentStep - 1].title}
                   </span>
@@ -782,13 +781,13 @@ export default function Register() {
               </div>
 
               {/* Form */}
-              <Card className="shadow-soft-lg">
+              <Card className="bg-white border border-gray-200 shadow-md rounded-lg">
                 <CardHeader>
                   <CardTitle className="flex items-center text-xl">
                     {(() => {
                       const StepIcon = steps[currentStep - 1].icon;
                       return (
-                        <StepIcon className="mr-2 h-6 w-6 text-zlc-blue-600" />
+                        <StepIcon className="mr-2 h-6 w-6 text-gray-800" />
                       );
                     })()}
                     {steps[currentStep - 1].title}
@@ -821,6 +820,7 @@ export default function Register() {
                                   <FormLabel>Nombre de la Empresa *</FormLabel>
                                   <FormControl>
                                     <Input
+                                      className="border-2 border-zlc-gray-200 bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 placeholder:text-zlc-gray-400 rounded-lg h-11"
                                       placeholder="Ej: Importadora del Caribe S.A."
                                       {...field}
                                     />
@@ -840,6 +840,7 @@ export default function Register() {
                                   </FormLabel>
                                   <FormControl>
                                     <Input
+                                      className="border-2 border-zlc-gray-200 bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 placeholder:text-zlc-gray-400 rounded-lg h-11"
                                       placeholder="Ej: 3-101-123456"
                                       {...field}
                                     />
@@ -853,19 +854,20 @@ export default function Register() {
                               )}
                             />
 
-                            <div className="grid gap-6 md:grid-cols-2">
+                            <div className="grid gap-6 md:grid-cols-2 ">
                               <FormField
                                 control={form.control}
                                 name="country"
                                 render={({ field }) => (
                                   <FormItem>
-                                    <FormLabel>Pa��s de Operación *</FormLabel>
+                                    <FormLabel>País de Operación *</FormLabel>
                                     <FormControl>
                                       <SearchableCountrySelect
                                         value={field.value}
                                         onValueChange={field.onChange}
                                         placeholder="Seleccione un país"
                                         countriesByRegion={countriesByRegion}
+                                        className="h-12 rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm shadow-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zlc-blue-500"
                                       />
                                     </FormControl>
                                     <FormMessage />
@@ -884,7 +886,7 @@ export default function Register() {
                                       defaultValue={field.value}
                                     >
                                       <FormControl>
-                                        <SelectTrigger>
+                                        <SelectTrigger className="border-2 border-zlc-gray-200 bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 rounded-lg h-11">
                                           <SelectValue placeholder="Seleccione un sector" />
                                         </SelectTrigger>
                                       </FormControl>
@@ -919,6 +921,7 @@ export default function Register() {
                                     <FormLabel>Nombre Completo *</FormLabel>
                                     <FormControl>
                                       <Input
+                                        className="border-2 border-zlc-gray-200 bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 placeholder:text-zlc-gray-400 rounded-lg h-11"
                                         placeholder="Ej: Juan Carlos Pérez"
                                         {...field}
                                       />
@@ -936,6 +939,7 @@ export default function Register() {
                                     <FormLabel>Cargo *</FormLabel>
                                     <FormControl>
                                       <Input
+                                        className="border-2 border-zlc-gray-200 bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 placeholder:text-zlc-gray-400 rounded-lg h-11"
                                         placeholder="Ej: Gerente de Compras"
                                         {...field}
                                       />
@@ -955,6 +959,7 @@ export default function Register() {
                                     <FormLabel>Email Corporativo *</FormLabel>
                                     <FormControl>
                                       <Input
+                                        className="border-2 border-zlc-gray-200 bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 placeholder:text-zlc-gray-400 rounded-lg h-11"
                                         type="email"
                                         placeholder="nombre@empresa.com"
                                         {...field}
@@ -1004,6 +1009,7 @@ export default function Register() {
                                     <FormLabel>Teléfono *</FormLabel>
                                     <FormControl>
                                       <Input
+                                        className="border-2 border-zlc-gray-200 bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 placeholder:text-zlc-gray-400 rounded-lg h-11"
                                         placeholder="+506 2234-5678"
                                         {...field}
                                       />
@@ -1028,7 +1034,7 @@ export default function Register() {
                                   <FormControl>
                                     <Textarea
                                       placeholder="Ej: Calle 15, Avenida 3-5, Edificio Corporativo, Oficina 502"
-                                      className="resize-none"
+                                      className="resize-none border border-black"
                                       rows={3}
                                       {...field}
                                     />
@@ -1053,7 +1059,7 @@ export default function Register() {
                                         handleCountryChange(value);
                                       }}
                                     >
-                                      <SelectTrigger>
+                                      <SelectTrigger className="border-2 border-zlc-gray-200 bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 rounded-lg h-11">
                                         <SelectValue placeholder="Seleccione un país" />
                                       </SelectTrigger>
                                       <SelectContent>
@@ -1107,7 +1113,7 @@ export default function Register() {
                                           availableStates.length === 0
                                         }
                                       >
-                                        <SelectTrigger>
+                                        <SelectTrigger className="border-2 border-zlc-gray-200 bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 rounded-lg h-11">
                                           <SelectValue
                                             placeholder={
                                               !selectedCountry
@@ -1153,7 +1159,7 @@ export default function Register() {
                                           availableCities.length === 0
                                         }
                                       >
-                                        <SelectTrigger>
+                                        <SelectTrigger className="border-2 border-zlc-gray-200 bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 rounded-lg h-11">
                                           <SelectValue
                                             placeholder={
                                               !selectedState
@@ -1186,7 +1192,11 @@ export default function Register() {
                                 <FormItem>
                                   <FormLabel>Código Postal *</FormLabel>
                                   <FormControl>
-                                    <Input placeholder="Ej: 10101" {...field} />
+                                    <Input
+                                      className="border-2 border-zlc-gray-200 bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 placeholder:text-zlc-gray-400 rounded-lg h-11"
+                                      placeholder="Ej: 10101"
+                                      {...field}
+                                    />
                                   </FormControl>
                                   <FormMessage />
                                 </FormItem>
@@ -1207,6 +1217,7 @@ export default function Register() {
                                     <FormLabel>Contraseña *</FormLabel>
                                     <FormControl>
                                       <Input
+                                        className="border-2 border-zlc-gray-200 bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 placeholder:text-zlc-gray-400 rounded-lg h-11"
                                         type="password"
                                         placeholder="Mínimo 8 caracteres"
                                         {...field}
@@ -1231,6 +1242,7 @@ export default function Register() {
                                     </FormLabel>
                                     <FormControl>
                                       <Input
+                                        className="border-2 border-zlc-gray-200 bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 placeholder:text-zlc-gray-400 rounded-lg h-11"
                                         type="password"
                                         placeholder="Repita la contraseña"
                                         {...field}
@@ -1289,7 +1301,7 @@ export default function Register() {
                                         >
                                           Política de Privacidad
                                         </Link>
-                                        , incluyendo las cláusulas específicas
+                                        , incluyendo las cláusulas espec��ficas
                                         sobre la Zona Libre de Colón.
                                       </FormLabel>
                                       <FormMessage />
@@ -1309,6 +1321,7 @@ export default function Register() {
                                 type="button"
                                 variant="outline"
                                 onClick={prevStep}
+                                className="border-2 border-zlc-gray-300 text-zlc-gray-700 hover:border-zlc-blue-500 hover:bg-zlc-blue-50 hover:text-zlc-blue-700 transition-all duration-200"
                               >
                                 <ArrowLeft className="mr-2 h-4 w-4" />
                                 Anterior
@@ -1329,7 +1342,7 @@ export default function Register() {
                                 type="button"
                                 onClick={nextStep}
                                 disabled={!canProceed()}
-                                className="bg-zlc-blue-800 hover:bg-zlc-blue-900"
+                                className="bg-zlc-blue-600 hover:bg-zlc-blue-700 border-2 border-zlc-blue-600 hover:border-zlc-blue-700 shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                               >
                                 Siguiente
                                 <ArrowRight className="ml-2 h-4 w-4" />
@@ -1340,7 +1353,7 @@ export default function Register() {
                                 disabled={
                                   isSubmitting || !form.formState.isValid
                                 }
-                                className="bg-zlc-blue-800 hover:bg-zlc-blue-900"
+                                className="bg-zlc-blue-600 hover:bg-zlc-blue-700 border-2 border-zlc-blue-600 hover:border-zlc-blue-700 shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                               >
                                 {isSubmitting
                                   ? "Registrando..."
@@ -1373,6 +1386,7 @@ export default function Register() {
                                   </FormLabel>
                                   <FormControl>
                                     <Input
+                                      className="border-2 border-zlc-gray-200 bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 placeholder:text-zlc-gray-400 rounded-lg h-11"
                                       placeholder="Ej: Textiles Modernos S.A."
                                       {...field}
                                     />
@@ -1391,6 +1405,7 @@ export default function Register() {
                                     <FormLabel>Número de RUC *</FormLabel>
                                     <FormControl>
                                       <Input
+                                        className="border-2 border-zlc-gray-200 bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 placeholder:text-zlc-gray-400 rounded-lg h-11"
                                         placeholder="Ej: 8-123-12345"
                                         {...field}
                                       />
@@ -1411,7 +1426,7 @@ export default function Register() {
                                         value={field.value}
                                         onValueChange={field.onChange}
                                       >
-                                        <SelectTrigger>
+                                        <SelectTrigger className="border-2 border-zlc-gray-200 bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 rounded-lg h-11">
                                           <SelectValue placeholder="Seleccione un sector" />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -1483,7 +1498,7 @@ export default function Register() {
                                 onChange={(e) =>
                                   handleFileUpload(e.target.files)
                                 }
-                                className="mb-3"
+                                className="mb-3 border-2 border-zlc-gray-200 bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 rounded-lg p-3 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-zlc-blue-50 file:text-zlc-blue-700 hover:file:bg-zlc-blue-100"
                               />
                               {uploadedDocuments.length > 0 && (
                                 <div className="space-y-2">
@@ -1503,8 +1518,9 @@ export default function Register() {
                                         variant="ghost"
                                         size="sm"
                                         onClick={() => removeDocument(index)}
+                                        className="text-red-600 hover:text-red-700 hover:bg-red-50 transition-all duration-200"
                                       >
-                                        <AlertCircle className="h-4 w-4 text-red-500" />
+                                        <AlertCircle className="h-4 w-4" />
                                       </Button>
                                     </div>
                                   ))}
@@ -1534,6 +1550,7 @@ export default function Register() {
                                     <FormLabel>Nombre Completo *</FormLabel>
                                     <FormControl>
                                       <Input
+                                        className="border-2 border-zlc-gray-200 bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 placeholder:text-zlc-gray-400 rounded-lg h-11"
                                         placeholder="Ej: Juan Carlos Pérez"
                                         {...field}
                                       />
@@ -1551,6 +1568,7 @@ export default function Register() {
                                     <FormLabel>Cargo *</FormLabel>
                                     <FormControl>
                                       <Input
+                                        className="border-2 border-zlc-gray-200 bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 placeholder:text-zlc-gray-400 rounded-lg h-11"
                                         placeholder="Ej: Gerente de Ventas"
                                         {...field}
                                       />
@@ -1570,6 +1588,7 @@ export default function Register() {
                                     <FormLabel>Email Corporativo *</FormLabel>
                                     <FormControl>
                                       <Input
+                                        className="border-2 border-zlc-gray-200 bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 placeholder:text-zlc-gray-400 rounded-lg h-11"
                                         type="email"
                                         placeholder="nombre@empresa.com"
                                         {...field}
@@ -1619,6 +1638,7 @@ export default function Register() {
                                     </FormLabel>
                                     <FormControl>
                                       <Input
+                                        className="border-2 border-zlc-gray-200 bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 placeholder:text-zlc-gray-400 rounded-lg h-11"
                                         placeholder="Ej: +507 6234-5678"
                                         {...field}
                                       />
@@ -1665,7 +1685,7 @@ export default function Register() {
                                         value={field.value}
                                         onValueChange={field.onChange}
                                       >
-                                        <SelectTrigger>
+                                        <SelectTrigger className="border-2 border-zlc-gray-200 bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 rounded-lg h-11">
                                           <SelectValue placeholder="Seleccione provincia" />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -1693,6 +1713,7 @@ export default function Register() {
                                     <FormLabel>Ciudad *</FormLabel>
                                     <FormControl>
                                       <Input
+                                        className="border-2 border-zlc-gray-200 bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 placeholder:text-zlc-gray-400 rounded-lg h-11"
                                         placeholder="Ej: Colón"
                                         {...field}
                                       />
@@ -1712,7 +1733,11 @@ export default function Register() {
                                     Código Postal (Opcional)
                                   </FormLabel>
                                   <FormControl>
-                                    <Input placeholder="Ej: 50000" {...field} />
+                                    <Input
+                                      className="border-2 border-zlc-gray-200 bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 placeholder:text-zlc-gray-400 rounded-lg h-11"
+                                      placeholder="Ej: 50000"
+                                      {...field}
+                                    />
                                   </FormControl>
                                   <FormMessage />
                                 </FormItem>
@@ -1810,14 +1835,14 @@ export default function Register() {
                               )}
                             />
 
-                            <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                            <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
                               <div className="flex items-start gap-3">
-                                <AlertCircle className="h-5 w-5 text-yellow-600 mt-0.5" />
+                                <AlertCircle className="h-5 w-5 text-amber-700 mt-0.5" />
                                 <div>
-                                  <h4 className="font-medium text-yellow-800">
+                                  <h4 className="font-medium text-amber-900">
                                     Proceso de Verificación
                                   </h4>
-                                  <p className="text-sm text-yellow-700 mt-1">
+                                  <p className="text-sm text-amber-800 mt-1">
                                     Su empresa será verificada manualmente. El
                                     proceso puede tardar de{" "}
                                     <strong>1 a 3 días hábiles</strong>.
@@ -1838,15 +1863,20 @@ export default function Register() {
                             variant="outline"
                             onClick={prevStep}
                             disabled={currentStep === 1}
+                            className="border-2 border-zlc-gray-300 text-zlc-gray-700 hover:border-zlc-blue-500 hover:bg-zlc-blue-50 hover:text-zlc-blue-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             <ArrowLeft className="mr-2 h-4 w-4" />
                             Anterior
                           </Button>
 
                           {currentStep < steps.length ? (
-                            <Button type="button" onClick={nextStep}>
+                            <Button
+                              type="button"
+                              onClick={nextStep}
+                              className="bg-zlc-blue-600 hover:bg-zlc-blue-700 border-2 border-zlc-blue-600 hover:border-zlc-blue-700 shadow-md transition-all duration-200"
+                            >
                               Siguiente
-                              <ArrowRight className="ml-2 h-4 w-4" />
+                              <ArrowRight className="ml-2 h-4 w-4 " />
                             </Button>
                           ) : (
                             <Button
@@ -1854,7 +1884,7 @@ export default function Register() {
                               disabled={
                                 isSubmitting || !supplierForm.formState.isValid
                               }
-                              className="bg-zlc-blue-800 hover:bg-zlc-blue-900"
+                              className="bg-zlc-blue-600 hover:bg-zlc-blue-700 border-2 border-zlc-blue-600 hover:border-zlc-blue-700 shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                               {isSubmitting
                                 ? "Registrando..."

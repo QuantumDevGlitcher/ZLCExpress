@@ -140,6 +140,7 @@ export function NotificationCenter({
               size="sm"
               onClick={onMarkAllAsRead}
               disabled={unreadCount === 0}
+              className="border-2 border-zlc-blue-300 text-zlc-blue-700 hover:bg-zlc-blue-50 hover:border-zlc-blue-500 disabled:border-gray-200 disabled:text-gray-400 disabled:hover:bg-white disabled:hover:border-gray-200"
             >
               <CheckCheck className="h-4 w-4 mr-1" />
               Marcar todas como leídas
@@ -148,7 +149,7 @@ export function NotificationCenter({
         </CardTitle>
 
         {/* Filter Tabs */}
-        <div className="flex gap-1 mt-4">
+        <div className="flex gap-2 mt-4">
           {[
             { key: "all", label: "Todas", count: notifications.length },
             { key: "unread", label: "No leídas", count: unreadCount },
@@ -177,13 +178,20 @@ export function NotificationCenter({
               variant={filter === tab.key ? "default" : "ghost"}
               size="sm"
               onClick={() => setFilter(tab.key as any)}
-              className="text-xs"
+              className={`text-xs border-2 transition-all ${
+                filter === tab.key
+                  ? "bg-zlc-blue-600 text-white border-zlc-blue-600 shadow-md"
+                  : "border-zlc-gray-200 text-zlc-gray-600 hover:bg-zlc-gray-50 hover:border-zlc-blue-300 hover:text-zlc-blue-700"
+              }`}
             >
               {tab.label}
               {tab.count > 0 && (
                 <Badge
-                  variant={filter === tab.key ? "secondary" : "outline"}
-                  className="ml-1 text-xs"
+                  className={`ml-1 text-xs ${
+                    filter === tab.key
+                      ? "bg-white text-zlc-blue-600"
+                      : "bg-zlc-gray-100 text-zlc-gray-700 border border-zlc-gray-300"
+                  }`}
                 >
                   {tab.count}
                 </Badge>
@@ -197,7 +205,7 @@ export function NotificationCenter({
         <div className="max-h-[600px] overflow-y-auto">
           {filteredNotifications.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
-              <Bell className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+              <Bell className="h-12 w-12 mx-auto mb-4 text-gray-400" />
               <p className="text-lg font-medium mb-2">No hay notificaciones</p>
               <p className="text-sm">
                 {filter === "unread"

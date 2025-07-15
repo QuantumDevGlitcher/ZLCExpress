@@ -636,14 +636,14 @@ const SupplierOrderDetail = () => {
                       </div>
 
                       {showPaymentConfirmation && (
-                        <div className="bg-yellow-50 border border-yellow-200 rounded-md p-4">
-                          <div className="flex items-center gap-2 text-yellow-800 mb-2">
+                        <div className="bg-amber-50 border border-amber-200 rounded-md p-4">
+                          <div className="flex items-center gap-2 text-amber-900 mb-2">
                             <AlertCircle className="h-5 w-5" />
                             <span className="font-medium">
                               Confirmar Recepción de Pago
                             </span>
                           </div>
-                          <p className="text-sm text-yellow-700 mb-3">
+                          <p className="text-sm text-amber-800 mb-3">
                             ¿Confirmas que has recibido la transferencia
                             bancaria del anticipo de $
                             {orderData.advanceAmount.toLocaleString()}{" "}

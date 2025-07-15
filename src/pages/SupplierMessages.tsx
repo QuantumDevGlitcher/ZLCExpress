@@ -460,11 +460,11 @@ const SupplierMessages = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">Chats Fijados</p>
-                    <p className="text-2xl font-bold text-yellow-600">
+                    <p className="text-2xl font-bold text-amber-700">
                       {pinnedChats}
                     </p>
                   </div>
-                  <Star className="h-8 w-8 text-yellow-600" />
+                  <Star className="h-8 w-8 text-amber-600" />
                 </div>
               </CardContent>
             </Card>
@@ -548,7 +548,7 @@ const SupplierMessages = () => {
                                 {conversation.buyerCompany}
                               </h4>
                               {conversation.isPinned && (
-                                <Star className="h-3 w-3 text-yellow-500 fill-current" />
+                                <Star className="h-3 w-3 text-amber-600 fill-current" />
                               )}
                             </div>
                             <p className="text-sm text-gray-600 truncate">
@@ -676,7 +676,7 @@ const SupplierMessages = () => {
                                   {message.senderName}
                                 </span>
                                 {message.isImportant && (
-                                  <Star className="h-3 w-3 text-yellow-500 fill-current" />
+                                  <Star className="h-3 w-3 text-amber-600 fill-current" />
                                 )}
                               </div>
                               <p className="text-sm">{message.message}</p>

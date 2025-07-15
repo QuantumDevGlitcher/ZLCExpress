@@ -168,12 +168,15 @@ export default function PaymentTerms() {
                 onOpenChange={setShowUploadDialog}
               >
                 <DialogTrigger asChild>
-                  <Button variant="outline">
+                  <Button
+                    variant="outline"
+                    className="border-2 border-zlc-gray-300 text-zlc-gray-700 hover:border-zlc-blue-500 hover:bg-zlc-blue-50 hover:text-zlc-blue-700 transition-all duration-200"
+                  >
                     <Upload className="h-4 w-4 mr-2" />
                     Subir Documento
                   </Button>
                 </DialogTrigger>
-                <DialogContent>
+                <DialogContent className="bg-white border-2 border-zlc-gray-200 shadow-lg">
                   <DialogHeader>
                     <DialogTitle>Subir Documento de Pago</DialogTitle>
                     <DialogDescription>
@@ -193,7 +196,7 @@ export default function PaymentTerms() {
                             documentType: e.target.value,
                           }))
                         }
-                        className="w-full p-2 border rounded-md"
+                        className="w-full p-3 border-2 border-zlc-gray-200 rounded-lg bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200"
                       >
                         <option value="">Seleccione tipo</option>
                         <option value="tt_receipt">
@@ -221,6 +224,8 @@ export default function PaymentTerms() {
                           }))
                         }
                         placeholder="Describa el documento..."
+                        className="border-2 border-zlc-gray-200 bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 placeholder:text-zlc-gray-400 rounded-lg p-3"
+                        rows={3}
                       />
                     </div>
                     <div>
@@ -230,17 +235,21 @@ export default function PaymentTerms() {
                         type="file"
                         onChange={handleFileUpload}
                         accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
-                        className="w-full p-2 border rounded-md"
+                        className="w-full p-3 border-2 border-zlc-gray-200 rounded-lg bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-zlc-blue-50 file:text-zlc-blue-700 hover:file:bg-zlc-blue-100"
                       />
                     </div>
-                    <div className="flex justify-end gap-2">
+                    <div className="flex justify-end gap-3">
                       <Button
                         variant="outline"
                         onClick={() => setShowUploadDialog(false)}
+                        className="border-2 border-zlc-gray-300 text-zlc-gray-700 hover:border-zlc-gray-500 hover:bg-zlc-gray-50 transition-all duration-200"
                       >
                         Cancelar
                       </Button>
-                      <Button>Subir Documento</Button>
+                      <Button className="bg-zlc-blue-600 hover:bg-zlc-blue-700 border-2 border-zlc-blue-600 hover:border-zlc-blue-700 shadow-md transition-all duration-200">
+                        <Upload className="h-4 w-4 mr-2" />
+                        Subir Documento
+                      </Button>
                     </div>
                   </div>
                 </DialogContent>
@@ -251,12 +260,12 @@ export default function PaymentTerms() {
                 onOpenChange={setShowCreditRequestDialog}
               >
                 <DialogTrigger asChild>
-                  <Button className="bg-zlc-blue-600 hover:bg-zlc-blue-700">
+                  <Button className="bg-zlc-blue-600 hover:bg-zlc-blue-700 border-2 border-zlc-blue-600 hover:border-zlc-blue-700 shadow-md transition-all duration-200">
                     <Plus className="h-4 w-4 mr-2" />
                     Solicitar Crédito
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-2xl">
+                <DialogContent className="max-w-2xl bg-white border-2 border-zlc-gray-200 shadow-lg">
                   <DialogHeader>
                     <DialogTitle>
                       Solicitar Aumento de Línea de Crédito
@@ -283,6 +292,7 @@ export default function PaymentTerms() {
                             }))
                           }
                           placeholder="50000"
+                          className="border-2 border-zlc-gray-200 bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 placeholder:text-zlc-gray-400 rounded-lg h-11"
                         />
                       </div>
                       <div>
@@ -300,6 +310,7 @@ export default function PaymentTerms() {
                             }))
                           }
                           placeholder="25000"
+                          className="border-2 border-zlc-gray-200 bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 placeholder:text-zlc-gray-400 rounded-lg h-11"
                         />
                       </div>
                     </div>
@@ -318,6 +329,7 @@ export default function PaymentTerms() {
                         }
                         placeholder="Explique por qué necesita el aumento de crédito..."
                         rows={3}
+                        className="border-2 border-zlc-gray-200 bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 placeholder:text-zlc-gray-400 rounded-lg p-3"
                       />
                     </div>
                     <div>
@@ -335,16 +347,22 @@ export default function PaymentTerms() {
                         }
                         placeholder="Describa su plan de expansión o crecimiento..."
                         rows={3}
+                        className="border-2 border-zlc-gray-200 bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 placeholder:text-zlc-gray-400 rounded-lg p-3"
                       />
                     </div>
-                    <div className="flex justify-end gap-2">
+                    <div className="flex justify-end gap-3">
                       <Button
                         variant="outline"
                         onClick={() => setShowCreditRequestDialog(false)}
+                        className="border-2 border-zlc-gray-300 text-zlc-gray-700 hover:border-zlc-gray-500 hover:bg-zlc-gray-50 transition-all duration-200"
                       >
                         Cancelar
                       </Button>
-                      <Button onClick={handleCreditRequest}>
+                      <Button
+                        onClick={handleCreditRequest}
+                        className="bg-zlc-blue-600 hover:bg-zlc-blue-700 border-2 border-zlc-blue-600 hover:border-zlc-blue-700 shadow-md transition-all duration-200"
+                      >
+                        <Plus className="h-4 w-4 mr-2" />
                         Enviar Solicitud
                       </Button>
                     </div>
@@ -523,7 +541,7 @@ export default function PaymentTerms() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <Button
                       variant="outline"
-                      className="h-auto p-4 justify-start"
+                      className="h-auto p-4 justify-start border-2 border-zlc-gray-200 hover:border-zlc-blue-300 hover:bg-zlc-blue-50 transition-all duration-200"
                     >
                       <div className="flex items-center gap-3">
                         <Download className="h-5 w-5 text-blue-600" />
@@ -540,7 +558,7 @@ export default function PaymentTerms() {
 
                     <Button
                       variant="outline"
-                      className="h-auto p-4 justify-start"
+                      className="h-auto p-4 justify-start border-2 border-zlc-gray-200 hover:border-zlc-blue-300 hover:bg-zlc-blue-50 transition-all duration-200"
                     >
                       <div className="flex items-center gap-3">
                         <Download className="h-5 w-5 text-green-600" />
@@ -557,7 +575,7 @@ export default function PaymentTerms() {
 
                     <Button
                       variant="outline"
-                      className="h-auto p-4 justify-start"
+                      className="h-auto p-4 justify-start border-2 border-zlc-gray-200 hover:border-zlc-blue-300 hover:bg-zlc-blue-50 transition-all duration-200"
                     >
                       <div className="flex items-center gap-3">
                         <Download className="h-5 w-5 text-purple-600" />
@@ -574,7 +592,7 @@ export default function PaymentTerms() {
 
                     <Button
                       variant="outline"
-                      className="h-auto p-4 justify-start"
+                      className="h-auto p-4 justify-start border-2 border-zlc-gray-200 hover:border-zlc-blue-300 hover:bg-zlc-blue-50 transition-all duration-200"
                     >
                       <div className="flex items-center gap-3">
                         <Download className="h-5 w-5 text-orange-600" />
@@ -717,15 +735,24 @@ export default function PaymentTerms() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
-                    <Button variant="outline" className="w-full justify-start">
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start border-2 border-zlc-gray-200 text-zlc-gray-700 hover:border-zlc-blue-300 hover:bg-zlc-blue-50 hover:text-zlc-blue-700 transition-all duration-200"
+                    >
                       <Upload className="h-4 w-4 mr-2" />
                       Subir Comprobante T/T
                     </Button>
-                    <Button variant="outline" className="w-full justify-start">
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start border-2 border-zlc-gray-200 text-zlc-gray-700 hover:border-zlc-blue-300 hover:bg-zlc-blue-50 hover:text-zlc-blue-700 transition-all duration-200"
+                    >
                       <FileText className="h-4 w-4 mr-2" />
                       Generar Solicitud LC
                     </Button>
-                    <Button variant="outline" className="w-full justify-start">
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start border-2 border-zlc-gray-200 text-zlc-gray-700 hover:border-zlc-blue-300 hover:bg-zlc-blue-50 hover:text-zlc-blue-700 transition-all duration-200"
+                    >
                       <CreditCard className="h-4 w-4 mr-2" />
                       Consultar Estado de Crédito
                     </Button>

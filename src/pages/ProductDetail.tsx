@@ -280,7 +280,7 @@ export default function ProductDetail() {
                             <span>{product.supplier.country}</span>
                           </div>
                           <div className="flex items-center space-x-1">
-                            <Star className="w-4 h-4 fill-current text-yellow-400" />
+                            <Star className="w-4 h-4 fill-current text-amber-500" />
                             <span>{product.supplier.rating}</span>
                           </div>
                         </div>

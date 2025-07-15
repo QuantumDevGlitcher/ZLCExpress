@@ -26,6 +26,7 @@ interface SearchableCountrySelectProps {
   placeholder?: string;
   countriesByRegion: CountriesByRegion;
   disabled?: boolean;
+  className?: string;
 }
 
 export function SearchableCountrySelect({
@@ -34,6 +35,7 @@ export function SearchableCountrySelect({
   placeholder = "Seleccione un país...",
   countriesByRegion,
   disabled = false,
+  className = "",
 }: SearchableCountrySelectProps) {
   const [open, setOpen] = React.useState(false);
 
@@ -59,27 +61,37 @@ export function SearchableCountrySelect({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between h-10"
           disabled={disabled}
+          className={cn(
+            "w-full justify-between h-12 rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm shadow-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zlc-blue-500 hover:bg-zinc-100 bg-white",
+            className
+          )}
         >
+
           {selectedCountry ? (
             <span className="truncate">{selectedCountry.name}</span>
           ) : (
             <span className="text-muted-foreground">{placeholder}</span>
           )}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50 " />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[400px] p-0" align="start">
+      <PopoverContent className="w-[400px] p-0 bg-white border border-zinc-300 shadow-md rounded-md" align="start">
         <Command>
-          <CommandInput placeholder="Buscar país..." className="h-9" />
+          <CommandInput
+            placeholder="Buscar país..."
+            className="h-10 px-3 py-2 text-sm border-b border-zinc-200 focus:outline-none bg-white"
+          />
+
           <CommandList>
             <CommandEmpty>No se encontró ningún país.</CommandEmpty>
             {Object.entries(countriesByRegion).map(([region, countries]) => (
-              <CommandGroup
+              <CommandGroup 
+
                 key={region}
                 heading={region}
-                className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-semibold [&_[cmdk-group-heading]]:text-zlc-blue-800 [&_[cmdk-group-heading]]:bg-zlc-gray-100"
+                className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-semibold [&_[cmdk-group-heading]]:text-zlc-blue-800 [&_[cmdk-group-heading]]:bg-zlc-gray-100 bg-white"
+                
               >
                 {countries.map((country) => (
                   <CommandItem
@@ -95,7 +107,12 @@ export function SearchableCountrySelect({
                         setOpen(false);
                       }
                     }}
-                    className="cursor-pointer"
+                    className={cn(
+                      "cursor-pointer px-3 py-2 text-sm hover:bg-zinc-100",
+                      value === country && "bg-zinc-200 !bg-zinc-200 !text-black"
+
+                    )}
+
                   >
                     <Check
                       className={cn(

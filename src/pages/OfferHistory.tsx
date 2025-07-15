@@ -99,7 +99,7 @@ function OfferHistory() {
   const getNegotiationActionIcon = (action: NegotiationStep["action"]) => {
     switch (action) {
       case "offer_made":
-        return <TrendingUp className="h-3 w-3 text-blue-500" />;
+        return <TrendingUp className="h-3 w-3 text-blue-500 " />;
       case "counter_offer":
         return <RotateCcw className="h-3 w-3 text-orange-500" />;
       case "price_adjustment":
@@ -111,7 +111,7 @@ function OfferHistory() {
       case "rejected":
         return <XCircle className="h-3 w-3 text-red-500" />;
       default:
-        return <Clock className="h-3 w-3 text-gray-500" />;
+        return <Clock className="h-3 w-3 text-gray-500 " />;
     }
   };
 
@@ -245,21 +245,21 @@ function OfferHistory() {
 
           {/* Filters */}
           <Card>
-            <CardContent className="p-6">
-              <div className="flex flex-col md:flex-row gap-4">
+            <CardContent className="p-6 ">
+              <div className="flex flex-col md:flex-row gap-4 ">
                 <div className="flex-1">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <div className="relative " >
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4 " />
                     <Input
                       placeholder="Buscar por producto, proveedor o RFQ..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-10"
+                      className="pl-10 focus:border-blue-500 focus:ring-blue-500 border border-black bg-white"
                     />
                   </div>
                 </div>
 
-                <div className="flex gap-2">
+                <div className="flex gap-2 ">
                   {[
                     { key: "all", label: "Todas", count: statusCounts.all },
                     {
@@ -290,22 +290,25 @@ function OfferHistory() {
                   ].map((filter) => (
                     <Button
                       key={filter.key}
-                      variant={
-                        statusFilter === filter.key ? "default" : "outline"
-                      }
                       size="sm"
                       onClick={() => setStatusFilter(filter.key)}
-                      className="whitespace-nowrap"
+                      className={`whitespace-nowrap px-3 py-1 rounded-md font-medium ${statusFilter === filter.key
+                        ? "bg-[#003566] text-white"
+                        : "bg-white text-black border border-gray-300 hover:bg-gray-100"
+                        }`}
+
                     >
+
                       {filter.label}
                       <Badge
-                        variant={
-                          statusFilter === filter.key ? "secondary" : "outline"
-                        }
-                        className="ml-2"
+                        className={`ml-2 text-xs rounded-full px-2 py-0.5 ${statusFilter === filter.key
+                            ? "bg-white text-black border border-black"
+                            : "bg-[#e0e0e0] text-gray-700"
+                          }`}
                       >
                         {filter.count}
                       </Badge>
+
                     </Button>
                   ))}
                 </div>
@@ -335,9 +338,8 @@ function OfferHistory() {
                       {filteredOffers.map((offer) => (
                         <div
                           key={offer.id}
-                          className={`p-4 hover:bg-gray-50 cursor-pointer transition-colors ${
-                            selectedOffer?.id === offer.id ? "bg-blue-50" : ""
-                          }`}
+                          className={`p-4 hover:bg-gray-50 cursor-pointer transition-colors ${selectedOffer?.id === offer.id ? "bg-blue-50" : ""
+                            }`}
                           onClick={() => setSelectedOffer(offer)}
                         >
                           <div className="flex items-start justify-between mb-3">

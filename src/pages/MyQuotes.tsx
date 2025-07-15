@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
@@ -145,7 +146,7 @@ export default function MyQuotes() {
     switch (status) {
       case "pending":
         return (
-          <Badge className="bg-yellow-100 text-yellow-800">
+          <Badge className="bg-amber-100 text-amber-900 border-amber-200">
             <Clock className="w-3 h-3 mr-1" />
             Pendiente
           </Badge>
@@ -224,7 +225,7 @@ export default function MyQuotes() {
             </Card>
             <Card>
               <CardContent className="p-4 text-center">
-                <div className="text-2xl font-bold text-yellow-600">
+                <div className="text-2xl font-bold text-amber-700">
                   {statusCounts.pending}
                 </div>
                 <div className="text-sm text-gray-600">Pendientes</div>
@@ -253,17 +254,37 @@ export default function MyQuotes() {
             <CardContent className="p-4">
               <div className="flex flex-col md:flex-row gap-4">
                 <div className="flex-1 relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-zlc-gray-500" />
                   <Input
                     placeholder="Buscar por producto o ID de cotización..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10"
+                    className="pl-10 h-11 border-2 border-zlc-gray-200 bg-white rounded-lg focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 placeholder:text-zlc-gray-400 text-zlc-gray-900"
                   />
+                  {searchQuery && (
+                    <button
+                      onClick={() => setSearchQuery("")}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-zlc-gray-400 hover:text-zlc-gray-600 transition-colors"
+                    >
+                      <svg
+                        className="h-4 w-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  )}
                 </div>
 
                 <Select value={statusFilter} onValueChange={setStatusFilter}>
-                  <SelectTrigger className="w-48">
+                  <SelectTrigger className="w-48 border-2 border-zlc-gray-200 bg-white text-zlc-gray-900 focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 rounded-lg h-11">
                     <Filter className="mr-2 h-4 w-4" />
                     <SelectValue placeholder="Filtrar por estado" />
                   </SelectTrigger>
@@ -296,7 +317,7 @@ export default function MyQuotes() {
                 </p>
                 <Button
                   asChild
-                  className="bg-zlc-blue-600 hover:bg-zlc-blue-700"
+                  className="bg-zlc-blue-600 hover:bg-zlc-blue-700 border-2 border-zlc-blue-600 hover:border-zlc-blue-700 shadow-md transition-all duration-200"
                 >
                   <Link to="/categories">Explorar Productos</Link>
                 </Button>
@@ -421,6 +442,7 @@ export default function MyQuotes() {
                               variant="outline"
                               size="sm"
                               onClick={() => setSelectedQuote(quote)}
+                              className="border-2 border-zlc-gray-300 text-zlc-gray-700 hover:border-zlc-blue-500 hover:bg-zlc-blue-50 hover:text-zlc-blue-700 transition-all duration-200"
                             >
                               <Eye className="h-4 w-4 mr-1" />
                               Ver Detalles
@@ -535,7 +557,11 @@ export default function MyQuotes() {
                           </DialogContent>
                         </Dialog>
 
-                        <Button variant="outline" size="sm">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="border-2 border-zlc-gray-300 text-zlc-gray-700 hover:border-zlc-blue-500 hover:bg-zlc-blue-50 hover:text-zlc-blue-700 transition-all duration-200"
+                        >
                           <Download className="h-4 w-4 mr-1" />
                           Descargar
                         </Button>
@@ -543,7 +569,7 @@ export default function MyQuotes() {
                         {quote.status === "counter-offer" && (
                           <Button
                             size="sm"
-                            className="bg-green-600 hover:bg-green-700"
+                            className="bg-green-600 hover:bg-green-700 border-2 border-green-600 hover:border-green-700 shadow-md transition-all duration-200"
                           >
                             Aceptar Oferta
                           </Button>
@@ -552,7 +578,7 @@ export default function MyQuotes() {
                         {quote.status === "accepted" && (
                           <Button
                             size="sm"
-                            className="bg-zlc-blue-600 hover:bg-zlc-blue-700"
+                            className="bg-zlc-blue-600 hover:bg-zlc-blue-700 border-2 border-zlc-blue-600 hover:border-zlc-blue-700 shadow-md transition-all duration-200"
                           >
                             Proceder con Orden
                           </Button>

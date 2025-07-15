@@ -359,7 +359,7 @@ function CustomsSupport() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Award className="h-6 w-6 text-yellow-500" />
+                <Award className="h-6 w-6 text-amber-600" />
                 Ventajas de la Zona Libre de Colón
               </CardTitle>
             </CardHeader>
@@ -401,14 +401,14 @@ function CustomsSupport() {
                 </div>
               </div>
 
-              <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
                 <div className="flex items-start gap-2">
-                  <AlertCircle className="h-5 w-5 text-yellow-600 mt-0.5" />
+                  <AlertCircle className="h-5 w-5 text-amber-700 mt-0.5" />
                   <div>
-                    <h4 className="font-medium text-yellow-800">
+                    <h4 className="font-medium text-amber-900">
                       Plazo Máximo Importante
                     </h4>
-                    <p className="text-sm text-yellow-700">
+                    <p className="text-sm text-amber-800">
                       Las mercancías pueden permanecer hasta{" "}
                       <strong>60 días en ZLC sin reexportar</strong>. Después de
                       este período, se requiere extensión especial o
@@ -475,7 +475,7 @@ function CustomsSupport() {
                       <span>iris.morales@zlcexpress.com</span>
                     </div>
                     <div className="flex items-center gap-1">
-                      <Star className="h-4 w-4 text-yellow-500" />
+                      <Star className="h-4 w-4 text-amber-600" />
                       <span>4.9/5 Calificación Cliente</span>
                     </div>
                   </div>
@@ -960,7 +960,7 @@ function CustomsSupport() {
                   <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
                     <Phone className="h-8 w-8 text-blue-600" />
                   </div>
-                  <h3 className="font-semibold mb-2">Centro de Atención</h3>
+                  <h3 className="font-semibold mb-2">Centro de Atenci��n</h3>
                   <p className="text-sm text-gray-600">+507 430-7000</p>
                   <p className="text-sm text-gray-600">Ext. 2800 (General)</p>
                   <p className="text-sm text-gray-600">Ext. 2850 (Iris)</p>

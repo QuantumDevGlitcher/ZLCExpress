@@ -70,7 +70,7 @@ export function TransportComparisonTable({
       <Star
         key={i}
         className={`h-3 w-3 ${
-          i < rating ? "text-yellow-400 fill-current" : "text-gray-300"
+          i < rating ? "text-amber-500 fill-current" : "text-gray-400"
         }`}
       />
     ));

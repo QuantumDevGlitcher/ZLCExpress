@@ -180,15 +180,35 @@ function Communications() {
                 </CardHeader>
                 <CardContent className="p-0">
                   {/* Search */}
-                  <div className="p-4 border-b">
+                  <div className="p-4 border-b bg-zlc-gray-50">
                     <div className="relative">
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-zlc-gray-500 h-4 w-4" />
                       <Input
-                        placeholder="Buscar conversaciones..."
+                        placeholder="Buscar conversaciones, RFQs o proveedores..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-10"
+                        className="pl-10 h-10 border-2 border-zlc-gray-200 bg-white rounded-lg focus:border-zlc-blue-500 focus:ring-2 focus:ring-zlc-blue-200 transition-all duration-200 placeholder:text-zlc-gray-400 text-zlc-gray-900"
                       />
+                      {searchTerm && (
+                        <button
+                          onClick={() => setSearchTerm("")}
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-zlc-gray-400 hover:text-zlc-gray-600 transition-colors"
+                        >
+                          <svg
+                            className="h-4 w-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                        </button>
+                      )}
                     </div>
                   </div>
 
@@ -234,10 +254,7 @@ function Communications() {
                                 </div>
                                 <div className="flex items-center gap-2">
                                   {thread.unreadCount > 0 && (
-                                    <Badge
-                                      variant="destructive"
-                                      className="text-xs"
-                                    >
+                                    <Badge className="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
                                       {thread.unreadCount}
                                     </Badge>
                                   )}
@@ -286,31 +303,48 @@ function Communications() {
             {/* Main Content */}
             <div className="lg:col-span-2">
               {/* Tab Navigation */}
-              <div className="flex gap-1 mb-6">
+              <div className="flex gap-2 mb-6">
                 <Button
-                  variant={activeTab === "chat" ? "default" : "outline"}
                   onClick={() => setActiveTab("chat")}
-                  className="flex items-center gap-2"
+                  className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all border-2 ${
+                    activeTab === "chat"
+                      ? "bg-zlc-blue-600 text-white border-zlc-blue-600 shadow-md"
+                      : "bg-white text-zlc-gray-700 border-zlc-gray-300 hover:bg-zlc-gray-50 hover:border-zlc-blue-300"
+                  }`}
                 >
                   <MessageSquare className="h-4 w-4" />
                   Chat
                   {unreadMessagesCount > 0 && (
-                    <Badge variant="secondary" className="text-xs">
+                    <Badge
+                      className={`text-xs ml-1 ${
+                        activeTab === "chat"
+                          ? "bg-white text-zlc-blue-600"
+                          : "bg-red-100 text-red-700 border border-red-200"
+                      }`}
+                    >
                       {unreadMessagesCount}
                     </Badge>
                   )}
                 </Button>
+
                 <Button
-                  variant={
-                    activeTab === "notifications" ? "default" : "outline"
-                  }
                   onClick={() => setActiveTab("notifications")}
-                  className="flex items-center gap-2"
+                  className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all border-2 ${
+                    activeTab === "notifications"
+                      ? "bg-zlc-blue-600 text-white border-zlc-blue-600 shadow-md"
+                      : "bg-white text-zlc-gray-700 border-zlc-gray-300 hover:bg-zlc-gray-50 hover:border-zlc-blue-300"
+                  }`}
                 >
                   <Bell className="h-4 w-4" />
                   Notificaciones
                   {unreadNotificationsCount > 0 && (
-                    <Badge variant="destructive" className="text-xs">
+                    <Badge
+                      className={`text-xs ml-1 ${
+                        activeTab === "notifications"
+                          ? "bg-white text-zlc-blue-600"
+                          : "bg-red-100 text-red-700 border border-red-200"
+                      }`}
+                    >
                       {unreadNotificationsCount}
                     </Badge>
                   )}
