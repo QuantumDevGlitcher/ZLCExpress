@@ -9,8 +9,8 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  VisuallyHidden,
 } from "@/components/ui/dialog";
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 const Command = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive>,
