@@ -1,603 +1,247 @@
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { useCart } from "@/contexts/CartContext";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Separator } from "@/components/ui/separator";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
+import { ProductHeader } from "@/components/container-lot/ProductHeader";
+import { ImageGallery } from "@/components/container-lot/ImageGallery";
+import { ProductSpecs } from "@/components/container-lot/ProductSpecs";
+import { PricingSection } from "@/components/container-lot/PricingSection";
+import { OrderConfig } from "@/components/container-lot/OrderConfig";
+import { CustomQuote } from "@/components/container-lot/CustomQuote";
+import { ChatWidget } from "@/components/container-lot/ChatWidget";
+import { DocumentDownloads } from "@/components/container-lot/DocumentDownloads";
+import { InfoTabs } from "@/components/container-lot/InfoTabs";
 
-import { Navigation } from "@/components/Navigation";
-import { VolumePricingTable } from "@/components/VolumePricingTable";
-import { RFQRequestDialog } from "@/components/RFQRequestDialog";
-import {
-  ArrowLeft,
-  Heart,
-  Share2,
-  ZoomIn,
-  Package,
-  Truck,
-  Clock,
-  Star,
-  Building,
-  MapPin,
-  MessageCircle,
-  Download,
-  Calculator,
-  FileText,
-  HelpCircle,
-  Send,
-  ChevronDown,
-  ChevronUp,
-  CheckCircle,
-  AlertCircle,
-  Users,
-  Scale,
-  ShoppingCart,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
+const Index = () => {
+  const [selectedContainers, setSelectedContainers] = useState(1);
 
-// Mock product data
-const product = {
-  id: "1",
-  title: "Camisetas de Algodón Premium - Lote Mixto Hombre/Mujer",
-  description:
-    "Camisetas de algodón premium fabricadas con estándares de calidad internacional. Perfectas para distribuidores mayoristas con gran demanda.",
-  negotiable: true,
-  supplier: {
-    name: "GlobalTextile Corp",
-    legalName: "Global Textile Corporation S.A.",
-    country: "Zona Libre de Colón, Panamá",
-    verified: true,
-    rating: 4.8,
-    logo: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=100&h=100&fit=crop",
-  },
-  images: [
-    "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&h=400&fit=crop",
-    "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&h=400&fit=crop",
-    "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=600&h=400&fit=crop",
-    "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=600&h=400&fit=crop",
-  ],
-  specifications: {
-    material: "100% Algodón Peinado 180gsm",
-    colors: ["Blanco", "Negro", "Gris", "Azul Marino", "Rojo"],
-    sizes: ["XS", "S", "M", "L", "XL", "XXL"],
-    totalUnits: 5000,
-    grossWeight: "2,400 kg",
-    netWeight: "2,000 kg",
-    containerType: "20' HC Container",
-    dimensions: "Dimensiones: 6.058m x 2.438m x 2.591m",
-  },
-  logistics: {
-    incoterm: "FOB ZLC",
-    leadTime: {
-      production: "14-21 días",
-      shipping: "7-10 días",
-      total: "21-31 días",
+  // Sample data - in a real app this would come from an API
+  const productData = {
+    title: "Camisetas de Algodón Premium - Lote Mixto Hombre/Mujer",
+    isNegotiable: true,
+    supplier: {
+      name: "GlobalTextile Corp",
+      legalName: "GlobalTextile Corporation S.A.",
+      country: "Zona Libre de Colón, Panamá",
+      logo: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=64&h=64&fit=crop&crop=center",
+      rating: 4.8,
+      verified: true,
     },
-    availableIncoterms: ["FOB ZLC", "CIF Puerto Destino", "EXW Zona Libre"],
-  },
-  pricing: {
-    pricePerContainer: 16500,
-    pricePerUnit: 3.3,
-    currency: "USD",
-    discounts: [
-      { quantity: 2, discount: 3, finalPrice: 16005 },
-      { quantity: 5, discount: 7, finalPrice: 15345 },
-      { quantity: 10, discount: 12, finalPrice: 14520 },
-      { quantity: 20, discount: 18, finalPrice: 13530 },
+    images: [
+      {
+        id: "1",
+        url: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=600&fit=crop",
+        alt: "Camisetas premium en display",
+        type: "product" as const,
+      },
+      {
+        id: "2",
+        url: "https://images.unsplash.com/photo-1503341504253-dff4815485f1?w=800&h=600&fit=crop",
+        alt: "Vista del contenedor cargado",
+        type: "container" as const,
+      },
+      {
+        id: "3",
+        url: "https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?w=800&h=600&fit=crop",
+        alt: "Empaque y etiquetado",
+        type: "packaging" as const,
+      },
+      {
+        id: "4",
+        url: "https://images.unsplash.com/photo-1562157873-818bc0726f68?w=800&h=600&fit=crop",
+        alt: "Variedad de colores disponibles",
+        type: "product" as const,
+      },
     ],
-  },
-  customization: {
-    allowsSizeColorMix: true,
-    customPackaging: true,
-    privateLabel: true,
-  },
-  documentation: {
-    commercialInvoice: true,
-    packingList: true,
-    certificateOfOrigin: true,
-    customsDeclaration: true,
-  },
-};
-
-export default function ProductDetail() {
-  const { id } = useParams();
-  const { addItem } = useCart();
-  const [selectedQuantity, setSelectedQuantity] = useState(1);
-  const [customPrice, setCustomPrice] = useState("");
-  const [showCustomQuote, setShowCustomQuote] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(0);
-
-  const calculateTotal = () => {
-    const discount = product.pricing.discounts.find(
-      (d) => selectedQuantity >= d.quantity,
-    );
-    const basePrice = product.pricing.pricePerContainer * selectedQuantity;
-    if (discount) {
-      return basePrice * (1 - discount.discount / 100);
-    }
-    return basePrice;
-  };
-
-  const getAppliedDiscount = () => {
-    return product.pricing.discounts.find(
-      (d) => selectedQuantity >= d.quantity,
-    );
-  };
-
-  const handleAddToCart = () => {
-    addItem({
-      productId: product.id,
-      productTitle: product.title,
-      productImage: product.images[0],
-      supplier: product.supplier.name,
-      supplierId: product.supplier.name,
-      containerType: product.specifications.containerType,
-      quantity: selectedQuantity,
-      pricePerContainer: product.pricing.pricePerContainer,
-      currency: product.pricing.currency,
-      incoterm: product.logistics.incoterm,
-      customPrice: customPrice ? parseFloat(customPrice) : undefined,
-      notes: "",
-    });
+    specifications: {
+      material: "100% Algodón Peinado 180gsm",
+      sizes: ["XS", "S", "M", "L", "XL", "XXL"],
+      colors: ["Negro", "Blanco", "Gris", "Azul Marino", "Rojo", "Verde"],
+      category: "Textiles - Ropa Casual",
+    },
+    logistics: {
+      totalUnits: 24000,
+      grossWeight: "2,850 kg",
+      netWeight: "2,400 kg",
+      containerDimensions: {
+        length: "12.19m",
+        width: "2.44m",
+        height: "2.59m",
+        type: "40' HC Container",
+      },
+      incoterm: "FOB ZLC",
+      conditions:
+        "Incluye carga en contenedor y documentación básica. Flete marítimo no incluido.",
+      leadTime: {
+        production: "14-21 días",
+        shipping: "7-10 días",
+      },
+    },
+    pricing: {
+      pricePerContainer: 18500,
+      estimatedUnitPrice: 0.77,
+      currency: "USD",
+      volumeDiscounts: [
+        { containers: 2, discountPercentage: 3 },
+        { containers: 5, discountPercentage: 7 },
+        { containers: 10, discountPercentage: 12 },
+        { containers: 20, discountPercentage: 18 },
+      ],
+    },
+    detailedSpecs: {
+      materials: [
+        "Algodón 100% peinado de fibra larga",
+        "Cuello reforzado con costuras dobles",
+        "Mangas con dobladillo tubular",
+        "Etiquetas de marca extraíbles",
+      ],
+      manufacturing:
+        "Producidas en instalaciones certificadas ISO 9001:2015 con estrictos controles de calidad. Proceso de pre-encogido para estabilidad dimensional. Tinturado reactivo para colores duraderos.",
+      quality: [
+        "Inspección de calidad por lotes",
+        "Test de encogimiento <3%",
+        "Control de peso por metro cuadrado",
+        "Verificación de medidas estándar",
+        "Test de solidez del color",
+        "Inspección visual 100%",
+      ],
+      certifications: [
+        "OEKO-TEX Standard 100",
+        "GOTS Certified",
+        "ISO 9001:2015",
+        "WRAP Approved",
+      ],
+      packaging:
+        "Cada camiseta empacada individualmente en bolsa de polietileno reciclable. Cajas de cartón de 12 unidades con código de barras. Embalaje en contenedor con sistema de separadores para protección durante transporte.",
+    },
+    reviews: [
+      {
+        id: "1",
+        company: "Fashion Retail Group",
+        rating: 5,
+        comment:
+          "Excelente calidad de algodón y acabados. La distribución de tallas fue perfecta para nuestro mercado. Entrega puntual y documentación completa.",
+        date: new Date("2024-01-15"),
+        verifiedPurchase: true,
+      },
+      {
+        id: "2",
+        company: "MegaStore Distribution",
+        rating: 4,
+        comment:
+          "Muy buena relación calidad-precio. Los colores son vibrantes y la consistencia entre lotes es excelente. Servicio al cliente muy profesional.",
+        date: new Date("2024-01-08"),
+        verifiedPurchase: true,
+      },
+      {
+        id: "3",
+        company: "Central America Imports",
+        rating: 5,
+        comment:
+          "Llevamos 2 años trabajando con GlobalTextile y siempre cumplen. Recomendamos especialmente para mercados latinoamericanos.",
+        date: new Date("2023-12-20"),
+        verifiedPurchase: true,
+      },
+    ],
+    faqs: [
+      {
+        id: "1",
+        question: "¿Cuál es el MOQ (cantidad mínima de pedido)?",
+        answer:
+          "El MOQ es de 1 contenedor (24,000 unidades). Para cantidades menores, consulte nuestras opciones de consolidación.",
+        helpful: 28,
+      },
+      {
+        id: "2",
+        question: "¿Pueden personalizar la distribución de tallas?",
+        answer:
+          "Sí, ofrecemos distribución personalizada de tallas sin costo adicional. Tiempo de producción puede extenderse 5-7 días adicionales.",
+        helpful: 19,
+      },
+      {
+        id: "3",
+        question: "¿Incluye etiquetado personalizado?",
+        answer:
+          "El etiquetado personalizado está disponible con pedido mínimo de 5 contenedores. Costo adicional de $0.15 por unidad.",
+        helpful: 15,
+      },
+    ],
+    returnPolicy: {
+      timeframe: "30 días calendario",
+      conditions: [
+        "Productos sin usar, en empaque original",
+        "Defectos de fábrica documentados con fotografías",
+        "Discrepancias significativas en especificaciones",
+        "Notificación por escrito dentro del plazo establecido",
+        "Costos de devolución a cargo del comprador (excepto defectos de fábrica)",
+      ],
+      process:
+        "1) Contactar al proveedor vía email o chat. 2) Enviar documentación fotográfica del problema. 3) Obtener autorización de devolución (RMA). 4) Coordinar logística de devolución. 5) Inspección y verificación. 6) Procesamiento de reembolso o reemplazo en 15 días hábiles.",
+    },
   };
 
   return (
-    <div className="min-h-screen bg-zlc-gray-50">
-      <Navigation />
+    <div className="min-h-screen bg-white">
+      {/* Main Content */}
+      <div className="container mx-auto px-4 py-8 max-w-7xl">
+        {/* Product Header */}
+        <ProductHeader
+          productTitle={productData.title}
+          isNegotiable={productData.isNegotiable}
+          supplier={productData.supplier}
+        />
 
-      <main className="pt-14 sm:pt-16 md:pt-20">
-        <div className="container-section py-6">
-          {/* Breadcrumb */}
-          <div className="flex items-center space-x-2 text-sm text-gray-600 mb-6">
-            <Link to="/categories" className="hover:text-zlc-blue-600">
-              Categorías
-            </Link>
-            <span>/</span>
-            <Link
-              to="/categories?category=ropa"
-              className="hover:text-zlc-blue-600"
-            >
-              Ropa y Textiles
-            </Link>
-            <span>/</span>
-            <span className="text-gray-900">Camisetas</span>
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+          {/* Left Column - Images */}
+          <div className="lg:col-span-2">
+            <ImageGallery images={productData.images} />
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-8 mb-8">
-            {/* Product Images */}
-            <div className="space-y-4">
-              <div className="aspect-square bg-white rounded-lg border overflow-hidden group relative">
-                <img
-                  src={product.images[selectedImage]}
-                  alt={product.title}
-                  className="w-full h-full object-cover transition-transform group-hover:scale-105"
-                />
-                <Button
-                  size="icon"
-                  variant="secondary"
-                  className="absolute top-4 right-4 opacity-80 hover:opacity-100"
-                >
-                  <ZoomIn className="h-4 w-4" />
-                </Button>
-              </div>
-
-              {/* Image Thumbnails */}
-              <div className="grid grid-cols-4 gap-2">
-                {product.images.map((image, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedImage(index)}
-                    className={cn(
-                      "aspect-square rounded-lg border-2 overflow-hidden transition-all",
-                      selectedImage === index
-                        ? "border-zlc-blue-600 ring-2 ring-zlc-blue-200"
-                        : "border-gray-200 hover:border-gray-300",
-                    )}
-                  >
-                    <img
-                      src={image}
-                      alt={`Vista ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Product Info */}
-            <div className="space-y-6">
-              {/* Header */}
-              <div>
-                <div className="flex items-start justify-between mb-2">
-                  <h1 className="text-3xl font-bold text-gray-900">
-                    {product.title}
-                  </h1>
-                  <div className="flex items-center space-x-2">
-                    <Button size="icon" variant="ghost">
-                      <Heart className="h-5 w-5" />
-                    </Button>
-                    <Button size="icon" variant="ghost">
-                      <Share2 className="h-5 w-5" />
-                    </Button>
-                  </div>
-                </div>
-
-                {product.negotiable && (
-                  <Badge className="bg-orange-100 text-orange-800 mb-4">
-                    Precio Negociable
-                  </Badge>
-                )}
-
-                <p className="text-gray-600 text-lg leading-relaxed">
-                  {product.description}
-                </p>
-              </div>
-
-              {/* Supplier Info */}
-              <Card>
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <img
-                        src={product.supplier.logo}
-                        alt={product.supplier.name}
-                        className="w-12 h-12 rounded-lg object-cover"
-                      />
-                      <div>
-                        <div className="flex items-center space-x-2">
-                          <h3 className="font-semibold text-gray-900">
-                            {product.supplier.name}
-                          </h3>
-                          {product.supplier.verified && (
-                            <Badge className="bg-green-100 text-green-800 text-xs">
-                              <CheckCircle className="w-3 h-3 mr-1" />
-                              Verificado
-                            </Badge>
-                          )}
-                        </div>
-                        <div className="flex items-center space-x-4 text-sm text-gray-600">
-                          <div className="flex items-center space-x-1">
-                            <MapPin className="w-4 h-4" />
-                            <span>{product.supplier.country}</span>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <Star className="w-4 h-4 fill-current text-amber-500" />
-                            <span>{product.supplier.rating}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <Button variant="outline" size="sm">
-                      <MessageCircle className="w-4 h-4 mr-2" />
-                      Contactar
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Pricing */}
-              <Card>
-                <CardContent className="p-6">
-                  <div className="space-y-4">
-                    <div>
-                      <div className="flex items-baseline space-x-2">
-                        <span className="text-3xl font-bold text-zlc-blue-600">
-                          ${product.pricing.pricePerContainer.toLocaleString()}
-                        </span>
-                        <span className="text-gray-600">por contenedor</span>
-                      </div>
-                      <div className="text-sm text-gray-600">
-                        ${product.pricing.pricePerUnit} por unidad •{" "}
-                        {product.specifications.totalUnits.toLocaleString()}{" "}
-                        unidades
-                      </div>
-                    </div>
-
-                    <Separator />
-
-                    {/* Quantity Selector */}
-                    <div>
-                      <Label
-                        htmlFor="quantity"
-                        className="text-base font-medium"
-                      >
-                        Cantidad de Contenedores
-                      </Label>
-                      <div className="flex items-center space-x-3 mt-2">
-                        <Select
-                          value={selectedQuantity.toString()}
-                          onValueChange={(value) =>
-                            setSelectedQuantity(parseInt(value))
-                          }
-                        >
-                          <SelectTrigger className="w-32">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {[1, 2, 5, 10, 20, 50].map((qty) => (
-                              <SelectItem key={qty} value={qty.toString()}>
-                                {qty}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-
-                        {getAppliedDiscount() && (
-                          <Badge className="bg-green-100 text-green-800">
-                            -{getAppliedDiscount()?.discount}% descuento
-                          </Badge>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Total Calculation */}
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <div className="flex justify-between items-center">
-                        <span className="font-medium">Total:</span>
-                        <span className="text-2xl font-bold text-zlc-blue-600">
-                          ${calculateTotal().toLocaleString()}
-                        </span>
-                      </div>
-                      {getAppliedDiscount() && (
-                        <div className="text-sm text-green-600 mt-1">
-                          Ahorro: $
-                          {(
-                            product.pricing.pricePerContainer *
-                              selectedQuantity -
-                            calculateTotal()
-                          ).toLocaleString()}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Action Buttons */}
-              <Card>
-                <CardContent className="p-6">
-                  <div className="space-y-3">
-                    <Button
-                      onClick={handleAddToCart}
-                      className="w-full btn-professional"
-                      size="lg"
-                    >
-                      <ShoppingCart className="mr-2 h-4 w-4" />
-                      Agregar al Carrito
-                    </Button>
-
-                    <RFQRequestDialog
-                      product={{
-                        id: product.id,
-                        title: product.title,
-                        description: product.description,
-                        containerSize:
-                          product.specifications.containerType.includes("20")
-                            ? "20'"
-                            : "40'",
-                        moq: product.specifications.totalUnits,
-                        priceRange: {
-                          min: product.pricing.pricePerContainer,
-                          max: product.pricing.pricePerContainer,
-                          currency: product.pricing.currency,
-                        },
-                        images: product.images,
-                        specifications: {},
-                        supplierId: "supplier-1",
-                        availableFrom: new Date(),
-                        estimatedDelivery: "21-31 días",
-                        status: "available",
-                      }}
-                      supplierId="supplier-1"
-                      supplierName={product.supplier.name}
-                      onRFQCreated={(rfqId) => {
-                        console.log("RFQ created:", rfqId);
-                      }}
-                    >
-                      <Button
-                        variant="outline"
-                        className="w-full border-zlc-blue-600 text-zlc-blue-600 hover:bg-zlc-blue-50"
-                        size="lg"
-                      >
-                        <FileText className="mr-2 h-4 w-4" />
-                        Solicitar Cotización (RFQ)
-                      </Button>
-                    </RFQRequestDialog>
-                  </div>
-
-                  <Button
-                    variant="outline"
-                    className="w-full h-10 mt-3"
-                    asChild
-                  >
-                    <Link to="/cart">
-                      <Send className="w-4 h-4 mr-2" />
-                      Ver Carrito
-                    </Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-
-          <div className="space-y-8">
-            {/* Volume Pricing Section */}
-            <VolumePricingTable
-              productId={product.id}
-              onPricingChange={(calculation) => {
-                console.log("Pricing changed:", calculation);
-              }}
-              defaultQuantity={1}
+          {/* Right Column - Order Configuration */}
+          <div className="space-y-6">
+            <OrderConfig
+              isNegotiable={productData.isNegotiable}
+              minContainers={1}
+              maxContainers={50}
+              containers={selectedContainers}
+              onContainersChange={setSelectedContainers}
             />
-
-            {/* Information Tabs */}
-            <Card>
-              <CardContent className="p-0">
-                <Tabs defaultValue="details" className="w-full">
-                  <TabsList className="grid w-full grid-cols-4">
-                    <TabsTrigger value="details">Detalles</TabsTrigger>
-                    <TabsTrigger value="reviews">Reseñas</TabsTrigger>
-                    <TabsTrigger value="qa">Preguntas</TabsTrigger>
-                    <TabsTrigger value="return">Devoluciones</TabsTrigger>
-                  </TabsList>
-
-                  <TabsContent value="details" className="mt-6">
-                    <Card>
-                      <CardContent className="p-6">
-                        <h3 className="text-lg font-semibold mb-4">
-                          Especificaciones del Producto
-                        </h3>
-                        <div className="grid md:grid-cols-2 gap-6">
-                          <div>
-                            <h4 className="font-semibold mb-2">Material</h4>
-                            <p className="text-gray-600 mb-4">
-                              {product.specifications.material}
-                            </p>
-
-                            <h4 className="font-semibold mb-2">
-                              Colores Disponibles
-                            </h4>
-                            <div className="flex flex-wrap gap-2">
-                              {product.specifications.colors.map((color) => (
-                                <Badge key={color} variant="outline">
-                                  {color}
-                                </Badge>
-                              ))}
-                            </div>
-
-                            <h4 className="font-semibold mb-2 mt-4">
-                              Tallas Disponibles
-                            </h4>
-                            <div className="flex flex-wrap gap-2">
-                              {product.specifications.sizes.map((size) => (
-                                <Badge key={size} variant="outline">
-                                  {size}
-                                </Badge>
-                              ))}
-                            </div>
-                          </div>
-
-                          <div>
-                            <div className="space-y-3">
-                              <div className="flex justify-between">
-                                <span className="text-gray-600">
-                                  Cantidad total:
-                                </span>
-                                <span className="font-medium">
-                                  {product.specifications.totalUnits.toLocaleString()}{" "}
-                                  unidades
-                                </span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-gray-600">
-                                  Peso bruto:
-                                </span>
-                                <span className="font-medium">
-                                  {product.specifications.grossWeight}
-                                </span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-gray-600">
-                                  Peso neto:
-                                </span>
-                                <span className="font-medium">
-                                  {product.specifications.netWeight}
-                                </span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-gray-600">
-                                  Contenedor:
-                                </span>
-                                <span className="font-medium">
-                                  {product.specifications.containerType}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </TabsContent>
-
-                  <TabsContent value="reviews" className="mt-6">
-                    <Card>
-                      <CardContent className="p-6">
-                        <h3 className="text-lg font-semibold mb-4">
-                          Reseñas de Compradores
-                        </h3>
-                        <div className="text-center py-8 text-gray-500">
-                          <Star className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-                          <p>Aún no hay reseñas para este producto</p>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </TabsContent>
-
-                  <TabsContent value="qa" className="mt-6">
-                    <Card>
-                      <CardContent className="p-6">
-                        <h3 className="text-lg font-semibold mb-4">
-                          Preguntas y Respuestas
-                        </h3>
-                        <div className="text-center py-8 text-gray-500">
-                          <HelpCircle className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-                          <p>No hay preguntas sobre este producto</p>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </TabsContent>
-
-                  <TabsContent value="return" className="mt-6">
-                    <Card>
-                      <CardContent className="p-6">
-                        <h3 className="text-lg font-semibold mb-4">
-                          Política de Devoluciones
-                        </h3>
-                        <div className="space-y-4">
-                          <div>
-                            <h4 className="font-medium text-gray-900 mb-2">
-                              Garantía de Calidad
-                            </h4>
-                            <ul className="space-y-1">
-                              <li>
-                                • Garantía de 6 meses contra defectos de
-                                manufactura
-                              </li>
-                              <li>
-                                • Reemplazo gratuito por defectos probados
-                              </li>
-                              <li>• Certificación de calidad incluida</li>
-                            </ul>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </TabsContent>
-                </Tabs>
-              </CardContent>
-            </Card>
           </div>
         </div>
-      </main>
+
+        {/* Product Specifications */}
+        <ProductSpecs
+          description="Camisetas de algodón premium diseñadas para el mercado latinoamericano. Fabricadas con algodón 100% peinado de fibra larga que garantiza suavidad, durabilidad y excelente caída. Ideales para distribución mayorista en tiendas de ropa casual, uniformes corporativos y merchandising. Disponibles en 6 tallas estándar y 6 colores básicos con alta rotación en el mercado."
+          specifications={productData.specifications}
+          logistics={productData.logistics}
+        />
+
+        {/* Pricing Section */}
+        <PricingSection
+          pricing={productData.pricing}
+          selectedContainers={selectedContainers}
+        />
+
+        {/* Custom Quote */}
+        <CustomQuote
+          availableSizes={productData.specifications.sizes}
+          availableColors={productData.specifications.colors}
+        />
+
+        {/* Document Downloads */}
+        <DocumentDownloads lotId="CT-2024-GLB-001" />
+
+        {/* Information Tabs */}
+        <InfoTabs
+          detailedSpecs={productData.detailedSpecs}
+          reviews={productData.reviews}
+          faqs={productData.faqs}
+          returnPolicy={productData.returnPolicy}
+        />
+      </div>
+
+      {/* Chat Widget */}
+      <ChatWidget supplierName={productData.supplier.name} />
     </div>
   );
-}
+};
+
+export default Index;

@@ -93,8 +93,22 @@
     @apply border-border;
   }
 
+  /* Override any yellow backgrounds */
+  *[style*="rgb(255, 255, 0)"],
+  *[style*="yellow"],
+  *[style*="#ffff00"] {
+    background-color: white !important;
+  }
+
+  html,
+  body,
+  #root {
+    background-color: white !important;
+  }
+
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-white text-foreground font-sans;
+    background-color: white !important;
     font-feature-settings:
       "rlig" 1,
       "calt" 1;
@@ -149,5 +163,9 @@
 
   .card-professional {
     @apply rounded-xl border bg-card p-6 shadow-soft hover:shadow-soft-lg transition-shadow duration-200;
+  }
+
+  .bg-b2b-gray-lighter {
+    @apply bg-white;
   }
 }
