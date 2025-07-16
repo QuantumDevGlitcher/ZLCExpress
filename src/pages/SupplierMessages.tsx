@@ -316,7 +316,7 @@ const SupplierMessages = () => {
       case "high":
         return "border-l-red-500";
       case "medium":
-        return "border-l-yellow-500";
+        return "border-l-white-500";
       case "low":
         return "border-l-green-500";
       default:

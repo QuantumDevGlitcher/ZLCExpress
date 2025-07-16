@@ -35,6 +35,12 @@ export default function BookingConfirmation() {
 
   const { quoteId, shippingData, selectedOption } = location.state || {};
 
+  // Redirect to shipping page if required data is missing
+  if (!selectedOption || !shippingData) {
+    navigate("/shipping");
+    return null;
+  }
+
   const [formData, setFormData] = useState({
     contactPerson: "",
     contactPhone: "",
@@ -51,9 +57,8 @@ export default function BookingConfirmation() {
   const bookingNumber = `ZLC-${Date.now().toString().slice(-8)}`;
   const cutoffDate = new Date(Date.now() + 5 * 24 * 60 * 60 * 1000); // 5 days from now
   const etd = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days from now
-  const eta = new Date(
-    etd.getTime() + selectedOption?.transitTime * 24 * 60 * 60 * 1000,
-  ); // ETD + transit time
+  const transitTime = selectedOption?.transitTime || 14; // Default to 14 days if not provided
+  const eta = new Date(etd.getTime() + transitTime * 24 * 60 * 60 * 1000); // ETD + transit time
 
   // Cost calculations
   const productTotal = 15750;
@@ -124,6 +129,9 @@ export default function BookingConfirmation() {
   };
 
   const formatDate = (date: Date) => {
+    if (!date || isNaN(date.getTime())) {
+      return "Fecha no disponible";
+    }
     return new Intl.DateTimeFormat("es-ES", {
       weekday: "long",
       day: "2-digit",

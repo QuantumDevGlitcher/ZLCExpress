@@ -54,13 +54,13 @@ export function CustomQuote({
 
   if (!isExpanded) {
     return (
-      <Card className="mb-8">
+      <Card className="mb-8 bg-white border border-gray-200 shadow-sm">
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <FileText className="h-5 w-5 text-blue-600" />
+              <FileText className="h-5 w-5 text-gray-700" />
               <div>
-                <h3 className="font-semibold text-gray-900">
+                <h3 className="text-lg font-semibold text-gray-900">
                   Cotización Personalizada
                 </h3>
                 <p className="text-sm text-gray-600">
@@ -72,7 +72,7 @@ export function CustomQuote({
             <Button
               onClick={() => setIsExpanded(true)}
               variant="ghost"
-              className="flex items-center gap-1 text-gray-600"
+              className="flex items-center gap-1 text-gray-600 hover:text-gray-700"
             >
               <ChevronDown className="h-4 w-4" />
             </Button>
@@ -83,17 +83,18 @@ export function CustomQuote({
   }
 
   return (
-    <Card className="mb-8">
-      <CardHeader>
+    <Card className="mb-8 bg-white border border-gray-200 shadow-sm">
+      <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
-            <FileText className="h-5 w-5" />
+          <CardTitle className="flex items-center gap-2 text-lg font-semibold text-gray-900">
+            <FileText className="h-5 w-5 text-gray-700" />
             Cotización Personalizada
           </CardTitle>
           <Button
             onClick={() => setIsExpanded(false)}
             variant="ghost"
             size="sm"
+            className="text-gray-600 hover:text-gray-700"
           >
             <ChevronUp className="h-4 w-4" />
           </Button>
@@ -103,12 +104,15 @@ export function CustomQuote({
           personalizada con sus requisitos específicos.
         </p>
       </CardHeader>
-      <CardContent>
+      <CardContent className="space-y-6">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Company Name */}
             <div>
-              <Label htmlFor="companyName" className="text-sm font-medium">
+              <Label
+                htmlFor="companyName"
+                className="text-sm font-medium text-gray-700"
+              >
                 Nombre de la Empresa <span className="text-red-500">*</span>
               </Label>
               <Input
@@ -121,13 +125,16 @@ export function CustomQuote({
                     companyName: e.target.value,
                   }))
                 }
-                className="mt-1"
+                className="mt-1 border-gray-300 focus:border-blue-500"
               />
             </div>
 
             {/* Contact Email */}
             <div>
-              <Label htmlFor="contactEmail" className="text-sm font-medium">
+              <Label
+                htmlFor="contactEmail"
+                className="text-sm font-medium text-gray-700"
+              >
                 Email de Contacto <span className="text-red-500">*</span>
               </Label>
               <Input
@@ -141,7 +148,7 @@ export function CustomQuote({
                     contactEmail: e.target.value,
                   }))
                 }
-                className="mt-1"
+                className="mt-1 border-gray-300 focus:border-blue-500"
               />
             </div>
 
@@ -149,7 +156,7 @@ export function CustomQuote({
             <div>
               <Label
                 htmlFor="estimatedQuantity"
-                className="text-sm font-medium"
+                className="text-sm font-medium text-gray-700"
               >
                 Cantidad Estimada (unidades){" "}
                 <span className="text-red-500">*</span>
@@ -164,13 +171,16 @@ export function CustomQuote({
                     estimatedQuantity: e.target.value,
                   }))
                 }
-                className="mt-1"
+                className="mt-1 border-gray-300 focus:border-blue-500"
               />
             </div>
 
             {/* Target Price */}
             <div>
-              <Label htmlFor="targetPrice" className="text-sm font-medium">
+              <Label
+                htmlFor="targetPrice"
+                className="text-sm font-medium text-gray-700"
+              >
                 Precio Objetivo (USD por unidad)
               </Label>
               <Input
@@ -183,57 +193,96 @@ export function CustomQuote({
                     targetPrice: e.target.value,
                   }))
                 }
-                className="mt-1"
+                className="mt-1 border-gray-300 focus:border-blue-500"
               />
             </div>
           </div>
 
           {/* Preferred Sizes */}
           <div>
-            <Label className="text-sm font-medium mb-3 block">
+            <Label className="text-sm font-medium text-gray-700 mb-3 block flex items-center gap-2">
+              <svg
+                className="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <circle cx="12" cy="12" r="10" />
+              </svg>
               Tallas Preferidas
             </Label>
-            <div className="flex flex-wrap gap-3">
-              {availableSizes.map((size) => (
-                <label key={size} className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    checked={formData.preferredSizes.includes(size)}
-                    onChange={(e) => handleSizeChange(size, e.target.checked)}
-                    className="rounded border-gray-300"
-                  />
-                  <span className="text-sm">{size}</span>
-                </label>
+            <div className="flex flex-wrap gap-2">
+              {["XS", "S", "M", "L", "XL", "XXL"].map((size) => (
+                <button
+                  key={size}
+                  type="button"
+                  onClick={() =>
+                    handleSizeChange(
+                      size,
+                      !formData.preferredSizes.includes(size),
+                    )
+                  }
+                  className={`px-4 py-2 text-sm rounded-md border transition-colors ${
+                    formData.preferredSizes.includes(size)
+                      ? "bg-gray-100 border-gray-300 text-gray-900"
+                      : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400"
+                  }`}
+                >
+                  {size}
+                </button>
               ))}
             </div>
           </div>
 
           {/* Preferred Colors */}
           <div>
-            <Label className="text-sm font-medium mb-3 block">
+            <Label className="text-sm font-medium text-gray-700 mb-3 block flex items-center gap-2">
+              <svg
+                className="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <circle cx="12" cy="12" r="10" />
+              </svg>
               Colores Preferidos
             </Label>
-            <div className="flex flex-wrap gap-3">
-              {availableColors.map((color) => (
-                <label key={color} className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    checked={formData.preferredColors.includes(color)}
-                    onChange={(e) => handleColorChange(color, e.target.checked)}
-                    className="rounded border-gray-300"
-                  />
-                  <span className="text-sm">{color}</span>
-                </label>
-              ))}
+            <div className="flex flex-wrap gap-2">
+              {["Negro", "Blanco", "Gris", "Azul Marino", "Rojo", "Verde"].map(
+                (color) => (
+                  <button
+                    key={color}
+                    type="button"
+                    onClick={() =>
+                      handleColorChange(
+                        color,
+                        !formData.preferredColors.includes(color),
+                      )
+                    }
+                    className={`px-4 py-2 text-sm rounded-md border transition-colors ${
+                      formData.preferredColors.includes(color)
+                        ? "bg-blue-600 border-blue-600 text-white hover:bg-blue-700"
+                        : "bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200 hover:border-gray-400"
+                    }`}
+                  >
+                    {color}
+                  </button>
+                ),
+              )}
             </div>
           </div>
 
           {/* Size/Color Distribution */}
           <div>
-            <Label htmlFor="distribution" className="text-sm font-medium">
+            <Label
+              htmlFor="distribution"
+              className="text-sm font-medium text-gray-700"
+            >
               Distribución de Tallas/Colores
             </Label>
-            <Input
+            <Textarea
               id="distribution"
               placeholder="ej. 30% talla S, 40% talla M, 30% talla L; Colores: 50% negro, 30% blanco, 20% azul"
               value={formData.sizeColorDistribution}
@@ -243,18 +292,24 @@ export function CustomQuote({
                   sizeColorDistribution: e.target.value,
                 }))
               }
-              className="mt-1"
+              className="mt-1 border-gray-300 focus:border-blue-500"
+              rows={2}
             />
           </div>
 
           {/* Desired Date */}
           <div>
-            <Label htmlFor="desiredDate" className="text-sm font-medium">
+            <Label
+              htmlFor="desiredDate"
+              className="text-sm font-medium text-gray-700 flex items-center gap-2"
+            >
+              <Calendar className="h-4 w-4" />
               Fecha Límite Deseada
             </Label>
             <Input
               id="desiredDate"
               type="date"
+              placeholder="mm/dd/yyyy"
               value={formData.desiredDate}
               onChange={(e) =>
                 setFormData((prev) => ({
@@ -262,7 +317,7 @@ export function CustomQuote({
                   desiredDate: e.target.value,
                 }))
               }
-              className="mt-1"
+              className="mt-1 border-gray-300 focus:border-blue-500"
             />
           </div>
 
@@ -270,14 +325,14 @@ export function CustomQuote({
           <div>
             <Label
               htmlFor="specialRequirements"
-              className="text-sm font-medium"
+              className="text-sm font-medium text-gray-700"
             >
               Requisitos Especiales
             </Label>
             <Textarea
               id="specialRequirements"
               placeholder="ej. Etiquetado personalizado, empaque especial, certificaciones requeridas..."
-              rows={3}
+              rows={4}
               value={formData.specialRequirements}
               onChange={(e) =>
                 setFormData((prev) => ({
@@ -285,27 +340,20 @@ export function CustomQuote({
                   specialRequirements: e.target.value,
                 }))
               }
-              className="mt-1"
+              className="mt-1 border-gray-300 focus:border-blue-500"
             />
           </div>
 
           {/* Submit Button */}
-          <div className="bg-gray-800 text-white p-4 rounded-lg">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <FileText className="h-5 w-5" />
-                <span className="font-medium">
-                  Enviar Solicitud de Cotización
-                </span>
-              </div>
-              <Button
-                type="submit"
-                className="bg-blue-600 hover:bg-blue-700 text-white"
-              >
-                Enviar
-              </Button>
-            </div>
-            <p className="text-sm text-gray-300 mt-2">
+          <div className="space-y-3">
+            <Button
+              type="submit"
+              className="w-full bg-gray-800 hover:bg-gray-900 text-white py-4 rounded-lg flex items-center justify-center gap-2 text-base font-medium"
+            >
+              <FileText className="h-5 w-5" />
+              Enviar Solicitud de Cotización
+            </Button>
+            <p className="text-sm text-gray-500 text-center">
               El proveedor revisará sus requisitos y le enviará una cotización
               personalizada
             </p>

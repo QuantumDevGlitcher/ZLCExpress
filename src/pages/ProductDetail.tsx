@@ -178,7 +178,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white ">
       {/* Main Content */}
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         {/* Product Header */}

@@ -43,28 +43,28 @@ export function PricingSection({
   const currentDiscount = getCurrentDiscount();
 
   return (
-    <Card className="mb-8">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <DollarSign className="h-5 w-5" />
+    <Card className="mb-8 bg-white border border-gray-200 shadow-sm">
+      <CardHeader className="pb-4">
+        <CardTitle className="flex items-center gap-2 text-gray-900 text-lg font-semibold">
+          <DollarSign className="h-5 w-5 text-gray-700" />
           Precios y Descuentos
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+      <CardContent className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Base Pricing */}
           <div>
-            <h4 className="font-semibold text-gray-900 mb-2">
+            <h4 className="text-sm font-medium text-gray-600 mb-2">
               Precio por Contenedor
             </h4>
-            <div className="text-3xl font-bold text-blue-600 mb-1">
+            <div className="text-2xl font-bold text-blue-600">
               USD {pricing.pricePerContainer.toLocaleString()}
             </div>
           </div>
 
           {/* Unit Price */}
           <div>
-            <h4 className="font-semibold text-gray-900 mb-2">
+            <h4 className="text-sm font-medium text-gray-600 mb-2">
               Precio Unitario Estimado
             </h4>
             <div className="text-lg font-semibold text-gray-900">
@@ -74,11 +74,11 @@ export function PricingSection({
         </div>
 
         {/* Volume Discounts Toggle */}
-        <div className="border-t pt-4">
+        <div>
           <Button
             variant="ghost"
             onClick={() => setShowDiscounts(!showDiscounts)}
-            className="flex items-center gap-2 p-0 h-auto text-left font-semibold"
+            className="flex items-center gap-2 p-0 h-auto text-left font-medium text-gray-900 hover:text-gray-700"
           >
             {showDiscounts ? (
               <ChevronUp className="h-4 w-4" />
@@ -89,26 +89,26 @@ export function PricingSection({
           </Button>
 
           {showDiscounts && (
-            <div className="mt-4">
-              <div className="overflow-hidden rounded-lg border">
+            <div className="mt-4 space-y-4">
+              <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
                 <table className="w-full">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                  <thead>
+                    <tr className="bg-gray-50 border-b border-gray-200">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                         Contenedores
                       </th>
-                      <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                         Descuento
                       </th>
-                      <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                         Precio c/u
                       </th>
-                      <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                         Estado
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
+                  <tbody className="bg-white divide-y divide-gray-100">
                     {pricing.volumeDiscounts.map((discount, index) => {
                       const isActive =
                         selectedContainers >= discount.containers;
@@ -121,7 +121,7 @@ export function PricingSection({
                       return (
                         <tr
                           key={index}
-                          className={`${
+                          className={`hover:bg-gray-50 ${
                             isCurrent
                               ? "bg-green-50"
                               : isActive
@@ -158,30 +158,32 @@ export function PricingSection({
               </div>
 
               {/* Calculation Summary */}
-              <div className="mt-6 bg-gray-50 p-4 rounded-lg">
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-3">
                   <Calculator className="h-4 w-4 text-gray-600" />
-                  <span className="font-medium text-gray-900">
+                  <span className="text-sm font-medium text-gray-900">
                     Resumen del Cálculo
                   </span>
                 </div>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
                     <span className="text-gray-600">
                       Contenedores seleccionados:
                     </span>
-                    <span className="font-medium">{selectedContainers}</span>
+                    <span className="font-medium text-gray-900">
+                      {selectedContainers}
+                    </span>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between text-sm">
                     <span className="text-gray-600">
                       Precio base por contenedor:
                     </span>
-                    <span className="font-medium">
+                    <span className="font-medium text-gray-900">
                       USD {pricing.pricePerContainer.toLocaleString()}
                     </span>
                   </div>
                   {currentDiscount && (
-                    <div className="flex justify-between text-green-600">
+                    <div className="flex justify-between text-sm text-green-600">
                       <span>
                         Descuento aplicado ({currentDiscount.discountPercentage}
                         %):
@@ -196,21 +198,25 @@ export function PricingSection({
                       </span>
                     </div>
                   )}
-                  <div className="border-t pt-2 flex justify-between font-semibold text-lg">
-                    <span>Total:</span>
-                    <span className="text-blue-600">
-                      USD{" "}
-                      {currentDiscount
-                        ? (
-                            calculateDiscountedPrice(
-                              1,
-                              currentDiscount.discountPercentage,
-                            ) * selectedContainers
-                          ).toLocaleString()
-                        : (
-                            pricing.pricePerContainer * selectedContainers
-                          ).toLocaleString()}
-                    </span>
+                  <div className="border-t border-gray-200 pt-2 mt-3">
+                    <div className="flex justify-between">
+                      <span className="text-base font-semibold text-gray-900">
+                        Total:
+                      </span>
+                      <span className="text-base font-bold text-blue-600">
+                        USD{" "}
+                        {currentDiscount
+                          ? (
+                              calculateDiscountedPrice(
+                                1,
+                                currentDiscount.discountPercentage,
+                              ) * selectedContainers
+                            ).toLocaleString()
+                          : (
+                              pricing.pricePerContainer * selectedContainers
+                            ).toLocaleString()}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>

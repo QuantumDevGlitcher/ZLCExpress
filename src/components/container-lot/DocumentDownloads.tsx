@@ -10,6 +10,7 @@ import {
   BookOpen,
   Calculator,
 } from "lucide-react";
+import { b } from "vitest/dist/chunks/suite.d.FvehnV49.js";
 
 interface DocumentDownloadsProps {
   lotId: string;
@@ -66,6 +67,7 @@ const additionalResources = [
     icon: Calculator,
     iconColor: "text-green-600",
     iconBg: "bg-green-100",
+    
   },
 ];
 
@@ -77,40 +79,40 @@ export function DocumentDownloads({ lotId }: DocumentDownloadsProps) {
   return (
     <Card className="mb-8">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+        <CardTitle className="flex items-center gap-2 ">
           <Download className="h-5 w-5" />
           Documentación B2B
         </CardTitle>
       </CardHeader>
       <CardContent>
         {/* Main Documents Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 border border-gray-200s">
           {documents.map((doc) => {
             const IconComponent = doc.icon;
 
             return (
               <div
                 key={doc.id}
-                className="border rounded-lg p-4 hover:bg-gray-50 transition-colors"
+                className=" rounded-lg p-4 hover:bg-gray-50 transition-colors border border-gray-200"
               >
-                <div className="flex items-start gap-3">
-                  <div className={`p-2 rounded-lg ${doc.iconBg}`}>
+                <div className="flex items-start gap-3 ">
+                  <div className={`p-2 rounded-lg ${doc.iconBg} `}>
                     <IconComponent className={`h-5 w-5 ${doc.iconColor}`} />
                   </div>
-                  <div className="flex-1">
-                    <h4 className="font-medium text-gray-900 mb-1">
+                  <div className="flex-1 ">
+                    <h4 className="font-medium text-gray-900 mb-1 ">
                       {doc.name}
                     </h4>
-                    <p className="text-sm text-gray-600 mb-3">
+                    <p className="text-sm text-gray-600 mb-3  ">
                       {doc.description}
                     </p>
                     <Button
                       size="sm"
                       variant="outline"
                       onClick={() => handleDownload(doc.id)}
-                      className="w-full"
+                      className="w-full "
                     >
-                      <Download className="h-3 w-3 mr-2" />
+                      <Download className="h-3 w-3 mr-2 "  />
                       Descargar
                     </Button>
                   </div>
@@ -152,17 +154,17 @@ export function DocumentDownloads({ lotId }: DocumentDownloadsProps) {
 
         {/* Additional Resources */}
         <div>
-          <h4 className="font-semibold text-gray-900 mb-4">
+          <h4 className="font-semibold text-gray-900 mb-4 ">
             Recursos Adicionales
           </h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
             {additionalResources.map((resource) => {
               const IconComponent = resource.icon;
 
               return (
                 <div
                   key={resource.id}
-                  className="flex items-center gap-3 p-3 border rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+                  className="flex items-center gap-3 p-3 border border-gray-200s rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
                   onClick={() => handleDownload(resource.id)}
                 >
                   <div className={`p-2 rounded-lg ${resource.iconBg}`}>
@@ -171,10 +173,10 @@ export function DocumentDownloads({ lotId }: DocumentDownloadsProps) {
                     />
                   </div>
                   <div>
-                    <h5 className="font-medium text-gray-900 text-sm">
+                    <h5 className="font-medium text-gray-900 text-sm ">
                       {resource.name}
                     </h5>
-                    <p className="text-xs text-gray-600">
+                    <p className="text-xs text-gray-600 ">
                       {resource.description}
                     </p>
                   </div>

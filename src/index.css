@@ -7,82 +7,126 @@
 @layer base {
   :root {
     /* ZLC Express Professional Theme - Light Mode */
-    --background: 248 250 252; /* slate-50 */
-    --foreground: 0 0 0; /* jet black */
+    --background: white;
+    /* slate-50 */
+    --foreground: 0 0 0;
+    /* jet black */
 
-    --card: 255 255 255; /* white */
-    --card-foreground: 0 0 0; /* jet black */
+    --card: 255 255 255;
+    /* white */
+    --card-foreground: 0 0 0;
+    /* jet black */
 
-    --popover: 255 255 255; /* white */
-    --popover-foreground: 0 0 0; /* jet black */
+    --popover: 255 255 255;
+    /* white */
+    --popover-foreground: 0 0 0;
+    /* jet black */
 
-    --primary: 7 89 133; /* zlc-blue-800 - dark blue */
-    --primary-foreground: 248 250 252; /* slate-50 */
+    --primary: 7 89 133;
+    /* zlc-blue-800 - dark blue */
+    --primary-foreground: 248 250 252;
+    /* slate-50 */
 
-    --secondary: 241 245 249; /* slate-100 - light gray */
-    --secondary-foreground: 0 0 0; /* jet black */
+    --secondary: 241 245 249;
+    /* slate-100 - light gray */
+    --secondary-foreground: 0 0 0;
+    /* jet black */
 
-    --muted: 241 245 249; /* slate-100 */
-    --muted-foreground: 0 0 0; /* jet black */
+    --muted: 241 245 249;
+    /* slate-100 */
+    --muted-foreground: 0 0 0;
+    /* jet black */
 
-    --accent: 14 165 233; /* zlc-blue-500 */
-    --accent-foreground: 255 255 255; /* white */
+    --accent: 14 165 233;
+    /* zlc-blue-500 */
+    --accent-foreground: 255 255 255;
+    /* white */
 
-    --destructive: 239 68 68; /* red-500 */
-    --destructive-foreground: 255 255 255; /* white */
+    --destructive: 239 68 68;
+    /* red-500 */
+    --destructive-foreground: 255 255 255;
+    /* white */
 
-    --border: 226 232 240; /* slate-200 */
-    --input: 226 232 240; /* slate-200 */
-    --ring: 7 89 133; /* zlc-blue-800 */
+    --border: 226 232 240;
+    /* slate-200 */
+    --input: 226 232 240;
+    /* slate-200 */
+    --ring: 7 89 133;
+    /* zlc-blue-800 */
 
-    --radius: 0.75rem; /* More rounded for modern look */
+    --radius: 0.75rem;
+    /* More rounded for modern look */
 
     --sidebar-background: 255 255 255;
-    --sidebar-foreground: 0 0 0; /* jet black */
+    --sidebar-foreground: 0 0 0;
+    /* jet black */
     --sidebar-primary: 7 89 133;
     --sidebar-primary-foreground: 248 250 252;
     --sidebar-accent: 241 245 249;
-    --sidebar-accent-foreground: 0 0 0; /* jet black */
+    --sidebar-accent-foreground: 0 0 0;
+    /* jet black */
     --sidebar-border: 226 232 240;
     --sidebar-ring: 7 89 133;
   }
 
   .dark {
     /* ZLC Express Professional Theme - Dark Mode */
-    --background: 15 23 42; /* slate-900 */
-    --foreground: 255 255 255; /* white for dark mode */
+    --background: 15 23 42;
+    /* slate-900 */
+    --foreground: 255 255 255;
+    /* white for dark mode */
 
-    --card: 30 41 59; /* slate-800 */
-    --card-foreground: 255 255 255; /* white for dark mode */
+    --card: 30 41 59;
+    /* slate-800 */
+    --card-foreground: 255 255 255;
+    /* white for dark mode */
 
-    --popover: 30 41 59; /* slate-800 */
-    --popover-foreground: 255 255 255; /* white for dark mode */
+    --popover: 30 41 59;
+    /* slate-800 */
+    --popover-foreground: 255 255 255;
+    /* white for dark mode */
 
-    --primary: 56 189 248; /* zlc-blue-400 */
-    --primary-foreground: 0 0 0; /* jet black for contrast */
+    --primary: 56 189 248;
+    /* zlc-blue-400 */
+    --primary-foreground: 0 0 0;
+    /* jet black for contrast */
 
-    --secondary: 51 65 85; /* slate-700 */
-    --secondary-foreground: 255 255 255; /* white for dark mode */
+    --secondary: 51 65 85;
+    /* slate-700 */
+    --secondary-foreground: 255 255 255;
+    /* white for dark mode */
 
-    --muted: 51 65 85; /* slate-700 */
-    --muted-foreground: 255 255 255; /* white for dark mode */
+    --muted: 51 65 85;
+    /* slate-700 */
+    --muted-foreground: 255 255 255;
+    /* white for dark mode */
 
-    --accent: 56 189 248; /* zlc-blue-400 */
-    --accent-foreground: 0 0 0; /* jet black for contrast */
+    --accent: 56 189 248;
+    /* zlc-blue-400 */
+    --accent-foreground: 0 0 0;
+    /* jet black for contrast */
 
-    --destructive: 239 68 68; /* red-500 */
-    --destructive-foreground: 255 255 255; /* white for dark mode */
+    --destructive: 239 68 68;
+    /* red-500 */
+    --destructive-foreground: 255 255 255;
+    /* white for dark mode */
 
-    --border: 51 65 85; /* slate-700 */
-    --input: 51 65 85; /* slate-700 */
-    --ring: 56 189 248; /* zlc-blue-400 */
+    --border: 51 65 85;
+    /* slate-700 */
+    --input: 51 65 85;
+    /* slate-700 */
+    --ring: 56 189 248;
+    /* zlc-blue-400 */
 
     --sidebar-background: 30 41 59;
-    --sidebar-foreground: 255 255 255; /* white for dark mode */
+    --sidebar-foreground: 255 255 255;
+    /* white for dark mode */
     --sidebar-primary: 56 189 248;
-    --sidebar-primary-foreground: 0 0 0; /* jet black for contrast */
+    --sidebar-primary-foreground: 0 0 0;
+    /* jet black for contrast */
     --sidebar-accent: 51 65 85;
-    --sidebar-accent-foreground: 255 255 255; /* white for dark mode */
+    --sidebar-accent-foreground: 255 255 255;
+    /* white for dark mode */
     --sidebar-border: 51 65 85;
     --sidebar-ring: 56 189 248;
   }
@@ -93,11 +137,17 @@
     @apply border-border;
   }
 
+  .tab,
+  .tab-active {
+    border-color: rgb(226 232 240) !important;
+  }
+
+
   /* Override any yellow backgrounds */
-  *[style*="rgb(255, 255, 0)"],
+  *[style*="rgb(255, 255, 255)"],
   *[style*="yellow"],
-  *[style*="#ffff00"] {
-    background-color: white !important;
+  *[style*="yellow"] {
+    background-color: yellow !important;
   }
 
   html,
@@ -112,7 +162,8 @@
     font-feature-settings:
       "rlig" 1,
       "calt" 1;
-    color: #000000; /* Force jet black for all text */
+    color: #000000;
+    /* Force jet black for all text */
   }
 
   h1,
@@ -122,7 +173,8 @@
   h5,
   h6 {
     @apply font-semibold tracking-tight;
-    color: #000000; /* Jet black for headings */
+    color: #000000;
+    /* Jet black for headings */
   }
 
   p,
@@ -130,7 +182,8 @@
   div,
   label,
   button {
-    color: #000000; /* Jet black for common text elements */
+    color: #000000;
+    /* Jet black for common text elements */
   }
 
   /* Ensure inputs and form elements use jet black text */

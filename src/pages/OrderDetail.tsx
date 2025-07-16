@@ -211,7 +211,7 @@ export default function OrderDetail() {
 
   if (!order) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 ">
         <Navigation />
         <div className="container mx-auto px-4 py-8 mt-20">
           <div className="text-center">
@@ -233,7 +233,7 @@ export default function OrderDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 ">
       <Navigation />
 
       <div className="container mx-auto px-4 py-8 mt-20">
@@ -253,11 +253,11 @@ export default function OrderDetail() {
               <h1 className="text-3xl font-bold text-gray-900">
                 {order.orderNumber}
               </h1>
-              <p className="text-gray-600 mt-1">
+              <p className="text-gray-600 mt-1 ">
                 Detalles completos del pedido B2B
               </p>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 ">
               {getStatusIcon(order.status)}
               <Badge className="text-sm">{getStatusLabel(order.status)}</Badge>
             </div>
@@ -275,7 +275,7 @@ export default function OrderDetail() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 ">
                     <div>
                       <Label className="text-sm text-gray-600">
                         Número de PO
@@ -307,7 +307,7 @@ export default function OrderDetail() {
 
                   <Separator className="my-4" />
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 ">
                     <div>
                       <Label className="text-sm text-gray-600">Proveedor</Label>
                       <div className="flex items-center gap-2">
@@ -324,7 +324,7 @@ export default function OrderDetail() {
                       </Badge>
                     </div>
                     <div className="md:col-span-2">
-                      <Label className="text-sm text-gray-600">
+                      <Label className="text-sm text-gray-600 ">
                         Condiciones de Pago
                       </Label>
                       <p className="font-medium">{order.paymentConditions}</p>
@@ -336,8 +336,8 @@ export default function OrderDetail() {
               {/* Container Breakdown */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Container className="h-5 w-5 text-zlc-blue-600" />
+                  <CardTitle className="flex items-center gap-2 ">
+                    <Container className="h-5 w-5 text-zlc-blue-600 " />
                     Desglose de Lotes por Contenedor
                   </CardTitle>
                 </CardHeader>
@@ -391,11 +391,11 @@ export default function OrderDetail() {
                             </TableCell>
                           </TableRow>
                         ))}
-                        <TableRow className="bg-gray-50">
+                        <TableRow className="bg-gray-50 ">
                           <TableCell colSpan={4} className="font-medium">
                             Total del Pedido
                           </TableCell>
-                          <TableCell className="font-bold text-lg">
+                          <TableCell className="font-bold text-lg ">
                             {formatCurrency(order.totalAmount, order.currency)}
                           </TableCell>
                         </TableRow>
@@ -429,10 +429,10 @@ export default function OrderDetail() {
                         </p>
                       </div>
                       <div>
-                        <Label className="text-sm text-gray-600">
+                        <Label className="text-sm text-gray-600 ">
                           Nº de Contenedor
                         </Label>
-                        <p className="font-mono font-medium">
+                        <p className="font-mono font-medium ">
                           {order.shippingData.containerNumber}
                         </p>
                       </div>
@@ -541,7 +541,7 @@ export default function OrderDetail() {
                               <Label htmlFor="paymentAmount">
                                 Monto ({order.currency})
                               </Label>
-                              <Input
+                              <Input 
                                 id="paymentAmount"
                                 type="number"
                                 value={paymentForm.amount}
@@ -798,7 +798,7 @@ export default function OrderDetail() {
               {/* Documents */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-2 ">
                     <FileText className="h-4 w-4" />
                     Documentos
                   </CardTitle>
@@ -815,16 +815,16 @@ export default function OrderDetail() {
                     </Button>
                     <Button
                       variant="outline"
-                      className="w-full justify-start"
+                      className="w-full justify-start "
                       onClick={() => console.log("Download packing list")}
                     >
-                      <Download className="h-4 w-4 mr-2" />
+                      <Download className="h-4 w-4 mr-2 " />
                       Packing List
                     </Button>
                     {order.shippingData?.blNumber && (
                       <Button
                         variant="outline"
-                        className="w-full justify-start"
+                        className="w-full justify-start "
                         onClick={() => console.log("Download B/L")}
                       >
                         <Download className="h-4 w-4 mr-2" />
@@ -836,7 +836,7 @@ export default function OrderDetail() {
                       <Button
                         key={doc.id}
                         variant="outline"
-                        className="w-full justify-start"
+                        className="w-full justify-start  "
                         onClick={() => handleDownload(doc.id)}
                       >
                         <Download className="h-4 w-4 mr-2" />
@@ -850,7 +850,7 @@ export default function OrderDetail() {
               {/* Actions */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-lg">Acciones</CardTitle>
+                  <CardTitle className="text-lg ">Acciones</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
