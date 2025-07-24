@@ -46,7 +46,7 @@ import { cn } from "@/lib/utils";
 const languages = [
   { code: "es", name: "Español", flag: "🇪🇸" },
   { code: "en", name: "English", flag: "🇺🇸" },
-  { code: "pt", name: "Português", flag: "🇧🇷" },
+  { code: "pt", name: "Português", flag: "🇧����" },
 ];
 
 const currencies = [
@@ -501,7 +501,7 @@ export function Navigation({ className }: NavigationProps) {
                       </Button>
                       <Button
                         asChild
-                        className="w-full bg-zlc-blue-800 hover:bg-zlc-blue-900"
+                        className="w-full bg-zlc-blue-800 hover:bg-zlc-blue-900 text-white"
                       >
                         <Link
                           to="/register"
