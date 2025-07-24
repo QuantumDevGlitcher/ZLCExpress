@@ -492,7 +492,7 @@ export default function Index() {
                 variant="outline"
                 className="border-white/30 bg-white text-black hover:bg-zlc-blue-900 hover:text-white h-12 px-8"
               >
-                <Phone className="mr-2 h-4 w-4 text-black" />
+                <Phone className="mr-2 h-4 w-4" />
                 Hablar con un Asesor
               </Button>
             </div>
