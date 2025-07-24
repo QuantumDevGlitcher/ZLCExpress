@@ -123,7 +123,7 @@ export default function TransportOptions() {
             {/* Main Content */}
             <div className="xl:col-span-3">
               {/* Status Alert */}
-              <Alert className="mb-6">
+              <Alert className="mb-6 bg-white border-white">
                 <CheckCircle className="h-4 w-4" />
                 <AlertDescription>
                   <strong>Solicitud procesada exitosamente.</strong>
@@ -144,6 +144,7 @@ export default function TransportOptions() {
                       size="sm"
                       onClick={handleRefreshOptions}
                       disabled={isLoading}
+                      className="bg-white border-white"
                     >
                       {isLoading ? (
                         <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
