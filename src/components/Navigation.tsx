@@ -248,7 +248,7 @@ export function Navigation({ className }: NavigationProps) {
                             "bg-zlc-blue-50",
                         )}
                       >
-                        <span className="mr-2">{lang.flag}</span>
+                        <span className="mr-2 font-semibold text-xs">{lang.code.toUpperCase()}</span>
                         {lang.name}
                       </DropdownMenuItem>
                     ))}
