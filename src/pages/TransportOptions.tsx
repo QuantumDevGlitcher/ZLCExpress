@@ -337,7 +337,7 @@ export default function TransportOptions() {
               </Card>
 
               {/* Help Information */}
-              <Alert>
+              <Alert className="bg-white border-white">
                 <Info className="h-4 w-4" />
                 <AlertDescription>
                   <strong>¿Necesita ayuda?</strong>
