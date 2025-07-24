@@ -514,6 +514,8 @@ export function Navigation({ className }: NavigationProps) {
                       </Button>
                     </div>
                   )}
+                    </div>
+                  </div>
                 </div>
               </SheetContent>
             </Sheet>
