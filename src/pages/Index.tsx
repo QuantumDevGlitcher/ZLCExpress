@@ -447,7 +447,7 @@ export default function Index() {
                     <p className="text-zlc-gray-700 mb-4 italic">
                       "{testimonial.content}"
                     </p>
-                    <div className="border-t pt-4">
+                    <div className="border-t border-gray-200 pt-4">
                       <p className="font-semibold text-zlc-gray-900">
                         {testimonial.name}
                       </p>
