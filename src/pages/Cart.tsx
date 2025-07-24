@@ -313,7 +313,7 @@ export default function Cart() {
                     value={paymentConditions}
                     onValueChange={setPaymentConditions}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="bg-white border-white">
                       <SelectValue placeholder="Seleccione condiciones de pago" />
                     </SelectTrigger>
                     <SelectContent>
@@ -357,7 +357,7 @@ export default function Cart() {
                     <Button
                       variant="outline"
                       onClick={() => fileInputRef.current?.click()}
-                      className="w-full"
+                      className="w-full bg-white border-black"
                     >
                       <Upload className="h-4 w-4 mr-2" />
                       Subir Orden de Compra
