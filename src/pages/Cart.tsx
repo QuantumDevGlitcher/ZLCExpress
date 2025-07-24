@@ -161,7 +161,7 @@ export default function Cart() {
             <Button
               variant="outline"
               onClick={clearCart}
-              className="text-red-600 border-red-200 hover:bg-red-50"
+              className="bg-white text-red-600 border-red-200 hover:bg-red-50"
             >
               <Trash2 className="h-4 w-4 mr-2" />
               Vaciar Carrito
@@ -180,7 +180,7 @@ export default function Cart() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {state.items.map((item) => (
-                    <div key={item.id} className="border rounded-lg p-4">
+                    <div key={item.id} className="border border-white rounded-lg p-4">
                       <div className="flex gap-4">
                         <img
                           src={item.productImage}
