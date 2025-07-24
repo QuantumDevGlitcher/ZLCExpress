@@ -153,19 +153,19 @@ export function TransportComparisonTable({
                       <div className="space-y-1">
                         <div className="flex flex-wrap gap-1">
                           {option.conditions.insurance && (
-                            <Badge variant="outline" className="text-xs">
+                            <Badge variant="outline" className="text-xs border-white">
                               <Shield className="h-3 w-3 mr-1" />
                               Seguro
                             </Badge>
                           )}
                           {option.conditions.customs && (
-                            <Badge variant="outline" className="text-xs">
+                            <Badge variant="outline" className="text-xs border-white">
                               <FileText className="h-3 w-3 mr-1" />
                               Aduanas
                             </Badge>
                           )}
                           {option.conditions.documentation && (
-                            <Badge variant="outline" className="text-xs">
+                            <Badge variant="outline" className="text-xs border-white">
                               Documentación
                             </Badge>
                           )}
