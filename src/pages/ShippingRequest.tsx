@@ -255,7 +255,7 @@ export default function ShippingRequest() {
                       >
                         Puerto de Origen
                       </Label>
-                      <div className="mt-2 p-3 bg-gray-50 rounded-lg border">
+                      <div className="mt-2 p-3 bg-gray-50 rounded-lg border border-white">
                         <div className="flex items-center gap-2">
                           <MapPin className="h-4 w-4 text-zlc-blue-600" />
                           <span className="font-medium">
@@ -287,7 +287,7 @@ export default function ShippingRequest() {
                         }
                       >
                         <SelectTrigger
-                          className={`mt-2 ${errors.destinationPort ? "border-red-500" : ""}`}
+                          className={`mt-2 bg-white border-white ${errors.destinationPort ? "border-red-500" : ""}`}
                         >
                           <SelectValue placeholder="Seleccione el puerto de destino" />
                         </SelectTrigger>
