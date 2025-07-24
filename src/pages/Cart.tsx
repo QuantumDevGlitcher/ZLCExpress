@@ -114,7 +114,7 @@ export default function Cart() {
               Explore nuestro catálogo y agregue productos para solicitar
               cotizaciones
             </p>
-            <Button asChild className="btn-professional">
+            <Button asChild className="btn-professional bg-white text-black hover:bg-gray-100">
               <Link to="/categories">
                 <Package className="h-4 w-4 mr-2" />
                 Explorar Catálogo
