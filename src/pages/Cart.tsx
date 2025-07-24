@@ -398,7 +398,7 @@ export default function Cart() {
                     placeholder="Requisitos especiales, comentarios sobre entrega, etc."
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
-                    className="min-h-24"
+                    className="min-h-24 bg-white border-black"
                   />
                 </CardContent>
               </Card>
@@ -425,6 +425,7 @@ export default function Cart() {
                       onChange={(e) =>
                         setFreightEstimate(parseFloat(e.target.value) || 0)
                       }
+                      className="bg-white border-gray-400"
                     />
                     <p className="text-xs text-gray-500 mt-1">
                       Ingrese el costo si ya tiene cotización de flete
