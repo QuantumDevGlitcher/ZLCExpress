@@ -367,7 +367,7 @@ export function Navigation({ className }: NavigationProps) {
                 </Button>
                 <Button
                   asChild
-                  className="bg-zlc-blue-800 hover:bg-zlc-blue-900"
+                  className="bg-zlc-blue-800 hover:bg-zlc-blue-900 text-white"
                 >
                   <Link to="/register">Registrar Empresa</Link>
                 </Button>

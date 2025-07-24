@@ -238,7 +238,7 @@ export default function Index() {
                     />
                   </div>
 
-                  <Button className="w-full bg-zlc-blue-600 hover:bg-zlc-blue-700 h-12">
+                  <Button className="w-full bg-zlc-blue-600 hover:bg-zlc-blue-700 h-12 text-white">
                     Buscar Productos
                   </Button>
                 </div>
