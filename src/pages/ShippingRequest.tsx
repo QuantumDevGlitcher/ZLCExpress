@@ -478,7 +478,7 @@ export default function ShippingRequest() {
               </Card>
 
               {/* Process Information */}
-              <Alert>
+              <Alert className="bg-white border-white">
                 <Info className="h-4 w-4" />
                 <AlertDescription>
                   <strong>Próximos pasos:</strong>
