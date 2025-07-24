@@ -463,8 +463,8 @@ export default function Categories() {
                   <div
                     key={lot.id}
                     className={cn(
-                      "bg-white border rounded-lg p-6 hover:shadow-md transition-shadow",
-                      lot.highlighted && "border-2 border-blue-500",
+                      "bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow",
+                      lot.highlighted && "border-2 border-slate-600",
                     )}
                   >
                     <div className="flex gap-6">
