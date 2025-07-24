@@ -399,7 +399,7 @@ export function Navigation({ className }: NavigationProps) {
                     ))}
 
                     {/* User Type Specific Menu in Mobile */}
-                    <div className="border-t pt-4 mt-4">
+                    <div className="border-t border-white/20 pt-4 mt-4">
                       {userType === "supplier" ? (
                         <>
                           <h4 className="text-sm font-medium text-gray-900 mb-2 px-3">
@@ -441,7 +441,7 @@ export function Navigation({ className }: NavigationProps) {
                   </nav>
 
                   {/* Mobile Language & Currency */}
-                  <div className="space-y-4 border-t pt-6">
+                  <div className="space-y-4 border-t border-white/20 pt-6">
                     <div>
                       <h4 className="text-sm font-medium mb-2">Idioma</h4>
                       <div className="space-y-1">
@@ -489,7 +489,7 @@ export function Navigation({ className }: NavigationProps) {
 
                   {/* Mobile Auth */}
                   {!isLoggedIn && (
-                    <div className="space-y-2 border-t pt-6">
+                    <div className="space-y-2 border-t border-white/20 pt-6">
                       <Button
                         variant="ghost"
                         asChild
