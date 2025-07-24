@@ -66,7 +66,7 @@ export function CartDropdown() {
                   <div className="text-xs text-gray-500 mb-2">
                     Último agregado:
                   </div>
-                  <div className="flex gap-3 p-3 bg-gray-50 rounded-lg">
+                  <div className="flex gap-3 p-3 bg-gray-100 rounded-lg">
                     <img
                       src={lastAddedItem.productImage}
                       alt={lastAddedItem.productTitle}
@@ -161,14 +161,14 @@ export function CartDropdown() {
               <div className="space-y-2">
                 <Button
                   asChild
-                  className="w-full bg-zlc-blue-600 hover:bg-zlc-blue-700"
+                  className="w-full bg-zlc-blue-600 hover:bg-zlc-blue-700 text-white"
                 >
                   <Link to="/cart">Ver Carrito Completo</Link>
                 </Button>
                 <Button
                   asChild
                   variant="outline"
-                  className="w-full border-zlc-blue-200 text-zlc-blue-700 hover:bg-zlc-blue-50"
+                  className="w-full border-zlc-blue-200 bg-white text-zlc-blue-700 hover:bg-zlc-blue-50"
                 >
                   <Link to="/cart">Solicitar Cotización</Link>
                 </Button>
