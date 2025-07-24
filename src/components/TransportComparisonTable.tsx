@@ -190,7 +190,7 @@ export function TransportComparisonTable({
                         className={
                           selectedOptionId === option.id
                             ? "bg-zlc-blue-600 hover:bg-zlc-blue-700"
-                            : ""
+                            : "bg-white border-white"
                         }
                       >
                         {selectedOptionId === option.id
