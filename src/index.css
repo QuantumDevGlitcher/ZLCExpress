@@ -150,4 +150,14 @@
   .card-professional {
     @apply rounded-xl border bg-card p-6 shadow-soft hover:shadow-soft-lg transition-shadow duration-200;
   }
+
+  /* Hide scrollbar while maintaining scroll functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
 }
