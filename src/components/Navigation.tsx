@@ -456,7 +456,7 @@ export function Navigation({ className }: NavigationProps) {
                                 : "hover:bg-zlc-gray-100",
                             )}
                           >
-                            <span className="mr-2">{lang.flag}</span>
+                            <span className="mr-2 font-semibold text-xs">{lang.code.toUpperCase()}</span>
                             {lang.name}
                           </button>
                         ))}
