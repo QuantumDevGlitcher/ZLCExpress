@@ -436,7 +436,7 @@ export default function Cart() {
                     to="/shipping-request"
                     state={{ quoteId: `quote-${Date.now()}` }}
                   >
-                    <Button variant="outline" className="w-full">
+                    <Button variant="outline" className="w-full bg-white border-white">
                       <Ship className="h-4 w-4 mr-2" />
                       Solicitar Cotización de Flete
                     </Button>
