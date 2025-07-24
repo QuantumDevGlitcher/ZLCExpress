@@ -225,7 +225,7 @@ export function Navigation({ className }: NavigationProps) {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm" className="h-9 px-3">
                     <Globe className="mr-2 h-4 w-4" />
-                    <span className="mr-1">{selectedLanguage.flag}</span>
+                    <span className="mr-1 font-semibold text-xs">{selectedLanguage.code.toUpperCase()}</span>
                     <span className="mr-2 text-sm">
                       {selectedLanguage.code.toUpperCase()}
                     </span>
