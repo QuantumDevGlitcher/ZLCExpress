@@ -331,7 +331,7 @@ export default function ShippingRequest() {
                             estimatedDate: e.target.value,
                           }))
                         }
-                        className={`mt-2 ${errors.estimatedDate ? "border-red-500" : ""}`}
+                        className={`mt-2 bg-white border-white ${errors.estimatedDate ? "border-red-500" : ""}`}
                         min={
                           new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
                             .toISOString()
@@ -366,7 +366,7 @@ export default function ShippingRequest() {
                           }))
                         }
                         placeholder="Ej: Temperatura controlada, manejo especial, seguro adicional..."
-                        className="mt-2"
+                        className="mt-2 bg-white border-gray-300"
                         rows={3}
                       />
                     </div>
