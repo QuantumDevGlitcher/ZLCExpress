@@ -487,7 +487,7 @@ export default function Cart() {
                     </div>
                   </div>
 
-                  <Alert>
+                  <Alert className="bg-white border-white">
                     <AlertCircle className="h-4 w-4" />
                     <AlertDescription className="text-xs">
                       Los precios finales pueden variar según las condiciones
@@ -510,7 +510,7 @@ export default function Cart() {
                       state.items.length === 0 ||
                       !paymentConditions
                     }
-                    className="w-full btn-professional"
+                    className="w-full btn-professional text-black"
                     size="lg"
                   >
                     {isSubmitting ? (
