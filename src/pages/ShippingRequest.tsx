@@ -217,7 +217,7 @@ export default function ShippingRequest() {
                         }
                       >
                         <SelectTrigger
-                          className={`mt-2 ${errors.containerType ? "border-red-500" : ""}`}
+                          className={`mt-2 bg-white border-white ${errors.containerType ? "border-red-500" : ""}`}
                         >
                           <SelectValue placeholder="Seleccione el tipo de contenedor" />
                         </SelectTrigger>
