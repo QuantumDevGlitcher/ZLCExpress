@@ -382,8 +382,10 @@ export function Navigation({ className }: NavigationProps) {
                   <span className="sr-only">Toggle menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-80 bg-white">
-                <div className="flex flex-col space-y-6 mt-6">
+              <SheetContent side="right" className="w-80 bg-white overflow-hidden">
+                <div className="flex flex-col h-full">
+                  <div className="overflow-y-auto flex-1 px-1">
+                    <div className="flex flex-col space-y-6 mt-6 pb-6">
                   {/* Mobile Navigation */}
                   <nav className="flex flex-col space-y-2">
                     {mainMenuItems.map((item) => (
