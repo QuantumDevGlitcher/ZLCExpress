@@ -231,7 +231,7 @@ export default function Cart() {
                                     handleQuantityChange(item.id, -1)
                                   }
                                   disabled={item.quantity <= 1}
-                                  className="h-8 w-8 p-0 bg-gray-200 border-gray-200"
+                                  className="h-8 w-8 p-0 bg-white border-white hover:bg-gray-100 hover:border-gray-200"
                                 >
                                   <Minus className="h-3 w-3" />
                                 </Button>
@@ -244,7 +244,7 @@ export default function Cart() {
                                   onClick={() =>
                                     handleQuantityChange(item.id, 1)
                                   }
-                                  className="h-8 w-8 p-0 bg-gray-300 border-gray-300"
+                                  className="h-8 w-8 p-0 bg-white border-white hover:bg-gray-100 hover:border-gray-200"
                                 >
                                   <Plus className="h-3 w-3" />
                                 </Button>
