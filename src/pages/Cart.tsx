@@ -201,7 +201,7 @@ export default function Cart() {
                                 </span>
                                 <Badge
                                   variant="outline"
-                                  className="text-xs px-1 py-0"
+                                  className="text-xs px-1 py-0 border-black"
                                 >
                                   {item.containerType}
                                 </Badge>
