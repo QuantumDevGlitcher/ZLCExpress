@@ -384,7 +384,7 @@ export function Navigation({ className }: NavigationProps) {
               </SheetTrigger>
               <SheetContent side="right" className="w-80 bg-white overflow-hidden">
                 <div className="flex flex-col h-full">
-                  <div className="overflow-y-auto flex-1 px-1">
+                  <div className="overflow-y-auto flex-1 px-1 scrollbar-hide">
                     <div className="flex flex-col space-y-6 mt-6 pb-6">
                   {/* Mobile Navigation */}
                   <nav className="flex flex-col space-y-2">
