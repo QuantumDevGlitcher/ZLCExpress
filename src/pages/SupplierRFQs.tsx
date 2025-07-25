@@ -220,7 +220,15 @@ const SupplierRFQs = () => {
     }
   };
 
-  const filteredRFQs = supplierRFQs.filter((rfq) => {
+  // Auto-update expired RFQs based on current date
+  const processedRFQs = supplierRFQs.map((rfq) => {
+    if (isRFQExpired(rfq) && rfq.status !== "rejected" && rfq.status !== "expired") {
+      return { ...rfq, status: "expired" as const };
+    }
+    return rfq;
+  });
+
+  const filteredRFQs = processedRFQs.filter((rfq) => {
     const matchesStatus = statusFilter === "all" || rfq.status === statusFilter;
     const matchesSearch =
       rfq.rfqNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -229,13 +237,16 @@ const SupplierRFQs = () => {
     return matchesStatus && matchesSearch;
   });
 
-  const pendingCount = supplierRFQs.filter(
+  const pendingCount = processedRFQs.filter(
     (rfq) => rfq.status === "pending",
   ).length;
-  const quotedCount = supplierRFQs.filter(
+  const quotedCount = processedRFQs.filter(
     (rfq) => rfq.status === "quoted",
   ).length;
-  const totalValue = supplierRFQs.reduce(
+  const expiredCount = processedRFQs.filter(
+    (rfq) => rfq.status === "expired",
+  ).length;
+  const totalValue = processedRFQs.reduce(
     (sum, rfq) => sum + rfq.estimatedValue,
     0,
   );
