@@ -128,6 +128,8 @@ const SupplierRFQs = () => {
         return "outline";
       case "rejected":
         return "destructive";
+      case "expired":
+        return "destructive";
       default:
         return "secondary";
     }
@@ -143,8 +145,61 @@ const SupplierRFQs = () => {
         return "Contraoferta";
       case "rejected":
         return "Rechazado";
+      case "expired":
+        return "Vencida";
       default:
         return status;
+    }
+  };
+
+  // Helper function to check if RFQ is expired
+  const isRFQExpired = (rfq: any) => {
+    return new Date() > new Date(rfq.validUntil);
+  };
+
+  // Helper function to get appropriate button text and state
+  const getButtonConfig = (rfq: any) => {
+    const expired = isRFQExpired(rfq);
+
+    if (expired || rfq.status === "expired") {
+      return {
+        text: "Ver Detalles",
+        disabled: false,
+        variant: "outline" as const,
+      };
+    }
+
+    switch (rfq.status) {
+      case "pending":
+        return {
+          text: "Responder",
+          disabled: false,
+          variant: "default" as const,
+        };
+      case "quoted":
+        return {
+          text: "Ver Cotización",
+          disabled: false,
+          variant: "outline" as const,
+        };
+      case "counter_offer":
+        return {
+          text: "Ver Contraoferta",
+          disabled: false,
+          variant: "outline" as const,
+        };
+      case "rejected":
+        return {
+          text: "Ver Detalles",
+          disabled: false,
+          variant: "outline" as const,
+        };
+      default:
+        return {
+          text: "Ver Detalles",
+          disabled: false,
+          variant: "outline" as const,
+        };
     }
   };
 
