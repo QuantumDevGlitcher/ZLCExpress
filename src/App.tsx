@@ -112,6 +112,10 @@ const App = () => (
                     path="/supplier/products/new"
                     element={<SupplierCreateProduct />}
                   />
+                  <Route
+                    path="/supplier/products/:id/edit"
+                    element={<SupplierProductEdit />}
+                  />
                   <Route path="/supplier/rfqs" element={<SupplierRFQs />} />
                   <Route
                     path="/supplier/rfqs/:id/respond"
