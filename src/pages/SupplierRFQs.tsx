@@ -274,7 +274,11 @@ const SupplierRFQs = () => {
 
   // Auto-update expired RFQs based on current date
   const processedRFQs = supplierRFQs.map((rfq) => {
-    if (isRFQExpired(rfq) && rfq.status !== "rejected" && rfq.status !== "expired") {
+    if (
+      isRFQExpired(rfq) &&
+      rfq.status !== "rejected" &&
+      rfq.status !== "expired"
+    ) {
       return { ...rfq, status: "expired" as const };
     }
     return rfq;
