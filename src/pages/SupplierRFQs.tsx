@@ -213,6 +213,8 @@ const SupplierRFQs = () => {
         return <AlertCircle className="h-4 w-4" />;
       case "rejected":
         return <AlertCircle className="h-4 w-4" />;
+      case "expired":
+        return <AlertCircle className="h-4 w-4" />;
       default:
         return null;
     }
