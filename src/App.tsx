@@ -31,6 +31,7 @@ import CustomsSupport from "./pages/CustomsSupport";
 import SupplierDashboard from "./pages/SupplierDashboard";
 import SupplierProducts from "./pages/SupplierProducts";
 import SupplierCreateProduct from "./pages/SupplierCreateProduct";
+import SupplierProductEdit from "./pages/SupplierProductEdit";
 import SupplierRFQs from "./pages/SupplierRFQs";
 import SupplierRFQResponse from "./pages/SupplierRFQResponse";
 import SupplierOrders from "./pages/SupplierOrders";
