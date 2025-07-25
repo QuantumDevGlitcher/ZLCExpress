@@ -359,6 +359,7 @@ const SupplierRFQs = () => {
                         Contraoferta
                       </SelectItem>
                       <SelectItem value="rejected">Rechazadas</SelectItem>
+                      <SelectItem value="expired">Vencidas</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
