@@ -46,10 +46,10 @@ const SupplierRFQs = () => {
       containerQuantity: 2,
       containerType: "20'" as const,
       incoterm: "FOB" as const,
-      receivedAt: new Date("2024-01-15"),
+      receivedAt: new Date("2024-01-25"),
       status: "pending" as const,
       estimatedValue: 19600,
-      validUntil: new Date("2024-02-15"),
+      validUntil: new Date("2024-02-25"), // Active - future date
     },
     {
       id: "RFQ-002",
@@ -59,10 +59,10 @@ const SupplierRFQs = () => {
       containerQuantity: 1,
       containerType: "40'" as const,
       incoterm: "CIF" as const,
-      receivedAt: new Date("2024-01-12"),
+      receivedAt: new Date("2024-01-20"),
       status: "quoted" as const,
       estimatedValue: 15800,
-      validUntil: new Date("2024-02-12"),
+      validUntil: new Date("2024-02-20"), // Active - future date
     },
     {
       id: "RFQ-003",
@@ -72,10 +72,10 @@ const SupplierRFQs = () => {
       containerQuantity: 3,
       containerType: "20'" as const,
       incoterm: "FOB" as const,
-      receivedAt: new Date("2024-01-10"),
+      receivedAt: new Date("2024-01-15"),
       status: "counter_offer" as const,
       estimatedValue: 29400,
-      validUntil: new Date("2024-02-10"),
+      validUntil: new Date("2024-02-15"), // Active - future date
     },
     {
       id: "RFQ-004",
@@ -85,10 +85,36 @@ const SupplierRFQs = () => {
       containerQuantity: 1,
       containerType: "20'" as const,
       incoterm: "EXW" as const,
-      receivedAt: new Date("2024-01-08"),
-      status: "rejected" as const,
+      receivedAt: new Date("2024-01-05"),
+      status: "expired" as const,
       estimatedValue: 9800,
-      validUntil: new Date("2024-02-08"),
+      validUntil: new Date("2024-01-20"), // Expired - past date
+    },
+    {
+      id: "RFQ-005",
+      rfqNumber: "RFQ-2024-005",
+      buyerCompany: "Distribuidora Central",
+      productTitle: "Camisa de Algodón Premium",
+      containerQuantity: 2,
+      containerType: "20'" as const,
+      incoterm: "FOB" as const,
+      receivedAt: new Date("2024-01-03"),
+      status: "expired" as const,
+      estimatedValue: 19600,
+      validUntil: new Date("2024-01-18"), // Expired - past date
+    },
+    {
+      id: "RFQ-006",
+      rfqNumber: "RFQ-2024-006",
+      buyerCompany: "Fashion Import Co.",
+      productTitle: "Camisa de Algodón Premium",
+      containerQuantity: 1,
+      containerType: "40'" as const,
+      incoterm: "CIF" as const,
+      receivedAt: new Date("2024-01-02"),
+      status: "rejected" as const,
+      estimatedValue: 15800,
+      validUntil: new Date("2024-01-15"), // Expired but already rejected
     },
   ];
 
