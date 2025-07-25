@@ -315,14 +315,14 @@ const SupplierProfile = () => {
             <CardContent className="p-4">
               <div className="flex flex-wrap gap-2">
                 <Button
-                  variant={activeTab === "profile" ? "default" : "outline"}
+                  variant={activeTab === "profile" ? "slate" : "outline"}
                   onClick={() => setActiveTab("profile")}
                 >
                   <Building2 className="h-4 w-4 mr-2" />
                   Datos de Empresa
                 </Button>
                 <Button
-                  variant={activeTab === "payments" ? "default" : "outline"}
+                  variant={activeTab === "payments" ? "slate" : "outline"}
                   onClick={() => setActiveTab("payments")}
                 >
                   <CreditCard className="h-4 w-4 mr-2" />
