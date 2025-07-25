@@ -358,9 +358,8 @@ const SupplierRFQs = () => {
                             onClick={() =>
                               navigate(`/supplier/rfqs/${rfq.id}/respond`)
                             }
-                            disabled={rfq.validUntil < new Date()}
                           >
-                            Responder
+                            Ver Detalles
                           </Button>
                         </TableCell>
                       </TableRow>
