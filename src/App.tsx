@@ -117,6 +117,10 @@ const App = () => (
                     path="/supplier/products/:id/edit"
                     element={<SupplierProductEdit />}
                   />
+                  <Route
+                    path="/supplier/products/:id"
+                    element={<SupplierProductDetail />}
+                  />
                   <Route path="/supplier/rfqs" element={<SupplierRFQs />} />
                   <Route
                     path="/supplier/rfqs/:id/respond"
