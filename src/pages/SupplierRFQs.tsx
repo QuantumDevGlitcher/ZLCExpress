@@ -117,6 +117,19 @@ const SupplierRFQs = () => {
       validUntil: new Date("2024-03-08"), // Active - future date
     },
     {
+      id: "RFQ-010",
+      rfqNumber: "RFQ-2024-010",
+      buyerCompany: "Premium Textiles Group",
+      productTitle: "Camisa de Algodón Premium",
+      containerQuantity: 5,
+      containerType: "40'" as const,
+      incoterm: "FOB" as const,
+      receivedAt: new Date("2024-01-30"),
+      status: "pending" as const,
+      estimatedValue: 42500,
+      validUntil: new Date("2025-10-12"), // Valid until December 10, 2025
+    },
+    {
       id: "RFQ-004",
       rfqNumber: "RFQ-2024-004",
       buyerCompany: "Global Trading Corp.",
