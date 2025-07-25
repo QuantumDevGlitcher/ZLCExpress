@@ -460,7 +460,7 @@ const SupplierProfile = () => {
                       }
                     />
                   </div>
-                  <Button onClick={handleSaveProfile} className="w-full">
+                  <Button onClick={handleSaveProfile} variant="secondary" className="w-full">
                     Guardar Cambios
                   </Button>
                 </CardContent>
