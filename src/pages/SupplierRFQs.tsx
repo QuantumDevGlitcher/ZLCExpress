@@ -436,14 +436,21 @@ const SupplierRFQs = () => {
                           </span>
                         </TableCell>
                         <TableCell>
-                          <Button
-                            size="sm"
-                            onClick={() =>
-                              navigate(`/supplier/rfqs/${rfq.id}/respond`)
-                            }
-                          >
-                            Ver Detalles
-                          </Button>
+                          {(() => {
+                            const buttonConfig = getButtonConfig(rfq);
+                            return (
+                              <Button
+                                size="sm"
+                                variant={buttonConfig.variant}
+                                disabled={buttonConfig.disabled}
+                                onClick={() =>
+                                  navigate(`/supplier/rfqs/${rfq.id}/respond`)
+                                }
+                              >
+                                {buttonConfig.text}
+                              </Button>
+                            );
+                          })()}
                         </TableCell>
                       </TableRow>
                     ))}
