@@ -305,12 +305,12 @@ const SupplierRFQs = () => {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600">Total RFQs</p>
-                    <p className="text-2xl font-bold text-gray-900">
-                      {supplierRFQs.length}
+                    <p className="text-sm text-gray-600">Vencidas</p>
+                    <p className="text-2xl font-bold text-red-600">
+                      {expiredCount}
                     </p>
                   </div>
-                  <Package className="h-8 w-8 text-gray-600" />
+                  <AlertCircle className="h-8 w-8 text-red-600" />
                 </div>
               </CardContent>
             </Card>
