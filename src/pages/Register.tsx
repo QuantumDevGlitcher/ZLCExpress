@@ -859,7 +859,7 @@ export default function Register() {
                                 name="country"
                                 render={({ field }) => (
                                   <FormItem>
-                                    <FormLabel>Pa��s de Operación *</FormLabel>
+                                    <FormLabel>Pais de Operación *</FormLabel>
                                     <FormControl>
                                       <SearchableCountrySelect
                                         value={field.value}
