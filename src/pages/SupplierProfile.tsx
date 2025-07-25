@@ -329,7 +329,7 @@ const SupplierProfile = () => {
                   Métodos de Pago
                 </Button>
                 <Button
-                  variant={activeTab === "invoices" ? "default" : "outline"}
+                  variant={activeTab === "invoices" ? "slate" : "outline"}
                   onClick={() => setActiveTab("invoices")}
                 >
                   <FileText className="h-4 w-4 mr-2" />
@@ -337,7 +337,7 @@ const SupplierProfile = () => {
                 </Button>
                 <Button
                   variant={
-                    activeTab === "notifications" ? "default" : "outline"
+                    activeTab === "notifications" ? "slate" : "outline"
                   }
                   onClick={() => setActiveTab("notifications")}
                 >
