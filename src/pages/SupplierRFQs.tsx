@@ -146,7 +146,7 @@ const SupplierRFQs = () => {
       id: "RFQ-005",
       rfqNumber: "RFQ-2024-005",
       buyerCompany: "Distribuidora Central",
-      productTitle: "Camisa de Algodón Premium",
+      productTitle: "Camisa de Algod��n Premium",
       containerQuantity: 2,
       containerType: "20'" as const,
       incoterm: "FOB" as const,
@@ -226,7 +226,7 @@ const SupplierRFQs = () => {
         return {
           text: "Responder",
           disabled: false,
-          variant: "default" as const,
+          variant: "secondary" as const,
         };
       case "quoted":
         return {
