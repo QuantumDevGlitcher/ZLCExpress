@@ -268,7 +268,11 @@ export default function SupplierProductEdit() {
       case "active":
         return <Badge className="bg-green-600">Activo</Badge>;
       case "draft":
-        return <Badge variant="outline" className="text-orange-600">Borrador</Badge>;
+        return (
+          <Badge variant="outline" className="text-orange-600">
+            Borrador
+          </Badge>
+        );
       case "sold_out":
         return <Badge variant="destructive">Agotado</Badge>;
       case "inactive":
@@ -365,7 +369,9 @@ export default function SupplierProductEdit() {
                       <Input
                         id="name"
                         value={formData.name || ""}
-                        onChange={(e) => handleInputChange("name", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("name", e.target.value)
+                        }
                         placeholder="Ej: Camisetas 100% Algodón Premium"
                       />
                     </div>
@@ -375,7 +381,9 @@ export default function SupplierProductEdit() {
                       <Input
                         id="code"
                         value={formData.code || ""}
-                        onChange={(e) => handleInputChange("code", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("code", e.target.value)
+                        }
                         placeholder="Ej: CAM-ALG-20GP-0500"
                       />
                     </div>
@@ -385,7 +393,9 @@ export default function SupplierProductEdit() {
                     <Label htmlFor="category">Categoría *</Label>
                     <Select
                       value={formData.category || ""}
-                      onValueChange={(value) => handleInputChange("category", value)}
+                      onValueChange={(value) =>
+                        handleInputChange("category", value)
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Selecciona una categoría" />
@@ -395,7 +405,9 @@ export default function SupplierProductEdit() {
                         <SelectItem value="Calzado">Calzado</SelectItem>
                         <SelectItem value="Accesorios">Accesorios</SelectItem>
                         <SelectItem value="Hogar">Hogar</SelectItem>
-                        <SelectItem value="Electrónicos">Electrónicos</SelectItem>
+                        <SelectItem value="Electrónicos">
+                          Electrónicos
+                        </SelectItem>
                         <SelectItem value="Otro">Otro</SelectItem>
                       </SelectContent>
                     </Select>
@@ -406,7 +418,9 @@ export default function SupplierProductEdit() {
                     <Textarea
                       id="description"
                       value={formData.description || ""}
-                      onChange={(e) => handleInputChange("description", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("description", e.target.value)
+                      }
                       placeholder="Describe el contenido del lote, tallas, colores, etc."
                       rows={3}
                     />
@@ -417,7 +431,12 @@ export default function SupplierProductEdit() {
                       <Label htmlFor="status">Estado</Label>
                       <Select
                         value={formData.status || "draft"}
-                        onValueChange={(value) => handleInputChange("status", value as ProductLot["status"])}
+                        onValueChange={(value) =>
+                          handleInputChange(
+                            "status",
+                            value as ProductLot["status"],
+                          )
+                        }
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -431,10 +450,17 @@ export default function SupplierProductEdit() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="containerType">Tipo de Contenedor *</Label>
+                      <Label htmlFor="containerType">
+                        Tipo de Contenedor *
+                      </Label>
                       <Select
                         value={formData.containerType || "20GP"}
-                        onValueChange={(value) => handleInputChange("containerType", value as ProductLot["containerType"])}
+                        onValueChange={(value) =>
+                          handleInputChange(
+                            "containerType",
+                            value as ProductLot["containerType"],
+                          )
+                        }
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -467,24 +493,38 @@ export default function SupplierProductEdit() {
                         type="number"
                         step="0.01"
                         value={formData.unitPrice || ""}
-                        onChange={(e) => handleInputChange("unitPrice", parseFloat(e.target.value) || 0)}
+                        onChange={(e) =>
+                          handleInputChange(
+                            "unitPrice",
+                            parseFloat(e.target.value) || 0,
+                          )
+                        }
                         placeholder="0.00"
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="unitsPerContainer">Unidades por Contenedor *</Label>
+                      <Label htmlFor="unitsPerContainer">
+                        Unidades por Contenedor *
+                      </Label>
                       <Input
                         id="unitsPerContainer"
                         type="number"
                         value={formData.unitsPerContainer || ""}
-                        onChange={(e) => handleInputChange("unitsPerContainer", parseInt(e.target.value) || 0)}
+                        onChange={(e) =>
+                          handleInputChange(
+                            "unitsPerContainer",
+                            parseInt(e.target.value) || 0,
+                          )
+                        }
                         placeholder="0"
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="pricePerContainer">Precio por Contenedor</Label>
+                      <Label htmlFor="pricePerContainer">
+                        Precio por Contenedor
+                      </Label>
                       <Input
                         id="pricePerContainer"
                         type="number"
@@ -501,7 +541,9 @@ export default function SupplierProductEdit() {
                       <Label htmlFor="currency">Moneda</Label>
                       <Select
                         value={formData.currency || "USD"}
-                        onValueChange={(value) => handleInputChange("currency", value)}
+                        onValueChange={(value) =>
+                          handleInputChange("currency", value)
+                        }
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -518,7 +560,9 @@ export default function SupplierProductEdit() {
                       <Label htmlFor="incoterm">Incoterm</Label>
                       <Select
                         value={formData.incoterm || "FOB"}
-                        onValueChange={(value) => handleInputChange("incoterm", value)}
+                        onValueChange={(value) =>
+                          handleInputChange("incoterm", value)
+                        }
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -538,7 +582,12 @@ export default function SupplierProductEdit() {
                         id="moq"
                         type="number"
                         value={formData.moq || ""}
-                        onChange={(e) => handleInputChange("moq", parseInt(e.target.value) || 1)}
+                        onChange={(e) =>
+                          handleInputChange(
+                            "moq",
+                            parseInt(e.target.value) || 1,
+                          )
+                        }
                         placeholder="1"
                         min="1"
                       />
@@ -548,7 +597,10 @@ export default function SupplierProductEdit() {
                   <div className="space-y-3">
                     <Label>Descuentos por Volumen</Label>
                     {formData.volumeDiscounts?.map((discount, index) => (
-                      <div key={index} className="flex items-center gap-3 p-3 border rounded-lg">
+                      <div
+                        key={index}
+                        className="flex items-center gap-3 p-3 border rounded-lg"
+                      >
                         <div className="flex-1 grid grid-cols-2 gap-3">
                           <div>
                             <Label className="text-xs">Cantidad Mínima</Label>
@@ -556,7 +608,11 @@ export default function SupplierProductEdit() {
                               type="number"
                               value={discount.minQuantity}
                               onChange={(e) =>
-                                updateVolumeDiscount(index, "minQuantity", parseInt(e.target.value) || 0)
+                                updateVolumeDiscount(
+                                  index,
+                                  "minQuantity",
+                                  parseInt(e.target.value) || 0,
+                                )
                               }
                               min="1"
                             />
@@ -567,7 +623,11 @@ export default function SupplierProductEdit() {
                               type="number"
                               value={discount.discountPercentage}
                               onChange={(e) =>
-                                updateVolumeDiscount(index, "discountPercentage", parseFloat(e.target.value) || 0)
+                                updateVolumeDiscount(
+                                  index,
+                                  "discountPercentage",
+                                  parseFloat(e.target.value) || 0,
+                                )
                               }
                               min="0"
                               max="50"
@@ -609,36 +669,57 @@ export default function SupplierProductEdit() {
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="stockContainers">Stock (Contenedores) *</Label>
+                      <Label htmlFor="stockContainers">
+                        Stock (Contenedores) *
+                      </Label>
                       <Input
                         id="stockContainers"
                         type="number"
                         value={formData.stockContainers || ""}
-                        onChange={(e) => handleInputChange("stockContainers", parseInt(e.target.value) || 0)}
+                        onChange={(e) =>
+                          handleInputChange(
+                            "stockContainers",
+                            parseInt(e.target.value) || 0,
+                          )
+                        }
                         placeholder="0"
                         min="0"
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="productionTime">Tiempo de Producción (días)</Label>
+                      <Label htmlFor="productionTime">
+                        Tiempo de Producción (días)
+                      </Label>
                       <Input
                         id="productionTime"
                         type="number"
                         value={formData.productionTime || ""}
-                        onChange={(e) => handleInputChange("productionTime", parseInt(e.target.value) || 0)}
+                        onChange={(e) =>
+                          handleInputChange(
+                            "productionTime",
+                            parseInt(e.target.value) || 0,
+                          )
+                        }
                         placeholder="15"
                         min="0"
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="packagingTime">Tiempo de Empaque (días)</Label>
+                      <Label htmlFor="packagingTime">
+                        Tiempo de Empaque (días)
+                      </Label>
                       <Input
                         id="packagingTime"
                         type="number"
                         value={formData.packagingTime || ""}
-                        onChange={(e) => handleInputChange("packagingTime", parseInt(e.target.value) || 0)}
+                        onChange={(e) =>
+                          handleInputChange(
+                            "packagingTime",
+                            parseInt(e.target.value) || 0,
+                          )
+                        }
                         placeholder="3"
                         min="0"
                       />
@@ -650,7 +731,9 @@ export default function SupplierProductEdit() {
                       <Checkbox
                         id="isNegotiable"
                         checked={formData.isNegotiable || false}
-                        onCheckedChange={(checked) => handleInputChange("isNegotiable", checked)}
+                        onCheckedChange={(checked) =>
+                          handleInputChange("isNegotiable", checked)
+                        }
                       />
                       <Label htmlFor="isNegotiable">Precio negociable</Label>
                     </div>
@@ -659,9 +742,13 @@ export default function SupplierProductEdit() {
                       <Checkbox
                         id="allowsCustomOrders"
                         checked={formData.allowsCustomOrders || false}
-                        onCheckedChange={(checked) => handleInputChange("allowsCustomOrders", checked)}
+                        onCheckedChange={(checked) =>
+                          handleInputChange("allowsCustomOrders", checked)
+                        }
                       />
-                      <Label htmlFor="allowsCustomOrders">Acepta pedidos personalizados</Label>
+                      <Label htmlFor="allowsCustomOrders">
+                        Acepta pedidos personalizados
+                      </Label>
                     </div>
                   </div>
                 </CardContent>
@@ -732,22 +819,30 @@ export default function SupplierProductEdit() {
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span className="text-gray-600">Vistas totales:</span>
-                      <span className="font-medium">{formData.totalViews || 0}</span>
+                      <span className="font-medium">
+                        {formData.totalViews || 0}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Consultas:</span>
-                      <span className="font-medium">{formData.totalInquiries || 0}</span>
+                      <span className="font-medium">
+                        {formData.totalInquiries || 0}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Creado:</span>
                       <span className="font-medium">
-                        {formData.createdAt ? new Date(formData.createdAt).toLocaleDateString() : "N/A"}
+                        {formData.createdAt
+                          ? new Date(formData.createdAt).toLocaleDateString()
+                          : "N/A"}
                       </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Actualizado:</span>
                       <span className="font-medium">
-                        {formData.updatedAt ? new Date(formData.updatedAt).toLocaleDateString() : "N/A"}
+                        {formData.updatedAt
+                          ? new Date(formData.updatedAt).toLocaleDateString()
+                          : "N/A"}
                       </span>
                     </div>
                   </div>
@@ -761,21 +856,36 @@ export default function SupplierProductEdit() {
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Valor por contenedor:</span>
+                    <span className="text-sm text-gray-600">
+                      Valor por contenedor:
+                    </span>
                     <span className="font-bold text-green-600">
-                      ${(formData.pricePerContainer || 0).toLocaleString()} {formData.currency}
+                      ${(formData.pricePerContainer || 0).toLocaleString()}{" "}
+                      {formData.currency}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Valor total stock:</span>
+                    <span className="text-sm text-gray-600">
+                      Valor total stock:
+                    </span>
                     <span className="font-bold text-blue-600">
-                      ${((formData.pricePerContainer || 0) * (formData.stockContainers || 0)).toLocaleString()} {formData.currency}
+                      $
+                      {(
+                        (formData.pricePerContainer || 0) *
+                        (formData.stockContainers || 0)
+                      ).toLocaleString()}{" "}
+                      {formData.currency}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Unidades totales:</span>
+                    <span className="text-sm text-gray-600">
+                      Unidades totales:
+                    </span>
                     <span className="font-medium">
-                      {((formData.unitsPerContainer || 0) * (formData.stockContainers || 0)).toLocaleString()}
+                      {(
+                        (formData.unitsPerContainer || 0) *
+                        (formData.stockContainers || 0)
+                      ).toLocaleString()}
                     </span>
                   </div>
                 </CardContent>

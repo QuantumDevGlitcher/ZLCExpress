@@ -103,7 +103,8 @@ export default function SupplierProductDetail() {
       name: "Camisetas 100% Algodón Premium",
       code: "CAM-ALG-20GP-0500",
       category: "Ropa",
-      description: "Lote premium de 5000 camisetas 100% algodón de alta calidad. Incluye una mezcla cuidadosamente seleccionada de tallas desde S hasta XL en una variedad de colores modernos y atemporales. Perfect para distribuidores que buscan productos de calidad superior con excelente relación precio-valor. Fabricadas con algodón certificado y procesos eco-friendly.",
+      description:
+        "Lote premium de 5000 camisetas 100% algodón de alta calidad. Incluye una mezcla cuidadosamente seleccionada de tallas desde S hasta XL en una variedad de colores modernos y atemporales. Perfect para distribuidores que buscan productos de calidad superior con excelente relación precio-valor. Fabricadas con algodón certificado y procesos eco-friendly.",
       status: "active",
       containerType: "20GP",
       moq: 1,
@@ -138,7 +139,8 @@ export default function SupplierProductDetail() {
       name: "Jeans Denim Calidad Premium",
       code: "JEA-DEN-40HQ-0300",
       category: "Ropa",
-      description: "Lote exclusivo de 3000 jeans denim premium con cortes clásicos y modernos. Tallas de 28 a 42, perfectos para el mercado mayorista.",
+      description:
+        "Lote exclusivo de 3000 jeans denim premium con cortes clásicos y modernos. Tallas de 28 a 42, perfectos para el mercado mayorista.",
       status: "active",
       containerType: "40HQ",
       moq: 1,
@@ -173,7 +175,8 @@ export default function SupplierProductDetail() {
       companyName: "Distribuidora Central S.A.",
       contactName: "María González",
       email: "maria@distribuidora.com",
-      message: "Estamos interesados en este lote. ¿Pueden enviar muestras antes de hacer el pedido?",
+      message:
+        "Estamos interesados en este lote. ¿Pueden enviar muestras antes de hacer el pedido?",
       requestedQuantity: 3,
       date: new Date("2024-01-22"),
       status: "pending",
@@ -183,7 +186,8 @@ export default function SupplierProductDetail() {
       companyName: "Retail Plus Ltd.",
       contactName: "Carlos Mendoza",
       email: "carlos@retailplus.com",
-      message: "Necesitamos 5 contenedores. ¿Cuál sería el precio con descuento por volumen?",
+      message:
+        "Necesitamos 5 contenedores. ¿Cuál sería el precio con descuento por volumen?",
       requestedQuantity: 5,
       date: new Date("2024-01-20"),
       status: "responded",
@@ -193,7 +197,8 @@ export default function SupplierProductDetail() {
       companyName: "Fashion World Inc.",
       contactName: "Ana Torres",
       email: "ana@fashionworld.com",
-      message: "¿Tienen disponibilidad para entrega inmediata? Necesitamos 2 contenedores.",
+      message:
+        "¿Tienen disponibilidad para entrega inmediata? Necesitamos 2 contenedores.",
       requestedQuantity: 2,
       date: new Date("2024-01-18"),
       status: "converted",
@@ -272,9 +277,17 @@ export default function SupplierProductDetail() {
   const getInquiryStatusBadge = (status: Inquiry["status"]) => {
     switch (status) {
       case "pending":
-        return <Badge variant="outline" className="text-orange-600">Pendiente</Badge>;
+        return (
+          <Badge variant="outline" className="text-orange-600">
+            Pendiente
+          </Badge>
+        );
       case "responded":
-        return <Badge variant="outline" className="text-blue-600">Respondida</Badge>;
+        return (
+          <Badge variant="outline" className="text-blue-600">
+            Respondida
+          </Badge>
+        );
       case "converted":
         return <Badge className="bg-green-600">Convertida</Badge>;
     }
@@ -282,11 +295,14 @@ export default function SupplierProductDetail() {
 
   const calculateDiscountedPrice = (quantity: number, basePrice: number) => {
     if (!product) return basePrice;
-    
+
     let applicableDiscount = 0;
     product.volumeDiscounts.forEach((discount) => {
       if (quantity >= discount.minQuantity) {
-        applicableDiscount = Math.max(applicableDiscount, discount.discountPercentage);
+        applicableDiscount = Math.max(
+          applicableDiscount,
+          discount.discountPercentage,
+        );
       }
     });
 
@@ -325,8 +341,12 @@ export default function SupplierProductDetail() {
           <div className="container mx-auto p-6">
             <div className="text-center py-12">
               <Package className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Lote no encontrado</h2>
-              <p className="text-gray-600 mb-4">El lote que buscas no existe o ha sido eliminado.</p>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                Lote no encontrado
+              </h2>
+              <p className="text-gray-600 mb-4">
+                El lote que buscas no existe o ha sido eliminado.
+              </p>
               <Button asChild>
                 <Link to="/supplier/products">
                   <ArrowLeft className="h-4 w-4 mr-2" />
@@ -358,7 +378,9 @@ export default function SupplierProductDetail() {
                 </Button>
               </div>
               <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-3xl font-bold text-gray-900">{product.name}</h1>
+                <h1 className="text-3xl font-bold text-gray-900">
+                  {product.name}
+                </h1>
                 {getStatusBadge(product.status)}
               </div>
               <p className="text-gray-600">
@@ -398,7 +420,7 @@ export default function SupplierProductDetail() {
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    
+
                     {product.images.length > 1 && (
                       <div className="flex gap-2 overflow-x-auto">
                         {product.images.map((image, index) => (
@@ -437,8 +459,12 @@ export default function SupplierProductDetail() {
 
                     <TabsContent value="details" className="space-y-4">
                       <div>
-                        <h3 className="text-lg font-semibold mb-3">Descripción del Producto</h3>
-                        <p className="text-gray-700 leading-relaxed">{product.description}</p>
+                        <h3 className="text-lg font-semibold mb-3">
+                          Descripción del Producto
+                        </h3>
+                        <p className="text-gray-700 leading-relaxed">
+                          {product.description}
+                        </p>
                       </div>
 
                       <Separator />
@@ -451,20 +477,34 @@ export default function SupplierProductDetail() {
                           </h4>
                           <div className="space-y-2 text-sm">
                             <div className="flex justify-between">
-                              <span className="text-gray-600">Tipo de Contenedor:</span>
-                              <span className="font-medium">{getContainerTypeDisplay(product.containerType)}</span>
+                              <span className="text-gray-600">
+                                Tipo de Contenedor:
+                              </span>
+                              <span className="font-medium">
+                                {getContainerTypeDisplay(product.containerType)}
+                              </span>
                             </div>
                             <div className="flex justify-between">
-                              <span className="text-gray-600">Unidades por Contenedor:</span>
-                              <span className="font-medium">{product.unitsPerContainer.toLocaleString()}</span>
+                              <span className="text-gray-600">
+                                Unidades por Contenedor:
+                              </span>
+                              <span className="font-medium">
+                                {product.unitsPerContainer.toLocaleString()}
+                              </span>
                             </div>
                             <div className="flex justify-between">
                               <span className="text-gray-600">MOQ:</span>
-                              <span className="font-medium">{product.moq} contenedores</span>
+                              <span className="font-medium">
+                                {product.moq} contenedores
+                              </span>
                             </div>
                             <div className="flex justify-between">
-                              <span className="text-gray-600">Stock Disponible:</span>
-                              <span className="font-medium">{product.stockContainers} contenedores</span>
+                              <span className="text-gray-600">
+                                Stock Disponible:
+                              </span>
+                              <span className="font-medium">
+                                {product.stockContainers} contenedores
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -476,17 +516,28 @@ export default function SupplierProductDetail() {
                           </h4>
                           <div className="space-y-2 text-sm">
                             <div className="flex justify-between">
-                              <span className="text-gray-600">Tiempo de Producción:</span>
-                              <span className="font-medium">{product.productionTime} días</span>
+                              <span className="text-gray-600">
+                                Tiempo de Producción:
+                              </span>
+                              <span className="font-medium">
+                                {product.productionTime} días
+                              </span>
                             </div>
                             <div className="flex justify-between">
-                              <span className="text-gray-600">Tiempo de Empaque:</span>
-                              <span className="font-medium">{product.packagingTime} días</span>
+                              <span className="text-gray-600">
+                                Tiempo de Empaque:
+                              </span>
+                              <span className="font-medium">
+                                {product.packagingTime} días
+                              </span>
                             </div>
                             <div className="flex justify-between">
-                              <span className="text-gray-600">Tiempo Total:</span>
+                              <span className="text-gray-600">
+                                Tiempo Total:
+                              </span>
                               <span className="font-medium text-blue-600">
-                                {product.productionTime + product.packagingTime} días
+                                {product.productionTime + product.packagingTime}{" "}
+                                días
                               </span>
                             </div>
                           </div>
@@ -523,29 +574,38 @@ export default function SupplierProductDetail() {
 
                     <TabsContent value="pricing" className="space-y-4">
                       <div>
-                        <h3 className="text-lg font-semibold mb-3">Estructura de Precios</h3>
-                        
+                        <h3 className="text-lg font-semibold mb-3">
+                          Estructura de Precios
+                        </h3>
+
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                           <div className="space-y-3">
                             <div className="text-center p-4 bg-blue-50 rounded-lg">
-                              <p className="text-sm text-gray-600">Precio por Unidad</p>
+                              <p className="text-sm text-gray-600">
+                                Precio por Unidad
+                              </p>
                               <p className="text-2xl font-bold text-blue-600">
                                 ${product.unitPrice} {product.currency}
                               </p>
                             </div>
                           </div>
-                          
+
                           <div className="space-y-3">
                             <div className="text-center p-4 bg-green-50 rounded-lg">
-                              <p className="text-sm text-gray-600">Precio por Contenedor</p>
+                              <p className="text-sm text-gray-600">
+                                Precio por Contenedor
+                              </p>
                               <p className="text-2xl font-bold text-green-600">
-                                ${product.pricePerContainer.toLocaleString()} {product.currency}
+                                ${product.pricePerContainer.toLocaleString()}{" "}
+                                {product.currency}
                               </p>
                             </div>
                           </div>
                         </div>
 
-                        <h4 className="font-semibold mb-3">Descuentos por Volumen</h4>
+                        <h4 className="font-semibold mb-3">
+                          Descuentos por Volumen
+                        </h4>
                         <Table>
                           <TableHeader>
                             <TableRow>
@@ -557,21 +617,29 @@ export default function SupplierProductDetail() {
                           </TableHeader>
                           <TableBody>
                             {product.volumeDiscounts.map((discount, index) => {
-                              const discountedPrice = calculateDiscountedPrice(discount.minQuantity, product.pricePerContainer);
-                              const savings = product.pricePerContainer - discountedPrice;
-                              
+                              const discountedPrice = calculateDiscountedPrice(
+                                discount.minQuantity,
+                                product.pricePerContainer,
+                              );
+                              const savings =
+                                product.pricePerContainer - discountedPrice;
+
                               return (
                                 <TableRow key={index}>
                                   <TableCell className="font-medium">
                                     {discount.minQuantity}+ contenedores
                                   </TableCell>
                                   <TableCell>
-                                    <Badge variant="outline" className="text-green-600">
+                                    <Badge
+                                      variant="outline"
+                                      className="text-green-600"
+                                    >
                                       {discount.discountPercentage}%
                                     </Badge>
                                   </TableCell>
                                   <TableCell className="font-medium">
-                                    ${discountedPrice.toLocaleString()} {product.currency}
+                                    ${discountedPrice.toLocaleString()}{" "}
+                                    {product.currency}
                                   </TableCell>
                                   <TableCell className="text-green-600 font-medium">
                                     ${savings.toLocaleString()}
@@ -586,16 +654,25 @@ export default function SupplierProductDetail() {
 
                     <TabsContent value="inquiries" className="space-y-4">
                       <div className="flex justify-between items-center">
-                        <h3 className="text-lg font-semibold">Consultas Recibidas</h3>
-                        <Badge variant="outline">{mockInquiries.length} total</Badge>
+                        <h3 className="text-lg font-semibold">
+                          Consultas Recibidas
+                        </h3>
+                        <Badge variant="outline">
+                          {mockInquiries.length} total
+                        </Badge>
                       </div>
 
                       <div className="space-y-4">
                         {mockInquiries.map((inquiry) => (
-                          <div key={inquiry.id} className="border rounded-lg p-4 space-y-3">
+                          <div
+                            key={inquiry.id}
+                            className="border rounded-lg p-4 space-y-3"
+                          >
                             <div className="flex justify-between items-start">
                               <div>
-                                <h4 className="font-semibold">{inquiry.companyName}</h4>
+                                <h4 className="font-semibold">
+                                  {inquiry.companyName}
+                                </h4>
                                 <p className="text-sm text-gray-600">
                                   {inquiry.contactName} • {inquiry.email}
                                 </p>
@@ -607,12 +684,13 @@ export default function SupplierProductDetail() {
                                 </p>
                               </div>
                             </div>
-                            
+
                             <p className="text-gray-700">{inquiry.message}</p>
-                            
+
                             <div className="flex justify-between items-center pt-2 border-t">
                               <span className="text-sm font-medium">
-                                Cantidad solicitada: {inquiry.requestedQuantity} contenedores
+                                Cantidad solicitada: {inquiry.requestedQuantity}{" "}
+                                contenedores
                               </span>
                               <Button size="sm" variant="outline">
                                 <MessageCircle className="h-4 w-4 mr-2" />
@@ -625,32 +703,48 @@ export default function SupplierProductDetail() {
                     </TabsContent>
 
                     <TabsContent value="analytics" className="space-y-4">
-                      <h3 className="text-lg font-semibold">Rendimiento del Lote</h3>
-                      
+                      <h3 className="text-lg font-semibold">
+                        Rendimiento del Lote
+                      </h3>
+
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="text-center p-4 bg-blue-50 rounded-lg">
                           <Eye className="h-8 w-8 mx-auto mb-2 text-blue-600" />
-                          <p className="text-2xl font-bold text-blue-600">{product.totalViews}</p>
-                          <p className="text-sm text-gray-600">Vistas Totales</p>
+                          <p className="text-2xl font-bold text-blue-600">
+                            {product.totalViews}
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            Vistas Totales
+                          </p>
                         </div>
-                        
+
                         <div className="text-center p-4 bg-green-50 rounded-lg">
                           <MessageCircle className="h-8 w-8 mx-auto mb-2 text-green-600" />
-                          <p className="text-2xl font-bold text-green-600">{product.totalInquiries}</p>
+                          <p className="text-2xl font-bold text-green-600">
+                            {product.totalInquiries}
+                          </p>
                           <p className="text-sm text-gray-600">Consultas</p>
                         </div>
-                        
+
                         <div className="text-center p-4 bg-purple-50 rounded-lg">
                           <TrendingUp className="h-8 w-8 mx-auto mb-2 text-purple-600" />
                           <p className="text-2xl font-bold text-purple-600">
-                            {((product.totalInquiries / product.totalViews) * 100).toFixed(1)}%
+                            {(
+                              (product.totalInquiries / product.totalViews) *
+                              100
+                            ).toFixed(1)}
+                            %
                           </p>
-                          <p className="text-sm text-gray-600">Tasa de Conversión</p>
+                          <p className="text-sm text-gray-600">
+                            Tasa de Conversión
+                          </p>
                         </div>
                       </div>
 
                       <div>
-                        <h4 className="font-semibold mb-3">Historial de Vistas (Últimos 7 días)</h4>
+                        <h4 className="font-semibold mb-3">
+                          Historial de Vistas (Últimos 7 días)
+                        </h4>
                         <Table>
                           <TableHeader>
                             <TableRow>
@@ -663,12 +757,27 @@ export default function SupplierProductDetail() {
                           <TableBody>
                             {mockViewHistory.map((day, index) => (
                               <TableRow key={index}>
-                                <TableCell>{new Date(day.date).toLocaleDateString()}</TableCell>
-                                <TableCell className="font-medium">{day.views}</TableCell>
-                                <TableCell className="font-medium">{day.inquiries}</TableCell>
                                 <TableCell>
-                                  <Badge variant="outline" className="text-blue-600">
-                                    {day.views > 0 ? ((day.inquiries / day.views) * 100).toFixed(1) : "0"}%
+                                  {new Date(day.date).toLocaleDateString()}
+                                </TableCell>
+                                <TableCell className="font-medium">
+                                  {day.views}
+                                </TableCell>
+                                <TableCell className="font-medium">
+                                  {day.inquiries}
+                                </TableCell>
+                                <TableCell>
+                                  <Badge
+                                    variant="outline"
+                                    className="text-blue-600"
+                                  >
+                                    {day.views > 0
+                                      ? (
+                                          (day.inquiries / day.views) *
+                                          100
+                                        ).toFixed(1)
+                                      : "0"}
+                                    %
                                   </Badge>
                                 </TableCell>
                               </TableRow>
@@ -699,17 +808,17 @@ export default function SupplierProductDetail() {
                       Editar Lote
                     </Link>
                   </Button>
-                  
+
                   <Button variant="outline" className="w-full">
                     <Copy className="h-4 w-4 mr-2" />
                     Duplicar Lote
                   </Button>
-                  
+
                   <Button variant="outline" className="w-full">
                     <Download className="h-4 w-4 mr-2" />
                     Exportar Datos
                   </Button>
-                  
+
                   <Button variant="outline" className="w-full">
                     <BarChart3 className="h-4 w-4 mr-2" />
                     Ver Reportes
@@ -725,37 +834,51 @@ export default function SupplierProductDetail() {
                 <CardContent className="space-y-4">
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600">Valor Total Stock:</span>
+                      <span className="text-sm text-gray-600">
+                        Valor Total Stock:
+                      </span>
                       <span className="font-bold text-green-600">
-                        ${(product.pricePerContainer * product.stockContainers).toLocaleString()} {product.currency}
+                        $
+                        {(
+                          product.pricePerContainer * product.stockContainers
+                        ).toLocaleString()}{" "}
+                        {product.currency}
                       </span>
                     </div>
-                    
+
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600">Unidades Totales:</span>
+                      <span className="text-sm text-gray-600">
+                        Unidades Totales:
+                      </span>
                       <span className="font-medium">
-                        {(product.unitsPerContainer * product.stockContainers).toLocaleString()}
+                        {(
+                          product.unitsPerContainer * product.stockContainers
+                        ).toLocaleString()}
                       </span>
                     </div>
-                    
+
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600">Valor por Unidad:</span>
+                      <span className="text-sm text-gray-600">
+                        Valor por Unidad:
+                      </span>
                       <span className="font-medium">
                         ${product.unitPrice} {product.currency}
                       </span>
                     </div>
 
                     <Separator />
-                    
+
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-gray-600">Creado:</span>
                       <span className="font-medium text-xs">
                         {product.createdAt.toLocaleDateString()}
                       </span>
                     </div>
-                    
+
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600">Actualizado:</span>
+                      <span className="text-sm text-gray-600">
+                        Actualizado:
+                      </span>
                       <span className="font-medium text-xs">
                         {product.updatedAt.toLocaleDateString()}
                       </span>
@@ -778,21 +901,31 @@ export default function SupplierProductDetail() {
                       <div className="text-2xl font-bold text-blue-600 mb-1">
                         {product.totalViews}
                       </div>
-                      <div className="text-sm text-gray-600">Vistas totales</div>
+                      <div className="text-sm text-gray-600">
+                        Vistas totales
+                      </div>
                     </div>
-                    
+
                     <div className="text-center">
                       <div className="text-2xl font-bold text-green-600 mb-1">
                         {product.totalInquiries}
                       </div>
-                      <div className="text-sm text-gray-600">Consultas recibidas</div>
+                      <div className="text-sm text-gray-600">
+                        Consultas recibidas
+                      </div>
                     </div>
-                    
+
                     <div className="text-center">
                       <div className="text-2xl font-bold text-purple-600 mb-1">
-                        {((product.totalInquiries / product.totalViews) * 100).toFixed(1)}%
+                        {(
+                          (product.totalInquiries / product.totalViews) *
+                          100
+                        ).toFixed(1)}
+                        %
                       </div>
-                      <div className="text-sm text-gray-600">Tasa de conversión</div>
+                      <div className="text-sm text-gray-600">
+                        Tasa de conversión
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -807,7 +940,8 @@ export default function SupplierProductDetail() {
                       <span className="font-medium">Stock Bajo</span>
                     </div>
                     <p className="text-sm text-orange-600 mt-1">
-                      Solo quedan {product.stockContainers} contenedores en stock.
+                      Solo quedan {product.stockContainers} contenedores en
+                      stock.
                     </p>
                     <Button size="sm" className="mt-3 w-full">
                       Reabastecer Stock
