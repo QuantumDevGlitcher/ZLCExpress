@@ -46,10 +46,10 @@ const SupplierRFQs = () => {
       containerQuantity: 2,
       containerType: "20'" as const,
       incoterm: "FOB" as const,
-      receivedAt: new Date("2024-01-25"),
+      receivedAt: new Date("2024-01-28"),
       status: "pending" as const,
       estimatedValue: 19600,
-      validUntil: new Date("2024-02-25"), // Active - future date
+      validUntil: new Date("2024-03-15"), // Active - future date
     },
     {
       id: "RFQ-002",
@@ -59,10 +59,10 @@ const SupplierRFQs = () => {
       containerQuantity: 1,
       containerType: "40'" as const,
       incoterm: "CIF" as const,
-      receivedAt: new Date("2024-01-20"),
+      receivedAt: new Date("2024-01-26"),
       status: "quoted" as const,
       estimatedValue: 15800,
-      validUntil: new Date("2024-02-20"), // Active - future date
+      validUntil: new Date("2024-03-10"), // Active - future date
     },
     {
       id: "RFQ-003",
@@ -72,10 +72,49 @@ const SupplierRFQs = () => {
       containerQuantity: 3,
       containerType: "20'" as const,
       incoterm: "FOB" as const,
-      receivedAt: new Date("2024-01-15"),
+      receivedAt: new Date("2024-01-24"),
       status: "counter_offer" as const,
       estimatedValue: 29400,
-      validUntil: new Date("2024-02-15"), // Active - future date
+      validUntil: new Date("2024-03-05"), // Active - future date
+    },
+    {
+      id: "RFQ-007",
+      rfqNumber: "RFQ-2024-007",
+      buyerCompany: "Mega Distribuciones SA",
+      productTitle: "Jeans Denim Premium",
+      containerQuantity: 2,
+      containerType: "40'" as const,
+      incoterm: "FOB" as const,
+      receivedAt: new Date("2024-01-29"),
+      status: "pending" as const,
+      estimatedValue: 25000,
+      validUntil: new Date("2024-03-20"), // Active - future date
+    },
+    {
+      id: "RFQ-008",
+      rfqNumber: "RFQ-2024-008",
+      buyerCompany: "Retail Excellence Ltd",
+      productTitle: "Zapatos Deportivos Mixtos",
+      containerQuantity: 1,
+      containerType: "20'" as const,
+      incoterm: "CIF" as const,
+      receivedAt: new Date("2024-01-27"),
+      status: "pending" as const,
+      estimatedValue: 18500,
+      validUntil: new Date("2024-03-12"), // Active - future date
+    },
+    {
+      id: "RFQ-009",
+      rfqNumber: "RFQ-2024-009",
+      buyerCompany: "Fashion Forward Inc",
+      productTitle: "Accesorios de Moda Variados",
+      containerQuantity: 3,
+      containerType: "20'" as const,
+      incoterm: "FOB" as const,
+      receivedAt: new Date("2024-01-25"),
+      status: "quoted" as const,
+      estimatedValue: 13500,
+      validUntil: new Date("2024-03-08"), // Active - future date
     },
     {
       id: "RFQ-004",
