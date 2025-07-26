@@ -265,7 +265,7 @@ const SupplierProfile = () => {
   const getInvoiceStatusVariant = (status: string) => {
     switch (status) {
       case "paid":
-        return "default";
+        return "secondary";
       case "sent":
         return "secondary";
       case "draft":
