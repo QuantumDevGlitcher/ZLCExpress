@@ -336,9 +336,7 @@ const SupplierProfile = () => {
                   Mis Facturas
                 </Button>
                 <Button
-                  variant={
-                    activeTab === "notifications" ? "slate" : "outline"
-                  }
+                  variant={activeTab === "notifications" ? "slate" : "outline"}
                   onClick={() => setActiveTab("notifications")}
                 >
                   <Bell className="h-4 w-4 mr-2" />
@@ -460,7 +458,11 @@ const SupplierProfile = () => {
                       }
                     />
                   </div>
-                  <Button onClick={handleSaveProfile} variant="secondary" className="w-full">
+                  <Button
+                    onClick={handleSaveProfile}
+                    variant="secondary"
+                    className="w-full"
+                  >
                     Guardar Cambios
                   </Button>
                 </CardContent>
@@ -684,7 +686,10 @@ const SupplierProfile = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {paymentMethods.map((method) => (
-                    <div key={method.id} className="border border-white rounded-lg p-4">
+                    <div
+                      key={method.id}
+                      className="border border-white rounded-lg p-4"
+                    >
                       <div className="flex items-center justify-between mb-3">
                         <h4 className="font-medium">{method.title}</h4>
                         {method.isDefault && (
@@ -791,7 +796,11 @@ const SupplierProfile = () => {
                       rows={3}
                     />
                   </div>
-                  <Button variant="secondary" onClick={handleSavePaymentMethod} className="w-full">
+                  <Button
+                    variant="secondary"
+                    onClick={handleSavePaymentMethod}
+                    className="w-full"
+                  >
                     Guardar Configuración
                   </Button>
                 </CardContent>
@@ -952,7 +961,11 @@ const SupplierProfile = () => {
                     <Switch />
                   </div>
 
-                  <Button variant="secondary" onClick={saveNotificationSettings} className="w-full">
+                  <Button
+                    variant="secondary"
+                    onClick={saveNotificationSettings}
+                    className="w-full"
+                  >
                     Guardar Configuración
                   </Button>
                 </div>
