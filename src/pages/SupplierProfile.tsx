@@ -684,11 +684,11 @@ const SupplierProfile = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {paymentMethods.map((method) => (
-                    <div key={method.id} className="border rounded-lg p-4">
+                    <div key={method.id} className="border border-white rounded-lg p-4">
                       <div className="flex items-center justify-between mb-3">
                         <h4 className="font-medium">{method.title}</h4>
                         {method.isDefault && (
-                          <Badge variant="default">Principal</Badge>
+                          <Badge variant="secondary">Principal</Badge>
                         )}
                       </div>
                       <div className="space-y-2 text-sm">
