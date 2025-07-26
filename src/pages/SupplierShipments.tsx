@@ -170,13 +170,13 @@ const SupplierShipments = () => {
       case "logistics_coordination":
         return "outline";
       case "documents_generated":
-        return "default";
+        return "secondary";
       case "shipped":
-        return "default";
+        return "secondary";
       case "in_transit":
         return "outline";
       case "delivered":
-        return "default";
+        return "secondary";
       default:
         return "secondary";
     }
