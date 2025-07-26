@@ -791,7 +791,7 @@ const SupplierProfile = () => {
                       rows={3}
                     />
                   </div>
-                  <Button onClick={handleSavePaymentMethod} className="w-full">
+                  <Button variant="secondary" onClick={handleSavePaymentMethod} className="w-full">
                     Guardar Configuración
                   </Button>
                 </CardContent>
