@@ -283,7 +283,7 @@ const HowItWorks = () => {
 
           <div className="text-center mt-12">
             <Button size="lg" variant="secondary" className="bg-green-600 text-white hover:bg-green-700" asChild>
-              <Link to="/supplier/register">
+              <Link to="/register">
                 Registrarse como Proveedor
                 <Users className="ml-2 h-5 w-5" />
               </Link>
