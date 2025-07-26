@@ -379,7 +379,7 @@ export default function ProductDetail() {
                     <Button
                       variant="default"
                       onClick={handleAddToCart}
-                      className="w-full btn-professional"
+                      className="w-full"
                       size="lg"
                     >
                       <ShoppingCart className="mr-2 h-4 w-4" />
