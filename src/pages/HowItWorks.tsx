@@ -90,7 +90,7 @@ const HowItWorks = () => {
     {
       step: "5",
       title: "Gestiona Pedidos",
-      description: "Administra producción, envíos y pagos de forma eficiente",
+      description: "Administra producción, env��os y pagos de forma eficiente",
       icon: <Globe className="h-8 w-8 text-green-600" />,
       details: ["Panel de control", "Logistics integrada", "Pagos seguros"],
     },
@@ -126,10 +126,10 @@ const HowItWorks = () => {
       {/* Hero Section */}
       <div className="pt-16 bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700">
         <div className="container mx-auto px-4 py-16 text-center text-white bg-[rgb(12,74,133)]">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6 text-white">
             ¿Cómo Funciona ZLC Express?
           </h1>
-          <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-3xl mx-auto">
+          <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-3xl mx-auto text-white">
             Conectamos compradores y proveedores B2B a través de una plataforma digital
             que simplifica el comercio internacional
           </p>
@@ -354,8 +354,8 @@ const HowItWorks = () => {
       {/* CTA Section */}
       <div className="py-16 bg-[rgb(12,74,133)]">
         <div className="container mx-auto px-4 text-center text-white">
-          <h2 className="text-3xl font-bold mb-4">¿Listo para Empezar?</h2>
-          <p className="text-xl mb-8 opacity-90">
+          <h2 className="text-3xl font-bold mb-4 text-white">¿Listo para Empezar?</h2>
+          <p className="text-xl mb-8 opacity-90 text-white">
             Únete a miles de empresas que ya están transformando su comercio B2B
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
