@@ -225,7 +225,9 @@ export function Navigation({ className }: NavigationProps) {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm" className="h-9 px-3">
                     <Globe className="mr-2 h-4 w-4" />
-                    <span className="mr-1 font-semibold text-xs">{selectedLanguage.code.toUpperCase()}</span>
+                    <span className="mr-1 font-semibold text-xs">
+                      {selectedLanguage.code.toUpperCase()}
+                    </span>
                     <span className="mr-2 text-sm">
                       {selectedLanguage.code.toUpperCase()}
                     </span>
@@ -248,7 +250,9 @@ export function Navigation({ className }: NavigationProps) {
                             "bg-zlc-blue-50",
                         )}
                       >
-                        <span className="mr-2 font-semibold text-xs">{lang.code.toUpperCase()}</span>
+                        <span className="mr-2 font-semibold text-xs">
+                          {lang.code.toUpperCase()}
+                        </span>
                         {lang.name}
                       </DropdownMenuItem>
                     ))}
@@ -382,138 +386,146 @@ export function Navigation({ className }: NavigationProps) {
                   <span className="sr-only">Toggle menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-80 bg-white overflow-hidden">
+              <SheetContent
+                side="right"
+                className="w-80 bg-white overflow-hidden"
+              >
                 <div className="flex flex-col h-full">
                   <div className="overflow-y-auto flex-1 px-1 scrollbar-hide">
                     <div className="flex flex-col space-y-6 mt-6 pb-6">
-                  {/* Mobile Navigation */}
-                  <nav className="flex flex-col space-y-2">
-                    {mainMenuItems.map((item) => (
-                      <Link
-                        key={item.href}
-                        to={item.href}
-                        onClick={() => setIsSheetOpen(false)}
-                        className="flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-zlc-gray-100"
-                      >
-                        <item.icon className="mr-3 h-4 w-4" />
-                        {item.label}
-                      </Link>
-                    ))}
+                      {/* Mobile Navigation */}
+                      <nav className="flex flex-col space-y-2">
+                        {mainMenuItems.map((item) => (
+                          <Link
+                            key={item.href}
+                            to={item.href}
+                            onClick={() => setIsSheetOpen(false)}
+                            className="flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-zlc-gray-100"
+                          >
+                            <item.icon className="mr-3 h-4 w-4" />
+                            {item.label}
+                          </Link>
+                        ))}
 
-                    {/* User Type Specific Menu in Mobile */}
-                    <div className="border-t border-white/20 pt-4 mt-4">
-                      {userType === "supplier" ? (
-                        <>
-                          <h4 className="text-sm font-medium text-gray-900 mb-2 px-3">
-                            <Building2 className="inline mr-2 h-4 w-4" />
-                            Panel Proveedor
-                          </h4>
-                          {supplierMenuItems.map((item) => (
+                        {/* User Type Specific Menu in Mobile */}
+                        <div className="border-t border-white/20 pt-4 mt-4">
+                          {userType === "supplier" ? (
+                            <>
+                              <h4 className="text-sm font-medium text-gray-900 mb-2 px-3">
+                                <Building2 className="inline mr-2 h-4 w-4" />
+                                Panel Proveedor
+                              </h4>
+                              {supplierMenuItems.map((item) => (
+                                <Link
+                                  key={item.href}
+                                  to={item.href}
+                                  onClick={() => setIsSheetOpen(false)}
+                                  className="flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-zlc-gray-100 ml-4"
+                                >
+                                  <item.icon className="mr-3 h-4 w-4" />
+                                  {item.label}
+                                </Link>
+                              ))}
+                            </>
+                          ) : (
+                            <>
+                              <h4 className="text-sm font-medium text-gray-900 mb-2 px-3">
+                                <Building2 className="inline mr-2 h-4 w-4" />
+                                B2B Tools
+                              </h4>
+                              {b2bMenuItems.map((item) => (
+                                <Link
+                                  key={item.href}
+                                  to={item.href}
+                                  onClick={() => setIsSheetOpen(false)}
+                                  className="flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-zlc-gray-100 ml-4"
+                                >
+                                  <item.icon className="mr-3 h-4 w-4" />
+                                  {item.label}
+                                </Link>
+                              ))}
+                            </>
+                          )}
+                        </div>
+                      </nav>
+
+                      {/* Mobile Language & Currency */}
+                      <div className="space-y-4 border-t border-white/20 pt-6">
+                        <div>
+                          <h4 className="text-sm font-medium mb-2">Idioma</h4>
+                          <div className="space-y-1">
+                            {languages.map((lang) => (
+                              <button
+                                key={lang.code}
+                                onClick={() => setSelectedLanguage(lang)}
+                                className={cn(
+                                  "flex w-full items-center rounded-lg px-3 py-2 text-sm",
+                                  selectedLanguage.code === lang.code
+                                    ? "bg-zlc-blue-100 text-zlc-blue-900"
+                                    : "hover:bg-zlc-gray-100",
+                                )}
+                              >
+                                <span className="mr-2 font-semibold text-xs">
+                                  {lang.code.toUpperCase()}
+                                </span>
+                                {lang.name}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div>
+                          <h4 className="text-sm font-medium mb-2">Moneda</h4>
+                          <div className="space-y-1">
+                            {currencies.map((currency) => (
+                              <button
+                                key={currency.code}
+                                onClick={() => setSelectedCurrency(currency)}
+                                className={cn(
+                                  "flex w-full items-center rounded-lg px-3 py-2 text-sm",
+                                  selectedCurrency.code === currency.code
+                                    ? "bg-zlc-blue-100 text-zlc-blue-900"
+                                    : "hover:bg-zlc-gray-100",
+                                )}
+                              >
+                                <span className="mr-2 font-mono">
+                                  {currency.symbol}
+                                </span>
+                                {currency.name}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Mobile Auth */}
+                      {!isLoggedIn && (
+                        <div className="space-y-2 border-t border-white/20 pt-6">
+                          <Button
+                            variant="ghost"
+                            asChild
+                            className="w-full justify-start"
+                          >
                             <Link
-                              key={item.href}
-                              to={item.href}
+                              to="/login"
                               onClick={() => setIsSheetOpen(false)}
-                              className="flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-zlc-gray-100 ml-4"
                             >
-                              <item.icon className="mr-3 h-4 w-4" />
-                              {item.label}
+                              Iniciar Sesión
                             </Link>
-                          ))}
-                        </>
-                      ) : (
-                        <>
-                          <h4 className="text-sm font-medium text-gray-900 mb-2 px-3">
-                            <Building2 className="inline mr-2 h-4 w-4" />
-                            B2B Tools
-                          </h4>
-                          {b2bMenuItems.map((item) => (
+                          </Button>
+                          <Button
+                            asChild
+                            className="w-full bg-zlc-blue-800 hover:bg-zlc-blue-900 text-white"
+                          >
                             <Link
-                              key={item.href}
-                              to={item.href}
+                              to="/register"
                               onClick={() => setIsSheetOpen(false)}
-                              className="flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-zlc-gray-100 ml-4"
                             >
-                              <item.icon className="mr-3 h-4 w-4" />
-                              {item.label}
+                              Registrar Empresa
                             </Link>
-                          ))}
-                        </>
+                          </Button>
+                        </div>
                       )}
-                    </div>
-                  </nav>
-
-                  {/* Mobile Language & Currency */}
-                  <div className="space-y-4 border-t border-white/20 pt-6">
-                    <div>
-                      <h4 className="text-sm font-medium mb-2">Idioma</h4>
-                      <div className="space-y-1">
-                        {languages.map((lang) => (
-                          <button
-                            key={lang.code}
-                            onClick={() => setSelectedLanguage(lang)}
-                            className={cn(
-                              "flex w-full items-center rounded-lg px-3 py-2 text-sm",
-                              selectedLanguage.code === lang.code
-                                ? "bg-zlc-blue-100 text-zlc-blue-900"
-                                : "hover:bg-zlc-gray-100",
-                            )}
-                          >
-                            <span className="mr-2 font-semibold text-xs">{lang.code.toUpperCase()}</span>
-                            {lang.name}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div>
-                      <h4 className="text-sm font-medium mb-2">Moneda</h4>
-                      <div className="space-y-1">
-                        {currencies.map((currency) => (
-                          <button
-                            key={currency.code}
-                            onClick={() => setSelectedCurrency(currency)}
-                            className={cn(
-                              "flex w-full items-center rounded-lg px-3 py-2 text-sm",
-                              selectedCurrency.code === currency.code
-                                ? "bg-zlc-blue-100 text-zlc-blue-900"
-                                : "hover:bg-zlc-gray-100",
-                            )}
-                          >
-                            <span className="mr-2 font-mono">
-                              {currency.symbol}
-                            </span>
-                            {currency.name}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Mobile Auth */}
-                  {!isLoggedIn && (
-                    <div className="space-y-2 border-t border-white/20 pt-6">
-                      <Button
-                        variant="ghost"
-                        asChild
-                        className="w-full justify-start"
-                      >
-                        <Link to="/login" onClick={() => setIsSheetOpen(false)}>
-                          Iniciar Sesión
-                        </Link>
-                      </Button>
-                      <Button
-                        asChild
-                        className="w-full bg-zlc-blue-800 hover:bg-zlc-blue-900 text-white"
-                      >
-                        <Link
-                          to="/register"
-                          onClick={() => setIsSheetOpen(false)}
-                        >
-                          Registrar Empresa
-                        </Link>
-                      </Button>
-                    </div>
-                  )}
                     </div>
                   </div>
                 </div>
