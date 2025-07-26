@@ -29,6 +29,7 @@ import OfferHistory from "./pages/OfferHistory";
 import Communications from "./pages/Communications";
 import HowItWorks from "./pages/HowItWorks";
 import Support from "./pages/Support";
+import Legal from "./pages/Legal";
 import CustomsSupport from "./pages/CustomsSupport";
 import SupplierDashboard from "./pages/SupplierDashboard";
 import SupplierProducts from "./pages/SupplierProducts";
@@ -169,14 +170,7 @@ const App = () => (
                   {/* Placeholder routes for navigation links */}
                   <Route path="/how-it-works" element={<HowItWorks />} />
                   <Route path="/support" element={<Support />} />
-                  <Route
-                    path="/legal"
-                    element={
-                      <div className="p-8 text-center">
-                        Marco Legal - En desarrollo
-                      </div>
-                    }
-                  />
+                  <Route path="/legal" element={<Legal />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>
