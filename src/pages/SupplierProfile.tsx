@@ -952,7 +952,7 @@ const SupplierProfile = () => {
                     <Switch />
                   </div>
 
-                  <Button onClick={saveNotificationSettings} className="w-full">
+                  <Button variant="secondary" onClick={saveNotificationSettings} className="w-full">
                     Guardar Configuración
                   </Button>
                 </div>
