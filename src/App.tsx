@@ -27,6 +27,7 @@ import PaymentTerms from "./pages/PaymentTerms";
 import ContractTemplates from "./pages/ContractTemplates";
 import OfferHistory from "./pages/OfferHistory";
 import Communications from "./pages/Communications";
+import HowItWorks from "./pages/HowItWorks";
 import CustomsSupport from "./pages/CustomsSupport";
 import SupplierDashboard from "./pages/SupplierDashboard";
 import SupplierProducts from "./pages/SupplierProducts";
