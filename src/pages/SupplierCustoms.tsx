@@ -244,7 +244,7 @@ const SupplierCustoms = () => {
   const getStatusVariant = (status: string) => {
     switch (status) {
       case "approved":
-        return "default";
+        return "secondary";
       case "under_review":
         return "secondary";
       case "rejected":
