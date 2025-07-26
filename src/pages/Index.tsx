@@ -196,8 +196,11 @@ export default function Index() {
                     size="lg"
                     variant="outline"
                     className="border-white/30 bg-white text-zlc-blue-900 hover:bg-zlc-blue-900 hover:text-white h-12 px-8"
+                    asChild
                   >
-                    Ver Catálogo
+                    <Link to="/categories">
+                      Ver Catálogo
+                    </Link>
                   </Button>
                 </div>
 
@@ -299,9 +302,12 @@ export default function Index() {
                 size="lg"
                 variant="outline"
                 className="border-zlc-blue-200 text-zlc-blue-700 hover:bg-zlc-blue-50"
+                asChild
               >
-                Ver Todas las Categorías
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <Link to="/categories">
+                  Ver Todas las Categorías
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
               </Button>
             </div>
           </div>
