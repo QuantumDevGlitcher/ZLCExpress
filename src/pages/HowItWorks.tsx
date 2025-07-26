@@ -122,15 +122,15 @@ const HowItWorks = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
-      
+
       {/* Hero Section */}
       <div className="pt-16 bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700">
-        <div className="container mx-auto px-4 py-16 text-center text-white">
+        <div className="container mx-auto px-4 py-16 text-center text-white bg-[rgb(12,74,133)]">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
             ¿Cómo Funciona ZLC Express?
           </h1>
           <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-3xl mx-auto">
-            Conectamos compradores y proveedores B2B a través de una plataforma digital 
+            Conectamos compradores y proveedores B2B a través de una plataforma digital
             que simplifica el comercio internacional
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -161,7 +161,7 @@ const HowItWorks = () => {
               Nuestra plataforma está diseñada para hacer el comercio B2B más eficiente y seguro
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {benefits.map((benefit, index) => (
               <Card key={index} className="text-center hover:shadow-lg transition-shadow">
@@ -214,7 +214,7 @@ const HowItWorks = () => {
                     </ul>
                   </CardContent>
                 </Card>
-                
+
                 {index < buyerSteps.length - 1 && (
                   <div className="hidden lg:block absolute top-1/2 -right-3 transform -translate-y-1/2 z-10">
                     <ArrowRight className="h-6 w-6 text-blue-400" />
@@ -271,7 +271,7 @@ const HowItWorks = () => {
                     </ul>
                   </CardContent>
                 </Card>
-                
+
                 {index < supplierSteps.length - 1 && (
                   <div className="hidden lg:block absolute top-1/2 -right-3 transform -translate-y-1/2 z-10">
                     <ArrowRight className="h-6 w-6 text-green-400" />
@@ -295,9 +295,9 @@ const HowItWorks = () => {
       {/* Technology & Security */}
       <div className="py-16 bg-gray-900 text-white">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Tecnología y Seguridad</h2>
-            <p className="text-xl opacity-90 max-w-2xl mx-auto">
+          <div className="text-center mb-12 text-white">
+            <h2 className="text-3xl font-bold mb-4 text-white">Tecnología y Seguridad</h2>
+            <p className="text-xl opacity-90 max-w-2xl mx-auto text-white">
               Utilizamos tecnología de punta para garantizar transacciones seguras y eficientes
             </p>
           </div>
@@ -306,10 +306,10 @@ const HowItWorks = () => {
             <Card className="bg-gray-800 border-gray-700 text-white">
               <CardHeader>
                 <Shield className="h-12 w-12 text-blue-400 mb-4" />
-                <CardTitle>Seguridad Avanzada</CardTitle>
+                <CardTitle className="text-white">Seguridad Avanzada</CardTitle>
               </CardHeader>
               <CardContent>
-                <ul className="space-y-2 text-gray-300">
+                <ul className="space-y-2 text-white">
                   <li>• Encriptación SSL 256-bit</li>
                   <li>• Verificación de identidad</li>
                   <li>• Auditorías regulares</li>
@@ -321,10 +321,10 @@ const HowItWorks = () => {
             <Card className="bg-gray-800 border-gray-700 text-white">
               <CardHeader>
                 <Globe className="h-12 w-12 text-green-400 mb-4" />
-                <CardTitle>Cobertura Global</CardTitle>
+                <CardTitle className="text-white">Cobertura Global</CardTitle>
               </CardHeader>
               <CardContent>
-                <ul className="space-y-2 text-gray-300">
+                <ul className="space-y-2 text-white">
                   <li>• Red mundial de proveedores</li>
                   <li>• Soporte multiidioma</li>
                   <li>• Múltiples zonas horarias</li>
@@ -336,10 +336,10 @@ const HowItWorks = () => {
             <Card className="bg-gray-800 border-gray-700 text-white">
               <CardHeader>
                 <Zap className="h-12 w-12 text-yellow-400 mb-4" />
-                <CardTitle>Automatización</CardTitle>
+                <CardTitle className="text-white">Automatización</CardTitle>
               </CardHeader>
               <CardContent>
-                <ul className="space-y-2 text-gray-300">
+                <ul className="space-y-2 text-white">
                   <li>• IA para matching</li>
                   <li>• Workflows automatizados</li>
                   <li>• Notificaciones inteligentes</li>
@@ -352,17 +352,17 @@ const HowItWorks = () => {
       </div>
 
       {/* CTA Section */}
-      <div className="py-16 bg-blue-600">
+      <div className="py-16 bg-[rgb(12,74,133)]">
         <div className="container mx-auto px-4 text-center text-white">
           <h2 className="text-3xl font-bold mb-4">¿Listo para Empezar?</h2>
           <p className="text-xl mb-8 opacity-90">
             Únete a miles de empresas que ya están transformando su comercio B2B
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary" asChild>
+            <Button size="lg" variant="secondary" className="bg-white text-black" asChild>
               <Link to="/register">Empezar Ahora</Link>
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600" asChild>
+            <Button size="lg" variant="outline" className="border-white bg-white text-black hover:bg-gray-100 hover:text-black" asChild>
               <Link to="/support">Hablar con un Experto</Link>
             </Button>
           </div>
