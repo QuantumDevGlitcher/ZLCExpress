@@ -284,7 +284,7 @@ const SupplierMessages = () => {
   const getTagVariant = (tag: string) => {
     switch (tag) {
       case "in_progress":
-        return "default";
+        return "secondary";
       case "negotiating":
         return "secondary";
       case "post_sale_support":
