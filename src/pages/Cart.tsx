@@ -504,6 +504,7 @@ export default function Cart() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <Button
+                    variant="secondary"
                     onClick={handleSendQuote}
                     disabled={
                       isSubmitting ||
