@@ -558,7 +558,7 @@ const SupplierCustoms = () => {
                   Checklist Pre-Embarque
                 </Button>
                 <Button
-                  variant={activeTab === "history" ? "default" : "outline"}
+                  variant={activeTab === "history" ? "secondary" : "outline"}
                   onClick={() => setActiveTab("history")}
                 >
                   <History className="h-4 w-4 mr-2" />
