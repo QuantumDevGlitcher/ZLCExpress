@@ -511,7 +511,7 @@ const SupplierReports = () => {
                   {productSales.map((product, index) => (
                     <div
                       key={index}
-                      className="flex items-center justify-between p-3 border rounded-lg"
+                      className="flex items-center justify-between p-3 border border-white rounded-lg"
                     >
                       <div>
                         <h4 className="font-medium">{product.productName}</h4>
