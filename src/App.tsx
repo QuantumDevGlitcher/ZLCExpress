@@ -28,6 +28,7 @@ import ContractTemplates from "./pages/ContractTemplates";
 import OfferHistory from "./pages/OfferHistory";
 import Communications from "./pages/Communications";
 import HowItWorks from "./pages/HowItWorks";
+import Support from "./pages/Support";
 import CustomsSupport from "./pages/CustomsSupport";
 import SupplierDashboard from "./pages/SupplierDashboard";
 import SupplierProducts from "./pages/SupplierProducts";
@@ -167,14 +168,7 @@ const App = () => (
 
                   {/* Placeholder routes for navigation links */}
                   <Route path="/how-it-works" element={<HowItWorks />} />
-                  <Route
-                    path="/support"
-                    element={
-                      <div className="p-8 text-center">
-                        Soporte - En desarrollo
-                      </div>
-                    }
-                  />
+                  <Route path="/support" element={<Support />} />
                   <Route
                     path="/legal"
                     element={
