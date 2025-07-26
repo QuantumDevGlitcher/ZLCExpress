@@ -504,6 +504,7 @@ const SupplierOrders = () => {
                         <TableCell>
                           <Button
                             size="sm"
+                            variant="secondary"
                             onClick={() =>
                               navigate(`/supplier/orders/${order.id}`)
                             }
