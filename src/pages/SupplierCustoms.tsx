@@ -489,7 +489,7 @@ const SupplierCustoms = () => {
           <Card className="mb-6">
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-2">
-                <h3 className="font-medium">Progreso de Documentación</h3>
+                <h3 className="font-medium">Progreso de Documentaci��n</h3>
                 <span className="text-sm font-medium">
                   {getCompletionPercentage()}% completo
                 </span>
@@ -537,21 +537,21 @@ const SupplierCustoms = () => {
             <CardContent className="p-4">
               <div className="flex flex-wrap gap-2">
                 <Button
-                  variant={activeTab === "documents" ? "default" : "outline"}
+                  variant={activeTab === "documents" ? "secondary" : "outline"}
                   onClick={() => setActiveTab("documents")}
                 >
                   <FileText className="h-4 w-4 mr-2" />
                   Mis Documentos
                 </Button>
                 <Button
-                  variant={activeTab === "generate" ? "default" : "outline"}
+                  variant={activeTab === "generate" ? "secondary" : "outline"}
                   onClick={() => setActiveTab("generate")}
                 >
                   <FilePlus className="h-4 w-4 mr-2" />
                   Generar Documentos
                 </Button>
                 <Button
-                  variant={activeTab === "checklist" ? "default" : "outline"}
+                  variant={activeTab === "checklist" ? "secondary" : "outline"}
                   onClick={() => setActiveTab("checklist")}
                 >
                   <FileCheck className="h-4 w-4 mr-2" />
