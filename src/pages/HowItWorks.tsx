@@ -24,30 +24,47 @@ const HowItWorks = () => {
     {
       step: "1",
       title: "Registra tu Empresa",
-      description: "Crea tu cuenta empresarial y verifica tu información comercial",
+      description:
+        "Crea tu cuenta empresarial y verifica tu información comercial",
       icon: <Users className="h-8 w-8 text-blue-600" />,
-      details: ["Datos empresariales", "Verificación fiscal", "Documentos legales"],
+      details: [
+        "Datos empresariales",
+        "Verificación fiscal",
+        "Documentos legales",
+      ],
     },
     {
       step: "2",
       title: "Explora el Catálogo",
       description: "Navega por miles de productos de proveedores verificados",
       icon: <Search className="h-8 w-8 text-blue-600" />,
-      details: ["Categorías especializadas", "Filtros avanzados", "Comparación de precios"],
+      details: [
+        "Categorías especializadas",
+        "Filtros avanzados",
+        "Comparación de precios",
+      ],
     },
     {
       step: "3",
       title: "Solicita Cotizaciones",
       description: "Envía RFQs personalizadas con tus especificaciones exactas",
       icon: <FileText className="h-8 w-8 text-blue-600" />,
-      details: ["Especificaciones técnicas", "Volúmenes requeridos", "Fechas de entrega"],
+      details: [
+        "Especificaciones técnicas",
+        "Volúmenes requeridos",
+        "Fechas de entrega",
+      ],
     },
     {
       step: "4",
       title: "Negocia y Compra",
       description: "Compara ofertas, negocia términos y realiza tu pedido",
       icon: <ShoppingCart className="h-8 w-8 text-blue-600" />,
-      details: ["Comparación de ofertas", "Negociación directa", "Términos flexibles"],
+      details: [
+        "Comparación de ofertas",
+        "Negociación directa",
+        "Términos flexibles",
+      ],
     },
     {
       step: "5",
@@ -71,7 +88,11 @@ const HowItWorks = () => {
       title: "Cataloga tus Productos",
       description: "Sube tu catálogo completo con especificaciones detalladas",
       icon: <Package className="h-8 w-8 text-green-600" />,
-      details: ["Fotos profesionales", "Especificaciones técnicas", "Precios dinámicos"],
+      details: [
+        "Fotos profesionales",
+        "Especificaciones técnicas",
+        "Precios dinámicos",
+      ],
     },
     {
       step: "3",
@@ -85,7 +106,11 @@ const HowItWorks = () => {
       title: "Envía Cotizaciones",
       description: "Responde con ofertas competitivas y términos claros",
       icon: <Zap className="h-8 w-8 text-green-600" />,
-      details: ["Respuesta rápida", "Ofertas personalizadas", "Términos flexibles"],
+      details: [
+        "Respuesta rápida",
+        "Ofertas personalizadas",
+        "Términos flexibles",
+      ],
     },
     {
       step: "5",
@@ -99,7 +124,8 @@ const HowItWorks = () => {
   const benefits = [
     {
       title: "Proceso Simplificado",
-      description: "Elimina intermediarios y conecta directamente con proveedores",
+      description:
+        "Elimina intermediarios y conecta directamente con proveedores",
       icon: <ArrowRight className="h-6 w-6 text-blue-600" />,
     },
     {
@@ -130,8 +156,8 @@ const HowItWorks = () => {
             ¿Cómo Funciona ZLC Express?
           </h1>
           <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-3xl mx-auto text-white">
-            Conectamos compradores y proveedores B2B a través de una plataforma digital
-            que simplifica el comercio internacional
+            Conectamos compradores y proveedores B2B a través de una plataforma
+            digital que simplifica el comercio internacional
           </p>
         </div>
       </div>
@@ -144,18 +170,22 @@ const HowItWorks = () => {
               ¿Por Qué Elegir ZLC Express?
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Nuestra plataforma está diseñada para hacer el comercio B2B más eficiente y seguro
+              Nuestra plataforma está diseñada para hacer el comercio B2B más
+              eficiente y seguro
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {benefits.map((benefit, index) => (
-              <Card key={index} className="text-center hover:shadow-lg transition-shadow">
+              <Card
+                key={index}
+                className="text-center hover:shadow-lg transition-shadow"
+              >
                 <CardContent className="p-6">
-                  <div className="mb-4 flex justify-center">
-                    {benefit.icon}
-                  </div>
-                  <h3 className="text-lg font-semibold mb-2">{benefit.title}</h3>
+                  <div className="mb-4 flex justify-center">{benefit.icon}</div>
+                  <h3 className="text-lg font-semibold mb-2">
+                    {benefit.title}
+                  </h3>
                   <p className="text-gray-600 text-sm">{benefit.description}</p>
                 </CardContent>
               </Card>
@@ -168,12 +198,15 @@ const HowItWorks = () => {
       <div className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <Badge variant="secondary" className="mb-4">Para Compradores</Badge>
+            <Badge variant="secondary" className="mb-4">
+              Para Compradores
+            </Badge>
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
               Proceso de Compra en 5 Pasos
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Desde el registro hasta la entrega, te acompañamos en todo el proceso
+              Desde el registro hasta la entrega, te acompañamos en todo el
+              proceso
             </p>
           </div>
 
@@ -185,14 +218,21 @@ const HowItWorks = () => {
                     <div className="mx-auto mb-4 w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
                       {step.icon}
                     </div>
-                    <div className="text-sm font-bold text-blue-600 mb-2">PASO {step.step}</div>
+                    <div className="text-sm font-bold text-blue-600 mb-2">
+                      PASO {step.step}
+                    </div>
                     <CardTitle className="text-lg">{step.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-600 text-sm mb-4">{step.description}</p>
+                    <p className="text-gray-600 text-sm mb-4">
+                      {step.description}
+                    </p>
                     <ul className="space-y-2">
                       {step.details.map((detail, detailIndex) => (
-                        <li key={detailIndex} className="flex items-start text-xs text-gray-500">
+                        <li
+                          key={detailIndex}
+                          className="flex items-start text-xs text-gray-500"
+                        >
                           <CheckCircle className="h-3 w-3 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
                           {detail}
                         </li>
@@ -225,7 +265,12 @@ const HowItWorks = () => {
       <div className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <Badge variant="secondary" className="mb-4 bg-green-100 text-green-800">Para Proveedores</Badge>
+            <Badge
+              variant="secondary"
+              className="mb-4 bg-green-100 text-green-800"
+            >
+              Para Proveedores
+            </Badge>
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
               Proceso de Venta en 5 Pasos
             </h2>
@@ -242,14 +287,21 @@ const HowItWorks = () => {
                     <div className="mx-auto mb-4 w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
                       {step.icon}
                     </div>
-                    <div className="text-sm font-bold text-green-600 mb-2">PASO {step.step}</div>
+                    <div className="text-sm font-bold text-green-600 mb-2">
+                      PASO {step.step}
+                    </div>
                     <CardTitle className="text-lg">{step.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-600 text-sm mb-4">{step.description}</p>
+                    <p className="text-gray-600 text-sm mb-4">
+                      {step.description}
+                    </p>
                     <ul className="space-y-2">
                       {step.details.map((detail, detailIndex) => (
-                        <li key={detailIndex} className="flex items-start text-xs text-gray-500">
+                        <li
+                          key={detailIndex}
+                          className="flex items-start text-xs text-gray-500"
+                        >
                           <CheckCircle className="h-3 w-3 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
                           {detail}
                         </li>
@@ -268,7 +320,12 @@ const HowItWorks = () => {
           </div>
 
           <div className="text-center mt-12">
-            <Button size="lg" variant="secondary" className="bg-green-600 text-white hover:bg-green-700" asChild>
+            <Button
+              size="lg"
+              variant="secondary"
+              className="bg-green-600 text-white hover:bg-green-700"
+              asChild
+            >
               <Link to="/register">
                 Registrarse como Proveedor
                 <Users className="ml-2 h-5 w-5" />
@@ -282,9 +339,12 @@ const HowItWorks = () => {
       <div className="py-16 bg-gray-900 text-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12 text-white">
-            <h2 className="text-3xl font-bold mb-4 text-white">Tecnología y Seguridad</h2>
+            <h2 className="text-3xl font-bold mb-4 text-white">
+              Tecnología y Seguridad
+            </h2>
             <p className="text-xl opacity-90 max-w-2xl mx-auto text-white">
-              Utilizamos tecnología de punta para garantizar transacciones seguras y eficientes
+              Utilizamos tecnología de punta para garantizar transacciones
+              seguras y eficientes
             </p>
           </div>
 
@@ -340,15 +400,27 @@ const HowItWorks = () => {
       {/* CTA Section */}
       <div className="py-16 bg-[rgb(12,74,133)]">
         <div className="container mx-auto px-4 text-center text-white">
-          <h2 className="text-3xl font-bold mb-4 text-white">¿Listo para Empezar?</h2>
+          <h2 className="text-3xl font-bold mb-4 text-white">
+            ¿Listo para Empezar?
+          </h2>
           <p className="text-xl mb-8 opacity-90 text-white">
             Únete a miles de empresas que ya están transformando su comercio B2B
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary" className="bg-white text-black" asChild>
+            <Button
+              size="lg"
+              variant="secondary"
+              className="bg-white text-black"
+              asChild
+            >
               <Link to="/register">Empezar Ahora</Link>
             </Button>
-            <Button size="lg" variant="outline" className="border-white bg-white text-black hover:bg-gray-100 hover:text-black" asChild>
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-white bg-white text-black hover:bg-gray-100 hover:text-black"
+              asChild
+            >
               <Link to="/support">Hablar con un Experto</Link>
             </Button>
           </div>

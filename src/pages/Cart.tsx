@@ -114,7 +114,10 @@ export default function Cart() {
               Explore nuestro catálogo y agregue productos para solicitar
               cotizaciones
             </p>
-            <Button asChild className="btn-professional bg-white text-black hover:bg-gray-100">
+            <Button
+              asChild
+              className="btn-professional bg-white text-black hover:bg-gray-100"
+            >
               <Link to="/categories">
                 <Package className="h-4 w-4 mr-2" />
                 Explorar Catálogo
@@ -180,7 +183,10 @@ export default function Cart() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {state.items.map((item) => (
-                    <div key={item.id} className="border border-white rounded-lg p-4">
+                    <div
+                      key={item.id}
+                      className="border border-white rounded-lg p-4"
+                    >
                       <div className="flex gap-4">
                         <img
                           src={item.productImage}
@@ -436,7 +442,10 @@ export default function Cart() {
                     to="/shipping-request"
                     state={{ quoteId: `quote-${Date.now()}` }}
                   >
-                    <Button variant="outline" className="w-full bg-white border-white">
+                    <Button
+                      variant="outline"
+                      className="w-full bg-white border-white"
+                    >
                       <Ship className="h-4 w-4 mr-2" />
                       Solicitar Cotización de Flete
                     </Button>

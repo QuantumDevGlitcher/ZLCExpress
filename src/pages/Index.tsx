@@ -198,9 +198,7 @@ export default function Index() {
                     className="border-white/30 bg-white text-zlc-blue-900 hover:bg-zlc-blue-900 hover:text-white h-12 px-8"
                     asChild
                   >
-                    <Link to="/categories">
-                      Ver Catálogo
-                    </Link>
+                    <Link to="/categories">Ver Catálogo</Link>
                   </Button>
                 </div>
 

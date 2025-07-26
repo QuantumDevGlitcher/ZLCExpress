@@ -166,10 +166,7 @@ const App = () => (
                   />
 
                   {/* Placeholder routes for navigation links */}
-                  <Route
-                    path="/how-it-works"
-                    element={<HowItWorks />}
-                  />
+                  <Route path="/how-it-works" element={<HowItWorks />} />
                   <Route
                     path="/support"
                     element={
