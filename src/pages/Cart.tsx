@@ -1,5 +1,5 @@
-import { useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -17,6 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Navigation } from "@/components/Navigation";
 import { useCart } from "@/contexts/CartContext";
+import { useToast } from "@/hooks/use-toast";
 import {
   ArrowLeft,
   Package,
@@ -33,10 +34,14 @@ import {
   Plus,
   Minus,
   Ship,
+  Loader2,
+  ExternalLink,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function Cart() {
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const {
     state,
     removeItem,
@@ -44,13 +49,38 @@ export default function Cart() {
     updateCustomPrice,
     clearCart,
     sendQuote,
+    loadCart,
   } = useCart();
+  
   const [paymentConditions, setPaymentConditions] = useState("");
   const [purchaseOrderFile, setPurchaseOrderFile] = useState<File | null>(null);
   const [freightEstimate, setFreightEstimate] = useState<number>(0);
   const [notes, setNotes] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPaymentOptions, setShowPaymentOptions] = useState(false);
+  const [loadingItems, setLoadingItems] = useState<Set<string>>(new Set());
+  const [isClearing, setIsClearing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Cargar el carrito al inicializar
+  useEffect(() => {
+    loadCart();
+  }, [loadCart]);
+
+  // Debug: Log cart items to see what data we're getting
+  useEffect(() => {
+    console.log('🛒 Cart state.items:', state.items);
+    state.items.forEach((item, index) => {
+      console.log(`Item ${index}:`, {
+        id: item.id,
+        productTitle: item.productTitle,
+        pricePerContainer: item.pricePerContainer,
+        customPrice: item.customPrice,
+        currency: item.currency,
+        quantity: item.quantity
+      });
+    });
+  }, [state.items]);
 
   const platformCommission = 250; // Fixed platform commission
   const subtotal = state.items.reduce((total, item) => {
@@ -59,17 +89,99 @@ export default function Cart() {
   }, 0);
   const grandTotal = subtotal + freightEstimate + platformCommission;
 
-  const handleQuantityChange = (itemId: string, change: number) => {
+  const handleQuantityChange = async (itemId: string, change: number) => {
     const item = state.items.find((i) => i.id === itemId);
-    if (item) {
-      const newQuantity = Math.max(1, item.quantity + change);
-      updateQuantity(itemId, newQuantity);
+    if (!item || loadingItems.has(itemId)) return;
+    
+    const newQuantity = Math.max(1, item.quantity + change);
+    if (newQuantity === item.quantity) return; // No cambiar si es la misma cantidad
+    
+    console.log('🔄 Starting quantity change:', { itemId, currentQuantity: item.quantity, newQuantity });
+    
+    // Agregar el item al conjunto de carga
+    setLoadingItems(prev => new Set(prev).add(itemId));
+    
+    try {
+      console.log('📡 Calling updateQuantity API...');
+      await updateQuantity(itemId, newQuantity);
+      console.log('✅ Quantity updated successfully');
+      toast({
+        title: "Cantidad actualizada",
+        description: `Se actualizó la cantidad a ${newQuantity} contenedor${newQuantity > 1 ? 'es' : ''}`,
+      });
+    } catch (error) {
+      console.error('❌ Error updating quantity:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo actualizar la cantidad",
+        variant: "destructive",
+      });
+    } finally {
+      // Remover el item del conjunto de carga
+      setLoadingItems(prev => {
+        const next = new Set(prev);
+        next.delete(itemId);
+        console.log('🧹 Removed from loading set:', itemId);
+        return next;
+      });
     }
   };
 
   const handleCustomPriceChange = (itemId: string, value: string) => {
     const price = parseFloat(value) || 0;
     updateCustomPrice(itemId, price);
+  };
+
+  const handleRemoveItem = async (itemId: string) => {
+    if (loadingItems.has(itemId)) return;
+    
+    // Agregar el item al conjunto de carga
+    setLoadingItems(prev => new Set(prev).add(itemId));
+    
+    try {
+      await removeItem(itemId);
+      toast({
+        title: "Producto eliminado",
+        description: "El producto se eliminó del carrito",
+      });
+    } catch (error) {
+      console.error('Error removing item:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo eliminar el producto",
+        variant: "destructive",
+      });
+      // Remover del conjunto de carga en caso de error
+      setLoadingItems(prev => {
+        const next = new Set(prev);
+        next.delete(itemId);
+        return next;
+      });
+    }
+    // No removemos del loadingItems aquí porque el item será eliminado del carrito
+  };
+
+  const handleClearCart = async () => {
+    if (isClearing) return;
+    
+    setIsClearing(true);
+    try {
+      await clearCart();
+      toast({
+        title: "Carrito vaciado",
+        description: "Se eliminaron todos los productos del carrito",
+      });
+    } catch (error) {
+      console.error('Error clearing cart:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo vaciar el carrito",
+        variant: "destructive",
+      });
+    } finally {
+      setIsClearing(false);
+      setLoadingItems(new Set()); // Limpiar el estado de carga
+    }
   };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,23 +192,63 @@ export default function Cart() {
   };
 
   const handleSendQuote = async () => {
-    if (state.items.length === 0) return;
+    if (state.items.length === 0) {
+      toast({
+        title: "Carrito vacío",
+        description: "Agregue productos al carrito antes de solicitar cotización",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!paymentConditions) {
+      toast({
+        title: "Condiciones de pago requeridas",
+        description: "Seleccione las condiciones de pago",
+        variant: "destructive",
+      });
+      setShowPaymentOptions(true);
+      return;
+    }
 
     setIsSubmitting(true);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      await sendQuote({
+        totalAmount: grandTotal,
+        paymentConditions,
+        purchaseOrderFile,
+        freightEstimate,
+        platformCommission,
+        notes,
+      });
 
-    sendQuote({
-      totalAmount: grandTotal,
-      paymentConditions,
-      purchaseOrderFile,
-      freightEstimate,
-      platformCommission,
-      notes,
+      toast({
+        title: "Cotización enviada",
+        description: "Su solicitud de cotización ha sido enviada a los proveedores",
+      });
+
+      // Redirigir a página de cotizaciones
+      navigate('/my-quotes');
+    } catch (error) {
+      toast({
+        title: "Error al enviar cotización",
+        description: "No se pudo enviar la solicitud. Intente nuevamente.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleFreightQuote = () => {
+    // Navegar a página de cotización de flete
+    navigate('/shipping-request', { 
+      state: { 
+        cartItems: state.items,
+        totalValue: subtotal 
+      } 
     });
-
-    setIsSubmitting(false);
   };
 
   // Empty cart state
@@ -160,10 +312,15 @@ export default function Cart() {
 
             <Button
               variant="outline"
-              onClick={clearCart}
-              className="bg-white text-red-600 border-red-200 hover:bg-red-50"
+              onClick={handleClearCart}
+              disabled={isClearing || state.isLoading}
+              className="bg-white text-red-600 border-red-200 hover:bg-red-50 disabled:opacity-50"
             >
-              <Trash2 className="h-4 w-4 mr-2" />
+              {isClearing ? (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              ) : (
+                <Trash2 className="h-4 w-4 mr-2" />
+              )}
               Vaciar Carrito
             </Button>
           </div>
@@ -182,11 +339,20 @@ export default function Cart() {
                   {state.items.map((item) => (
                     <div key={item.id} className="border border-white rounded-lg p-4">
                       <div className="flex gap-4">
-                        <img
-                          src={item.productImage}
-                          alt={item.productTitle}
-                          className="w-20 h-20 object-cover rounded-lg"
-                        />
+                        <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden">
+                          {item.productImage ? (
+                            <img
+                              src={item.productImage}
+                              alt={item.productTitle}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                e.currentTarget.style.display = 'none';
+                                e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                              }}
+                            />
+                          ) : null}
+                          <Package className="h-8 w-8 text-gray-400" />
+                        </div>
 
                         <div className="flex-1 space-y-3">
                           <div className="flex items-start justify-between">
@@ -210,10 +376,15 @@ export default function Cart() {
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => removeItem(item.id)}
-                              className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                              onClick={() => handleRemoveItem(item.id)}
+                              className="text-red-500 hover:text-red-700 hover:bg-red-50 disabled:opacity-50"
+                              disabled={loadingItems.has(item.id) || state.isLoading}
                             >
-                              <Trash2 className="h-4 w-4" />
+                              {loadingItems.has(item.id) ? (
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                              ) : (
+                                <Trash2 className="h-4 w-4" />
+                              )}
                             </Button>
                           </div>
 
@@ -230,10 +401,14 @@ export default function Cart() {
                                   onClick={() =>
                                     handleQuantityChange(item.id, -1)
                                   }
-                                  disabled={item.quantity <= 1}
-                                  className="h-8 w-8 p-0 bg-white border-white hover:bg-gray-100 hover:border-gray-200"
+                                  disabled={item.quantity <= 1 || loadingItems.has(item.id)}
+                                  className="h-8 w-8 p-0 bg-white border-white hover:bg-gray-100 hover:border-gray-200 disabled:opacity-50"
                                 >
-                                  <Minus className="h-3 w-3" />
+                                  {loadingItems.has(item.id) ? (
+                                    <Loader2 className="h-3 w-3 animate-spin" />
+                                  ) : (
+                                    <Minus className="h-3 w-3" />
+                                  )}
                                 </Button>
                                 <span className="font-medium w-8 text-center">
                                   {item.quantity}
@@ -244,9 +419,14 @@ export default function Cart() {
                                   onClick={() =>
                                     handleQuantityChange(item.id, 1)
                                   }
-                                  className="h-8 w-8 p-0 bg-white border-white hover:bg-gray-100 hover:border-gray-200"
+                                  disabled={loadingItems.has(item.id)}
+                                  className="h-8 w-8 p-0 bg-white border-white hover:bg-gray-100 hover:border-gray-200 disabled:opacity-50"
                                 >
-                                  <Plus className="h-3 w-3" />
+                                  {loadingItems.has(item.id) ? (
+                                    <Loader2 className="h-3 w-3 animate-spin" />
+                                  ) : (
+                                    <Plus className="h-3 w-3" />
+                                  )}
                                 </Button>
                               </div>
                             </div>
@@ -254,7 +434,7 @@ export default function Cart() {
                             {/* Price per Container */}
                             <div>
                               <Label className="text-xs text-gray-500">
-                                Precio Unitario ({item.currency})
+                                Precio por Contenedor ({item.currency})
                               </Label>
                               <Input
                                 type="number"
@@ -301,39 +481,66 @@ export default function Cart() {
               </Card>
 
               {/* Payment Conditions */}
-              <Card>
+              <Card className={cn(showPaymentOptions && !paymentConditions && "ring-2 ring-red-500")}>
                 <CardHeader>
                   <CardTitle className="flex items-center">
                     <CreditCard className="h-5 w-5 mr-2 text-zlc-blue-600" />
-                    Condiciones de Pago
+                    Condiciones de Pago *
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <Select
                     value={paymentConditions}
-                    onValueChange={setPaymentConditions}
+                    onValueChange={(value) => {
+                      setPaymentConditions(value);
+                      setShowPaymentOptions(false);
+                    }}
                   >
-                    <SelectTrigger className="bg-white border-white">
+                    <SelectTrigger className={cn(
+                      "bg-white border-white",
+                      showPaymentOptions && !paymentConditions && "border-red-500"
+                    )}>
                       <SelectValue placeholder="Seleccione condiciones de pago" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="30-70-bl">
-                        30% Anticipo - 70% contra B/L
+                        <div className="space-y-1">
+                          <div className="font-medium">30% Anticipo - 70% contra B/L</div>
+                          <div className="text-xs text-gray-500">30% adelantado, 70% al recibir conocimiento de embarque</div>
+                        </div>
                       </SelectItem>
                       <SelectItem value="letter-credit">
-                        Carta de Crédito (L/C)
+                        <div className="space-y-1">
+                          <div className="font-medium">Carta de Crédito (L/C)</div>
+                          <div className="text-xs text-gray-500">Pago seguro mediante carta de crédito irrevocable</div>
+                        </div>
                       </SelectItem>
                       <SelectItem value="50-50">
-                        50% Anticipo - 50% contra Embarque
+                        <div className="space-y-1">
+                          <div className="font-medium">50% Anticipo - 50% contra Embarque</div>
+                          <div className="text-xs text-gray-500">50% adelantado, 50% antes del embarque</div>
+                        </div>
                       </SelectItem>
                       <SelectItem value="prepaid">
-                        Pago Total Anticipado
+                        <div className="space-y-1">
+                          <div className="font-medium">Pago Total Anticipado</div>
+                          <div className="text-xs text-gray-500">100% pagado antes de la producción</div>
+                        </div>
                       </SelectItem>
                       <SelectItem value="custom">
-                        Condiciones Personalizadas
+                        <div className="space-y-1">
+                          <div className="font-medium">Condiciones Personalizadas</div>
+                          <div className="text-xs text-gray-500">Términos específicos a negociar</div>
+                        </div>
                       </SelectItem>
                     </SelectContent>
                   </Select>
+                  {showPaymentOptions && !paymentConditions && (
+                    <p className="text-red-500 text-sm mt-2 flex items-center gap-1">
+                      <AlertCircle className="h-4 w-4" />
+                      Las condiciones de pago son requeridas
+                    </p>
+                  )}
                   <p className="text-xs text-gray-500 mt-2">
                     Las condiciones finales serán negociadas con cada proveedor
                   </p>
@@ -431,16 +638,22 @@ export default function Cart() {
                       Ingrese el costo si ya tiene cotización de flete
                     </p>
                   </div>
-
-                  <Link
-                    to="/shipping-request"
-                    state={{ quoteId: `quote-${Date.now()}` }}
-                  >
-                    <Button variant="outline" className="w-full bg-white border-white">
-                      <Ship className="h-4 w-4 mr-2" />
+                  
+                  <Separator />
+                  
+                  <div>
+                    <Button
+                      variant="outline"
+                      onClick={handleFreightQuote}
+                      className="w-full"
+                    >
+                      <Calculator className="h-4 w-4 mr-2" />
                       Solicitar Cotización de Flete
                     </Button>
-                  </Link>
+                    <p className="text-xs text-gray-500 mt-1">
+                      Obtenga cotizaciones de múltiples transportistas
+                    </p>
+                  </div>
                 </CardContent>
               </Card>
 
@@ -503,6 +716,29 @@ export default function Cart() {
                   <CardTitle>Enviar Solicitud</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
+                  <div className="flex justify-between items-center mb-4">
+                    <Button
+                      variant="outline"
+                      onClick={handleClearCart}
+                      disabled={isSubmitting || state.isLoading || isClearing}
+                      className="text-red-600 border-red-200 hover:bg-red-50 disabled:opacity-50"
+                    >
+                      {isClearing ? (
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      ) : (
+                        <Trash2 className="h-4 w-4 mr-2" />
+                      )}
+                      Vaciar Carrito
+                    </Button>
+                    
+                    <div className="text-right">
+                      <p className="text-sm text-gray-600">Total Estimado</p>
+                      <p className="text-xl font-bold text-green-600">
+                        ${grandTotal.toLocaleString()} USD
+                      </p>
+                    </div>
+                  </div>
+                  
                   <Button
                     onClick={handleSendQuote}
                     disabled={
@@ -510,25 +746,35 @@ export default function Cart() {
                       state.items.length === 0 ||
                       !paymentConditions
                     }
-                    className="w-full btn-professional text-black"
+                    className="w-full h-12 text-lg font-semibold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white"
                     size="lg"
                   >
                     {isSubmitting ? (
                       <>
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                        Enviando...
+                        <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                        Enviando Solicitud...
                       </>
                     ) : (
                       <>
+                        <Send className="h-5 w-5 mr-2" />
                         Enviar Solicitud de Cotización
-                        <Send className="ml-2 h-4 w-4" />
                       </>
                     )}
                   </Button>
 
-                  <div className="text-xs text-gray-500 text-center">
-                    Al enviar, generaremos una Orden Proforma que será enviada a
-                    los proveedores correspondientes.
+                  <div className="text-center">
+                    <div className="text-xs text-gray-500 mb-2">
+                      Al enviar, generaremos una Orden Proforma que será enviada a
+                      los proveedores correspondientes.
+                    </div>
+                    <Button
+                      variant="link"
+                      onClick={() => navigate('/my-quotes')}
+                      className="text-xs text-blue-600 h-auto p-0"
+                    >
+                      Ver mis solicitudes anteriores
+                      <ExternalLink className="h-3 w-3 ml-1" />
+                    </Button>
                   </div>
                 </CardContent>
               </Card>

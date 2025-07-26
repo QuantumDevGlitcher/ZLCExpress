@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { CartDropdown } from "@/components/CartDropdown";
+import { useAuthContext, useCurrentUser, useUserRole } from "@/contexts/AuthContext";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -94,17 +95,22 @@ export function Navigation({ className }: NavigationProps) {
   const location = useLocation();
   const [selectedLanguage, setSelectedLanguage] = useState(languages[0]);
   const [selectedCurrency, setSelectedCurrency] = useState(currencies[0]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // This would come from auth context
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
-  const companyStatus = "verified"; // This would come from auth context
+  // Usar el contexto de autenticación real
+  const { logout } = useAuthContext();
+  const user = useCurrentUser();
+  const { userType: authUserType } = useUserRole();
+  const isLoggedIn = !!user;
+
+  const companyStatus = user?.verificationStatus || "pending";
 
   // ============================================
   // USER TYPE DETECTION - FOR DEVELOPMENT ONLY
   // TODO: REPLACE WITH REAL AUTH CONTEXT
   // ============================================
   const isSupplierRoute = location.pathname.startsWith("/supplier");
-  const userType = isSupplierRoute ? "supplier" : "buyer";
+  const userType = authUserType || (isSupplierRoute ? "supplier" : "buyer");
   // ============================================
   // END USER TYPE DETECTION SECTION
   // ============================================
@@ -354,7 +360,7 @@ export function Navigation({ className }: NavigationProps) {
                       </>
                     )}
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => setIsLoggedIn(false)}>
+                    <DropdownMenuItem onClick={logout}>
                       Cerrar Sesión
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -490,7 +496,94 @@ export function Navigation({ className }: NavigationProps) {
                   </div>
 
                   {/* Mobile Auth */}
-                  {!isLoggedIn && (
+                  {isLoggedIn ? (
+                    <div className="space-y-3 border-t border-white/20 pt-6">
+                      <div className="px-3 py-2">
+                        <p className="font-medium text-sm">{user?.contactName}</p>
+                        <p className="text-xs text-gray-600">{user?.companyName}</p>
+                        {companyStatus === "verified" && (
+                          <Badge variant="secondary" className="bg-green-100 text-green-800 mt-1">
+                            Empresa Verificada
+                          </Badge>
+                        )}
+                      </div>
+                      
+                      {userType === "supplier" ? (
+                        <div className="space-y-1">
+                          <Link
+                            to="/supplier/dashboard"
+                            onClick={() => setIsSheetOpen(false)}
+                            className="flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-zlc-gray-100"
+                          >
+                            <Home className="mr-3 h-4 w-4" />
+                            Mi Panel
+                          </Link>
+                          <Link
+                            to="/supplier/profile"
+                            onClick={() => setIsSheetOpen(false)}
+                            className="flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-zlc-gray-100"
+                          >
+                            <Building2 className="mr-3 h-4 w-4" />
+                            Mi Perfil
+                          </Link>
+                          <Link
+                            to="/supplier/products"
+                            onClick={() => setIsSheetOpen(false)}
+                            className="flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-zlc-gray-100"
+                          >
+                            <Package className="mr-3 h-4 w-4" />
+                            Mis Lotes
+                          </Link>
+                          <Link
+                            to="/supplier/orders"
+                            onClick={() => setIsSheetOpen(false)}
+                            className="flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-zlc-gray-100"
+                          >
+                            <ShoppingCart className="mr-3 h-4 w-4" />
+                            Mis Órdenes
+                          </Link>
+                        </div>
+                      ) : (
+                        <div className="space-y-1">
+                          <Link
+                            to="/"
+                            onClick={() => setIsSheetOpen(false)}
+                            className="flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-zlc-gray-100"
+                          >
+                            <ShoppingCart className="mr-3 h-4 w-4" />
+                            Dashboard
+                          </Link>
+                          <Link
+                            to="/my-orders"
+                            onClick={() => setIsSheetOpen(false)}
+                            className="flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-zlc-gray-100"
+                          >
+                            <Package className="mr-3 h-4 w-4" />
+                            Mis Pedidos
+                          </Link>
+                          <Link
+                            to="/company-profile"
+                            onClick={() => setIsSheetOpen(false)}
+                            className="flex items-center rounded-lg px-3 py-2 text-sm font-medium hover:bg-zlc-gray-100"
+                          >
+                            <Settings className="mr-3 h-4 w-4" />
+                            Configuración
+                          </Link>
+                        </div>
+                      )}
+                      
+                      <Button
+                        variant="ghost"
+                        onClick={() => {
+                          logout();
+                          setIsSheetOpen(false);
+                        }}
+                        className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
+                      >
+                        Cerrar Sesión
+                      </Button>
+                    </div>
+                  ) : (
                     <div className="space-y-2 border-t border-white/20 pt-6">
                       <Button
                         variant="ghost"

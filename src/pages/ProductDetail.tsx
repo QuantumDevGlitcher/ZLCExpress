@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
@@ -48,556 +48,600 @@ import {
   ChevronUp,
   CheckCircle,
   AlertCircle,
-  Users,
-  Scale,
+  DollarSign,
+  Minus,
+  Plus,
+  Eye,
   ShoppingCart,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
-
-// Mock product data
-const product = {
-  id: "1",
-  title: "Camisetas de Algodón Premium - Lote Mixto Hombre/Mujer",
-  description:
-    "Camisetas de algodón premium fabricadas con estándares de calidad internacional. Perfectas para distribuidores mayoristas con gran demanda.",
-  negotiable: true,
-  supplier: {
-    name: "GlobalTextile Corp",
-    legalName: "Global Textile Corporation S.A.",
-    country: "Zona Libre de Colón, Panamá",
-    verified: true,
-    rating: 4.8,
-    logo: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=100&h=100&fit=crop",
-  },
-  images: [
-    "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&h=400&fit=crop",
-    "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&h=400&fit=crop",
-    "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=600&h=400&fit=crop",
-    "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=600&h=400&fit=crop",
-  ],
-  specifications: {
-    material: "100% Algodón Peinado 180gsm",
-    colors: ["Blanco", "Negro", "Gris", "Azul Marino", "Rojo"],
-    sizes: ["XS", "S", "M", "L", "XL", "XXL"],
-    totalUnits: 5000,
-    grossWeight: "2,400 kg",
-    netWeight: "2,000 kg",
-    containerType: "20' HC Container",
-    dimensions: "Dimensiones: 6.058m x 2.438m x 2.591m",
-  },
-  logistics: {
-    incoterm: "FOB ZLC",
-    leadTime: {
-      production: "14-21 días",
-      shipping: "7-10 días",
-      total: "21-31 días",
-    },
-    availableIncoterms: ["FOB ZLC", "CIF Puerto Destino", "EXW Zona Libre"],
-  },
-  pricing: {
-    pricePerContainer: 16500,
-    pricePerUnit: 3.3,
-    currency: "USD",
-    discounts: [
-      { quantity: 2, discount: 3, finalPrice: 16005 },
-      { quantity: 5, discount: 7, finalPrice: 15345 },
-      { quantity: 10, discount: 12, finalPrice: 14520 },
-      { quantity: 20, discount: 18, finalPrice: 13530 },
-    ],
-  },
-  customization: {
-    allowsSizeColorMix: true,
-    customPackaging: true,
-    privateLabel: true,
-  },
-  documentation: {
-    commercialInvoice: true,
-    packingList: true,
-    certificateOfOrigin: true,
-    customsDeclaration: true,
-  },
-};
+import { getProductById, Product } from "@/services/api";
 
 export default function ProductDetail() {
   const { id } = useParams();
-  const { addItem } = useCart();
-  const [selectedQuantity, setSelectedQuantity] = useState(1);
-  const [customPrice, setCustomPrice] = useState("");
-  const [showCustomQuote, setShowCustomQuote] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(0);
+  const { addItem, state: { isLoading: cartLoading } } = useCart();
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [quantity, setQuantity] = useState(1);
+  const [rfqOpen, setRfqOpen] = useState(false);
 
-  const calculateTotal = () => {
-    const discount = product.pricing.discounts.find(
-      (d) => selectedQuantity >= d.quantity,
-    );
-    const basePrice = product.pricing.pricePerContainer * selectedQuantity;
-    if (discount) {
-      return basePrice * (1 - discount.discount / 100);
+  useEffect(() => {
+    if (id) {
+      loadProduct(id);
     }
-    return basePrice;
+  }, [id]);
+
+  const loadProduct = async (productId: string) => {
+    try {
+      setLoading(true);
+      const response = await getProductById(productId);
+      if (response.success && response.product) {
+        setProduct(response.product);
+      } else {
+        setError(response.message || "Error loading product");
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Error loading product");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const getAppliedDiscount = () => {
-    return product.pricing.discounts.find(
-      (d) => selectedQuantity >= d.quantity,
+  const handleAddToCart = async () => {
+    if (product) {
+      try {
+        await addItem(
+          product.id,
+          quantity,
+          product.containerType,
+          product.incoterm
+        );
+      } catch (error) {
+        console.error('Error adding item to cart:', error);
+        // You could show a toast notification here
+      }
+    }
+  };
+
+  const incrementQuantity = () => {
+    if (product && quantity < (product.stockContainers || 99)) {
+      setQuantity(prev => prev + 1);
+    }
+  };
+
+  const decrementQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(prev => prev - 1);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navigation />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="flex items-center justify-center h-64">
+            <div className="text-lg text-gray-600">Cargando producto...</div>
+          </div>
+        </div>
+      </div>
     );
-  };
+  }
 
-  const handleAddToCart = () => {
-    addItem({
-      productId: product.id,
-      productTitle: product.title,
-      productImage: product.images[0],
-      supplier: product.supplier.name,
-      supplierId: product.supplier.name,
-      containerType: product.specifications.containerType,
-      quantity: selectedQuantity,
-      pricePerContainer: product.pricing.pricePerContainer,
-      currency: product.pricing.currency,
-      incoterm: product.logistics.incoterm,
-      customPrice: customPrice ? parseFloat(customPrice) : undefined,
-      notes: "",
-    });
-  };
+  if (error || !product) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navigation />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center py-12">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Producto no encontrado</h2>
+            <p className="text-gray-600 mb-8">{error || "El producto solicitado no existe."}</p>
+            <Link to="/categories">
+              <Button>Volver a Categorías</Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-zlc-gray-50">
+    <div className="min-h-screen bg-gray-50">
       <Navigation />
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Breadcrumb mejorado */}
+        <nav className="flex items-center space-x-2 text-sm text-gray-600 mb-8">
+          <Link 
+            to="/categories" 
+            className="flex items-center text-blue-600 hover:text-blue-800 transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Categorías
+          </Link>
+          <span className="text-gray-400">/</span>
+          <span className="text-gray-900 font-medium">{product.name}</span>
+        </nav>
 
-      <main className="pt-14 sm:pt-16 md:pt-20">
-        <div className="container-section py-6">
-          {/* Breadcrumb */}
-          <div className="flex items-center space-x-2 text-sm text-gray-600 mb-6">
-            <Link to="/categories" className="hover:text-zlc-blue-600">
-              Categorías
-            </Link>
-            <span>/</span>
-            <Link
-              to="/categories?category=ropa"
-              className="hover:text-zlc-blue-600"
-            >
-              Ropa y Textiles
-            </Link>
-            <span>/</span>
-            <span className="text-gray-900">Camisetas</span>
-          </div>
-
-          <div className="grid lg:grid-cols-2 gap-8 mb-8">
-            {/* Product Images */}
-            <div className="space-y-4">
-              <div className="aspect-square bg-white rounded-lg border overflow-hidden group relative">
-                <img
-                  src={product.images[selectedImage]}
-                  alt={product.title}
-                  className="w-full h-full object-cover transition-transform group-hover:scale-105"
-                />
-                <Button
-                  size="icon"
-                  variant="secondary"
-                  className="absolute top-4 right-4 opacity-80 hover:opacity-100"
-                >
-                  <ZoomIn className="h-4 w-4" />
-                </Button>
-              </div>
-
-              {/* Image Thumbnails */}
-              <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* Sección de imágenes */}
+          <div className="space-y-6">
+            <div className="relative aspect-square bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-200">
+              <img
+                src={product.images[selectedImageIndex]}
+                alt={product.name}
+                className="w-full h-full object-cover"
+              />
+              <Button
+                size="sm"
+                variant="secondary"
+                className="absolute top-4 right-4 bg-white/80 backdrop-blur-sm hover:bg-white"
+              >
+                <ZoomIn className="h-4 w-4" />
+              </Button>
+            </div>
+            
+            {product.images.length > 1 && (
+              <div className="grid grid-cols-5 gap-3">
                 {product.images.map((image, index) => (
                   <button
                     key={index}
-                    onClick={() => setSelectedImage(index)}
-                    className={cn(
-                      "aspect-square rounded-lg border-2 overflow-hidden transition-all",
-                      selectedImage === index
-                        ? "border-zlc-blue-600 ring-2 ring-zlc-blue-200"
-                        : "border-gray-200 hover:border-gray-300",
-                    )}
+                    onClick={() => setSelectedImageIndex(index)}
+                    className={`aspect-square rounded-lg overflow-hidden border-2 transition-all ${
+                      selectedImageIndex === index
+                        ? 'border-blue-500 ring-2 ring-blue-200'
+                        : 'border-gray-200 hover:border-gray-300'
+                    }`}
                   >
                     <img
                       src={image}
-                      alt={`Vista ${index + 1}`}
+                      alt={`${product.name} ${index + 1}`}
                       className="w-full h-full object-cover"
                     />
                   </button>
                 ))}
               </div>
+            )}
+          </div>
+
+          {/* Información del producto */}
+          <div className="space-y-8">
+            {/* Header mejorado */}
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <Badge 
+                  variant="secondary" 
+                  className="bg-blue-100 text-blue-800 border-blue-200"
+                >
+                  {product.category?.name || "Sin categoría"}
+                </Badge>
+                <Badge 
+                  variant="secondary" 
+                  className="bg-amber-100 text-amber-800 border-amber-200"
+                >
+                  ⭐ Destacado
+                </Badge>
+              </div>
+              <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+                {product.name}
+              </h1>
+              <p className="text-lg text-gray-600 leading-relaxed">
+                {product.description}
+              </p>
             </div>
 
-            {/* Product Info */}
-            <div className="space-y-6">
-              {/* Header */}
-              <div>
-                <div className="flex items-start justify-between mb-2">
-                  <h1 className="text-3xl font-bold text-gray-900">
-                    {product.title}
-                  </h1>
-                  <div className="flex items-center space-x-2">
-                    <Button size="icon" variant="ghost">
-                      <Heart className="h-5 w-5" />
-                    </Button>
-                    <Button size="icon" variant="ghost">
-                      <Share2 className="h-5 w-5" />
-                    </Button>
+            {/* Sección de precio mejorada con gradientes */}
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-100 p-6 lg:p-8 rounded-2xl border border-blue-200 shadow-lg">
+              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                <div className="space-y-2">
+                  <div className="text-sm text-blue-600 font-medium uppercase tracking-wide">
+                    Precio por Contenedor {product.containerType}
+                  </div>
+                  <div className="text-4xl lg:text-5xl font-bold text-blue-900">
+                    ${product.pricePerContainer.toLocaleString()}
+                    <span className="text-xl text-blue-700 ml-2">{product.currency}</span>
+                  </div>
+                  <div className="text-sm text-blue-600">
+                    MOQ: {product.moq} contenedor{product.moq > 1 ? 'es' : ''} mínimo
+                  </div>
+                </div>
+                
+                <div className="bg-white bg-opacity-60 backdrop-blur-sm rounded-xl p-4 border border-blue-200">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-green-700">
+                      {product.stockContainers > 0 ? '✓' : '⚠️'}
+                    </div>
+                    <div className="text-sm font-medium text-gray-700">
+                      {product.stockContainers > 0 ? 'Disponible' : 'Consultar stock'}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Controles de cantidad MEJORADOS - MAS VISIBLES */}
+            <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-6 rounded-2xl border border-gray-200 shadow-md">
+              <Label className="text-lg font-semibold text-gray-900 mb-4 block">
+                Cantidad de Contenedores
+              </Label>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center bg-white rounded-xl border-2 border-gray-300 shadow-sm">
+                  <Button
+                    variant="ghost"
+                    size="lg"
+                    onClick={decrementQuantity}
+                    disabled={quantity <= 1}
+                    className="h-14 w-14 text-lg font-bold text-gray-700 hover:bg-gray-100 rounded-l-xl border-r"
+                  >
+                    <Minus className="h-6 w-6" />
+                  </Button>
+                  <div className="h-14 w-20 flex items-center justify-center bg-white text-xl font-bold text-gray-900">
+                    {quantity}
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="lg"
+                    onClick={incrementQuantity}
+                    disabled={product.stockContainers && quantity >= product.stockContainers}
+                    className="h-14 w-14 text-lg font-bold text-gray-700 hover:bg-gray-100 rounded-r-xl border-l"
+                  >
+                    <Plus className="h-6 w-6" />
+                  </Button>
+                </div>
+                <div className="text-sm text-gray-600 flex-1">
+                  Total: <span className="font-bold text-lg text-gray-900">
+                    ${(product.pricePerContainer * quantity).toLocaleString()} {product.currency}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Botones de acción MEJORADOS - MAS PROMINENTES */}
+            <div className="space-y-4">
+              <Button
+                onClick={handleAddToCart}
+                className="w-full h-16 text-lg font-bold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-lg transform transition-all hover:scale-105"
+                disabled={product.stockContainers === 0 || cartLoading}
+              >
+                <ShoppingCart className="h-6 w-6 mr-3" />
+                {cartLoading ? 'Agregando...' : `Agregar al Carrito (${quantity} contenedor${quantity > 1 ? 'es' : ''})`}
+              </Button>
+              
+              <RFQRequestDialog
+                product={{
+                  id: product.id,
+                  categoryId: product.categoryId,
+                  title: product.name,
+                  description: product.description,
+                  containerSize: product.containerType as "20'" | "40'",
+                  moq: product.moq,
+                  priceRange: {
+                    min: product.pricePerContainer,
+                    max: product.pricePerContainer,
+                    currency: product.currency,
+                  },
+                  images: product.images,
+                  specifications: {},
+                  supplierId: product.supplierId,
+                  availableFrom: new Date(),
+                  estimatedDelivery: `${product.productionTime + product.packagingTime} días`,
+                  status: "available" as const,
+                }}
+                supplierId={product.supplierId}
+                supplierName={product.supplier?.companyName || "Proveedor"}
+              >
+                <Button
+                  variant="outline"
+                  className="w-full h-14 text-lg font-semibold border-2 border-blue-600 text-blue-600 hover:bg-blue-50 shadow-md"
+                >
+                  <MessageCircle className="h-5 w-5 mr-3" />
+                  Solicitar Cotización
+                </Button>
+              </RFQRequestDialog>
+            </div>
+
+            {/* Estadísticas mejoradas */}
+            <div className="grid grid-cols-3 gap-4">
+              <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-4 rounded-xl text-center border border-green-200">
+                <div className="text-2xl font-bold text-green-700">{product.productionTime}</div>
+                <div className="text-sm text-green-600 font-medium">Días producción</div>
+              </div>
+              <div className="bg-gradient-to-br from-orange-50 to-amber-50 p-4 rounded-xl text-center border border-orange-200">
+                <div className="text-2xl font-bold text-orange-700">{product.packagingTime}</div>
+                <div className="text-sm text-orange-600 font-medium">Días empaque</div>
+              </div>
+              <div className="bg-gradient-to-br from-purple-50 to-violet-50 p-4 rounded-xl text-center border border-purple-200">
+                <div className="text-2xl font-bold text-purple-700">{product.moq}</div>
+                <div className="text-sm text-purple-600 font-medium">MOQ mínimo</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Tabs mejoradas con iconos y diseño responsivo */}
+        <Tabs defaultValue="description" className="w-full mt-8">
+          <TabsList className="grid w-full grid-cols-4 h-auto p-2 bg-white shadow-lg rounded-xl border border-gray-200">
+            <TabsTrigger 
+              value="description" 
+              className="flex items-center gap-2 h-14 text-sm font-semibold data-[state=active]:bg-blue-600 data-[state=active]:text-white rounded-lg"
+            >
+              <FileText className="h-4 w-4" />
+              <span className="hidden sm:inline">Descripción</span>
+            </TabsTrigger>
+            <TabsTrigger 
+              value="specifications" 
+              className="flex items-center gap-2 h-14 text-sm font-semibold data-[state=active]:bg-blue-600 data-[state=active]:text-white rounded-lg"
+            >
+              <Package className="h-4 w-4" />
+              <span className="hidden sm:inline">Especificaciones</span>
+            </TabsTrigger>
+            <TabsTrigger 
+              value="pricing" 
+              className="flex items-center gap-2 h-14 text-sm font-semibold data-[state=active]:bg-blue-600 data-[state=active]:text-white rounded-lg"
+            >
+              <DollarSign className="h-4 w-4" />
+              <span className="hidden sm:inline">Precios</span>
+            </TabsTrigger>
+            <TabsTrigger 
+              value="shipping" 
+              className="flex items-center gap-2 h-14 text-sm font-semibold data-[state=active]:bg-blue-600 data-[state=active]:text-white rounded-lg"
+            >
+              <Truck className="h-4 w-4" />
+              <span className="hidden sm:inline">Envío</span>
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Descripción mejorada */}
+          <TabsContent value="description" className="mt-6">
+            <Card className="border-2 border-gray-100 shadow-lg">
+              <CardContent className="p-6 lg:p-8">
+                <h3 className="text-xl lg:text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                  <FileText className="h-6 w-6 mr-3 text-blue-600" />
+                  Descripción Detallada
+                </h3>
+                
+                <div className="prose max-w-none text-gray-700 text-base leading-relaxed mb-8">
+                  <p className="text-lg mb-6">{product.description}</p>
+                  
+                  {/* Características destacadas */}
+                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200 mb-6">
+                    <h4 className="font-bold text-lg text-blue-900 mb-4 flex items-center">
+                      <CheckCircle className="h-5 w-5 mr-2 text-blue-600" />
+                      Características Destacadas
+                    </h4>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                      <div className="flex items-center bg-white bg-opacity-60 rounded-lg p-3">
+                        <span className="text-green-500 mr-3">✓</span>
+                        <span className="text-blue-800 font-medium">Calidad certificada internacional</span>
+                      </div>
+                      <div className="flex items-center bg-white bg-opacity-60 rounded-lg p-3">
+                        <span className="text-green-500 mr-3">✓</span>
+                        <span className="text-blue-800 font-medium">Empaque seguro para transporte</span>
+                      </div>
+                      <div className="flex items-center bg-white bg-opacity-60 rounded-lg p-3">
+                        <span className="text-green-500 mr-3">✓</span>
+                        <span className="text-blue-800 font-medium">Inspección pre-embarque incluida</span>
+                      </div>
+                      <div className="flex items-center bg-white bg-opacity-60 rounded-lg p-3">
+                        <span className="text-green-500 mr-3">✓</span>
+                        <span className="text-blue-800 font-medium">Soporte técnico especializado</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Especificaciones mejoradas */}
+          <TabsContent value="specifications" className="mt-6">
+            <Card className="border-2 border-gray-100 shadow-lg">
+              <CardContent className="p-6 lg:p-8">
+                <h3 className="text-xl lg:text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                  <Package className="h-6 w-6 mr-3 text-green-600" />
+                  Especificaciones Técnicas
+                </h3>
+                
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border border-green-200">
+                    <h4 className="font-bold text-lg text-green-900 mb-4">
+                      📦 Información del Contenedor
+                    </h4>
+                    <div className="space-y-3">
+                      <div className="bg-white bg-opacity-60 rounded-lg p-3 flex justify-between items-center">
+                        <span className="text-gray-700 font-medium">Tipo:</span>
+                        <Badge className="bg-green-600 text-white">{product.containerType}</Badge>
+                      </div>
+                      <div className="bg-white bg-opacity-60 rounded-lg p-3 flex justify-between items-center">
+                        <span className="text-gray-700 font-medium">Capacidad:</span>
+                        <span className="font-bold text-green-800">
+                          {product.containerType.includes("20") ? "28-33 CBM" : "58-68 CBM"}
+                        </span>
+                      </div>
+                      <div className="bg-white bg-opacity-60 rounded-lg p-3 flex justify-between items-center">
+                        <span className="text-gray-700 font-medium">Peso máximo:</span>
+                        <span className="font-bold text-green-800">
+                          {product.containerType.includes("20") ? "28,230 kg" : "30,480 kg"}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200">
+                    <h4 className="font-bold text-lg text-blue-900 mb-4">
+                      🏭 Información del Producto
+                    </h4>
+                    <div className="space-y-3">
+                      <div className="bg-white bg-opacity-60 rounded-lg p-3 flex justify-between items-center">
+                        <span className="text-gray-700 font-medium">Categoría:</span>
+                        <span className="font-bold text-blue-800">{product.category?.name || "Sin categoría"}</span>
+                      </div>
+                      <div className="bg-white bg-opacity-60 rounded-lg p-3 flex justify-between items-center">
+                        <span className="text-gray-700 font-medium">Stock disponible:</span>
+                        <span className="font-bold text-blue-800">{product.stockContainers} contenedores</span>
+                      </div>
+                      <div className="bg-white bg-opacity-60 rounded-lg p-3 flex justify-between items-center">
+                        <span className="text-gray-700 font-medium">Origen:</span>
+                        <span className="font-bold text-blue-800">Zhongshan, China</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Precios mejorados */}
+          <TabsContent value="pricing" className="mt-6">
+            <Card className="border-2 border-gray-100 shadow-lg">
+              <CardContent className="p-6 lg:p-8">
+                <h3 className="text-xl lg:text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                  <DollarSign className="h-6 w-6 mr-3 text-green-600" />
+                  Descuentos por Volumen
+                </h3>
+                
+                {product.volumeDiscounts && product.volumeDiscounts.length > 0 ? (
+                  <div className="space-y-6">
+                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border border-green-200">
+                      <VolumePricingTable productId={product.id} />
+                    </div>
+                    
+                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200">
+                      <h4 className="font-bold text-lg text-blue-900 mb-4 flex items-center">
+                        <Calculator className="h-5 w-5 mr-2" />
+                        Calculadora de Ahorros
+                      </h4>
+                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                        <div className="bg-white bg-opacity-60 rounded-lg p-4 text-center">
+                          <div className="text-lg font-bold text-blue-800">5%</div>
+                          <div className="text-sm text-blue-600">Ahorro en 2+ contenedores</div>
+                        </div>
+                        <div className="bg-white bg-opacity-60 rounded-lg p-4 text-center">
+                          <div className="text-lg font-bold text-blue-800">10%</div>
+                          <div className="text-sm text-blue-600">Ahorro en 5+ contenedores</div>
+                        </div>
+                        <div className="bg-white bg-opacity-60 rounded-lg p-4 text-center">
+                          <div className="text-lg font-bold text-blue-800">15%</div>
+                          <div className="text-sm text-blue-600">Ahorro en 10+ contenedores</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center py-12 bg-gray-50 rounded-xl">
+                    <DollarSign className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                    <h4 className="text-lg font-semibold text-gray-600 mb-2">Sin descuentos por volumen</h4>
+                    <p className="text-gray-500">Este producto mantiene precio fijo independiente de la cantidad</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Envío mejorado */}
+          <TabsContent value="shipping" className="mt-6">
+            <Card className="border-2 border-gray-100 shadow-lg">
+              <CardContent className="p-6 lg:p-8">
+                <h3 className="text-xl lg:text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                  <Truck className="h-6 w-6 mr-3 text-orange-600" />
+                  Información de Envío y Logística
+                </h3>
+                
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  <div className="bg-gradient-to-br from-orange-50 to-red-50 rounded-xl p-6 border border-orange-200">
+                    <h4 className="font-bold text-lg text-orange-900 mb-4 flex items-center">
+                      <span className="text-orange-600 mr-2">📋</span>
+                      Condiciones de Venta
+                    </h4>
+                    <div className="space-y-3">
+                      <div className="bg-white bg-opacity-60 rounded-lg p-3 flex justify-between items-center">
+                        <span className="text-gray-700 font-medium">Incoterm:</span>
+                        <Badge className="bg-orange-600 text-white">{product.incoterm}</Badge>
+                      </div>
+                      <div className="bg-white bg-opacity-60 rounded-lg p-3 flex justify-between items-center">
+                        <span className="text-gray-700 font-medium">Puerto de origen:</span>
+                        <span className="font-bold text-orange-800">Zhongshan, China</span>
+                      </div>
+                      <div className="bg-white bg-opacity-60 rounded-lg p-3 flex justify-between items-center">
+                        <span className="text-gray-700 font-medium">Moneda:</span>
+                        <span className="font-bold text-orange-800">USD</span>
+                      </div>
+                      <div className="bg-white bg-opacity-60 rounded-lg p-3 flex justify-between items-center">
+                        <span className="text-gray-700 font-medium">Método de pago:</span>
+                        <span className="font-bold text-orange-800">T/T, L/C</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200">
+                    <h4 className="font-bold text-lg text-blue-900 mb-4 flex items-center">
+                      <Clock className="h-5 w-5 mr-2 text-blue-600" />
+                      Tiempos y Procesos
+                    </h4>
+                    <div className="space-y-3">
+                      <div className="bg-white bg-opacity-60 rounded-lg p-3 flex justify-between items-center">
+                        <span className="text-gray-700 font-medium">Producción:</span>
+                        <span className="font-bold text-blue-800">{product.productionTime} días</span>
+                      </div>
+                      <div className="bg-white bg-opacity-60 rounded-lg p-3 flex justify-between items-center">
+                        <span className="text-gray-700 font-medium">Empaque:</span>
+                        <span className="font-bold text-blue-800">{product.packagingTime} días</span>
+                      </div>
+                      <div className="bg-white bg-opacity-60 rounded-lg p-3 flex justify-between items-center">
+                        <span className="text-gray-700 font-medium">Total estimado:</span>
+                        <span className="font-bold text-blue-800">{product.productionTime + product.packagingTime} días</span>
+                      </div>
+                      <div className="bg-white bg-opacity-60 rounded-lg p-3 flex justify-between items-center">
+                        <span className="text-gray-700 font-medium">Tránsito marítimo:</span>
+                        <span className="font-bold text-blue-800">15-25 días</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                {product.negotiable && (
-                  <Badge className="bg-orange-100 text-orange-800 mb-4">
-                    Precio Negociable
-                  </Badge>
-                )}
-
-                <p className="text-gray-600 text-lg leading-relaxed">
-                  {product.description}
-                </p>
-              </div>
-
-              {/* Supplier Info */}
-              <Card>
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <img
-                        src={product.supplier.logo}
-                        alt={product.supplier.name}
-                        className="w-12 h-12 rounded-lg object-cover"
-                      />
-                      <div>
-                        <div className="flex items-center space-x-2">
-                          <h3 className="font-semibold text-gray-900">
-                            {product.supplier.name}
-                          </h3>
-                          {product.supplier.verified && (
-                            <Badge className="bg-green-100 text-green-800 text-xs">
-                              <CheckCircle className="w-3 h-3 mr-1" />
-                              Verificado
-                            </Badge>
-                          )}
-                        </div>
-                        <div className="flex items-center space-x-4 text-sm text-gray-600">
-                          <div className="flex items-center space-x-1">
-                            <MapPin className="w-4 h-4" />
-                            <span>{product.supplier.country}</span>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <Star className="w-4 h-4 fill-current text-yellow-400" />
-                            <span>{product.supplier.rating}</span>
-                          </div>
-                        </div>
+                {/* Timeline del proceso */}
+                <div className="mt-8 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 border border-purple-200">
+                  <h4 className="font-bold text-lg text-purple-900 mb-6 flex items-center">
+                    <span className="text-purple-600 mr-2">⏱️</span>
+                    Timeline del Proceso de Pedido
+                  </h4>
+                  <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+                    <div className="text-center">
+                      <div className="bg-purple-200 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <span className="text-purple-800 font-bold">1</span>
                       </div>
+                      <h5 className="font-semibold text-purple-800 mb-1">Confirmación</h5>
+                      <p className="text-sm text-purple-600">1-2 días</p>
                     </div>
-                    <Button variant="outline" size="sm">
-                      <MessageCircle className="w-4 h-4 mr-2" />
-                      Contactar
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Pricing */}
-              <Card>
-                <CardContent className="p-6">
-                  <div className="space-y-4">
-                    <div>
-                      <div className="flex items-baseline space-x-2">
-                        <span className="text-3xl font-bold text-zlc-blue-600">
-                          ${product.pricing.pricePerContainer.toLocaleString()}
-                        </span>
-                        <span className="text-gray-600">por contenedor</span>
+                    <div className="text-center">
+                      <div className="bg-purple-200 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <span className="text-purple-800 font-bold">2</span>
                       </div>
-                      <div className="text-sm text-gray-600">
-                        ${product.pricing.pricePerUnit} por unidad •{" "}
-                        {product.specifications.totalUnits.toLocaleString()}{" "}
-                        unidades
-                      </div>
+                      <h5 className="font-semibold text-purple-800 mb-1">Producción</h5>
+                      <p className="text-sm text-purple-600">{product.productionTime} días</p>
                     </div>
-
-                    <Separator />
-
-                    {/* Quantity Selector */}
-                    <div>
-                      <Label
-                        htmlFor="quantity"
-                        className="text-base font-medium"
-                      >
-                        Cantidad de Contenedores
-                      </Label>
-                      <div className="flex items-center space-x-3 mt-2">
-                        <Select
-                          value={selectedQuantity.toString()}
-                          onValueChange={(value) =>
-                            setSelectedQuantity(parseInt(value))
-                          }
-                        >
-                          <SelectTrigger className="w-32">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {[1, 2, 5, 10, 20, 50].map((qty) => (
-                              <SelectItem key={qty} value={qty.toString()}>
-                                {qty}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-
-                        {getAppliedDiscount() && (
-                          <Badge className="bg-green-100 text-green-800">
-                            -{getAppliedDiscount()?.discount}% descuento
-                          </Badge>
-                        )}
+                    <div className="text-center">
+                      <div className="bg-purple-200 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <span className="text-purple-800 font-bold">3</span>
                       </div>
+                      <h5 className="font-semibold text-purple-800 mb-1">Embarque</h5>
+                      <p className="text-sm text-purple-600">3-5 días</p>
                     </div>
-
-                    {/* Total Calculation */}
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <div className="flex justify-between items-center">
-                        <span className="font-medium">Total:</span>
-                        <span className="text-2xl font-bold text-zlc-blue-600">
-                          ${calculateTotal().toLocaleString()}
-                        </span>
+                    <div className="text-center">
+                      <div className="bg-purple-200 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <span className="text-purple-800 font-bold">4</span>
                       </div>
-                      {getAppliedDiscount() && (
-                        <div className="text-sm text-green-600 mt-1">
-                          Ahorro: $
-                          {(
-                            product.pricing.pricePerContainer *
-                              selectedQuantity -
-                            calculateTotal()
-                          ).toLocaleString()}
-                        </div>
-                      )}
+                      <h5 className="font-semibold text-purple-800 mb-1">Entrega</h5>
+                      <p className="text-sm text-purple-600">15-25 días</p>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-
-              {/* Action Buttons */}
-              <Card>
-                <CardContent className="p-6">
-                  <div className="space-y-3">
-                    <Button
-                      onClick={handleAddToCart}
-                      className="w-full btn-professional"
-                      size="lg"
-                    >
-                      <ShoppingCart className="mr-2 h-4 w-4" />
-                      Agregar al Carrito
-                    </Button>
-
-                    <RFQRequestDialog
-                      product={{
-                        id: product.id,
-                        title: product.title,
-                        description: product.description,
-                        containerSize:
-                          product.specifications.containerType.includes("20")
-                            ? "20'"
-                            : "40'",
-                        moq: product.specifications.totalUnits,
-                        priceRange: {
-                          min: product.pricing.pricePerContainer,
-                          max: product.pricing.pricePerContainer,
-                          currency: product.pricing.currency,
-                        },
-                        images: product.images,
-                        specifications: {},
-                        supplierId: "supplier-1",
-                        availableFrom: new Date(),
-                        estimatedDelivery: "21-31 días",
-                        status: "available",
-                      }}
-                      supplierId="supplier-1"
-                      supplierName={product.supplier.name}
-                      onRFQCreated={(rfqId) => {
-                        console.log("RFQ created:", rfqId);
-                      }}
-                    >
-                      <Button
-                        variant="outline"
-                        className="w-full border-zlc-blue-600 text-zlc-blue-600 hover:bg-zlc-blue-50"
-                        size="lg"
-                      >
-                        <FileText className="mr-2 h-4 w-4" />
-                        Solicitar Cotización (RFQ)
-                      </Button>
-                    </RFQRequestDialog>
-                  </div>
-
-                  <Button
-                    variant="outline"
-                    className="w-full h-10 mt-3"
-                    asChild
-                  >
-                    <Link to="/cart">
-                      <Send className="w-4 h-4 mr-2" />
-                      Ver Carrito
-                    </Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-
-          <div className="space-y-8">
-            {/* Volume Pricing Section */}
-            <VolumePricingTable
-              productId={product.id}
-              onPricingChange={(calculation) => {
-                console.log("Pricing changed:", calculation);
-              }}
-              defaultQuantity={1}
-            />
-
-            {/* Information Tabs */}
-            <Card>
-              <CardContent className="p-0">
-                <Tabs defaultValue="details" className="w-full">
-                  <TabsList className="grid w-full grid-cols-4">
-                    <TabsTrigger value="details">Detalles</TabsTrigger>
-                    <TabsTrigger value="reviews">Reseñas</TabsTrigger>
-                    <TabsTrigger value="qa">Preguntas</TabsTrigger>
-                    <TabsTrigger value="return">Devoluciones</TabsTrigger>
-                  </TabsList>
-
-                  <TabsContent value="details" className="mt-6">
-                    <Card>
-                      <CardContent className="p-6">
-                        <h3 className="text-lg font-semibold mb-4">
-                          Especificaciones del Producto
-                        </h3>
-                        <div className="grid md:grid-cols-2 gap-6">
-                          <div>
-                            <h4 className="font-semibold mb-2">Material</h4>
-                            <p className="text-gray-600 mb-4">
-                              {product.specifications.material}
-                            </p>
-
-                            <h4 className="font-semibold mb-2">
-                              Colores Disponibles
-                            </h4>
-                            <div className="flex flex-wrap gap-2">
-                              {product.specifications.colors.map((color) => (
-                                <Badge key={color} variant="outline">
-                                  {color}
-                                </Badge>
-                              ))}
-                            </div>
-
-                            <h4 className="font-semibold mb-2 mt-4">
-                              Tallas Disponibles
-                            </h4>
-                            <div className="flex flex-wrap gap-2">
-                              {product.specifications.sizes.map((size) => (
-                                <Badge key={size} variant="outline">
-                                  {size}
-                                </Badge>
-                              ))}
-                            </div>
-                          </div>
-
-                          <div>
-                            <div className="space-y-3">
-                              <div className="flex justify-between">
-                                <span className="text-gray-600">
-                                  Cantidad total:
-                                </span>
-                                <span className="font-medium">
-                                  {product.specifications.totalUnits.toLocaleString()}{" "}
-                                  unidades
-                                </span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-gray-600">
-                                  Peso bruto:
-                                </span>
-                                <span className="font-medium">
-                                  {product.specifications.grossWeight}
-                                </span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-gray-600">
-                                  Peso neto:
-                                </span>
-                                <span className="font-medium">
-                                  {product.specifications.netWeight}
-                                </span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-gray-600">
-                                  Contenedor:
-                                </span>
-                                <span className="font-medium">
-                                  {product.specifications.containerType}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </TabsContent>
-
-                  <TabsContent value="reviews" className="mt-6">
-                    <Card>
-                      <CardContent className="p-6">
-                        <h3 className="text-lg font-semibold mb-4">
-                          Reseñas de Compradores
-                        </h3>
-                        <div className="text-center py-8 text-gray-500">
-                          <Star className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-                          <p>Aún no hay reseñas para este producto</p>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </TabsContent>
-
-                  <TabsContent value="qa" className="mt-6">
-                    <Card>
-                      <CardContent className="p-6">
-                        <h3 className="text-lg font-semibold mb-4">
-                          Preguntas y Respuestas
-                        </h3>
-                        <div className="text-center py-8 text-gray-500">
-                          <HelpCircle className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-                          <p>No hay preguntas sobre este producto</p>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </TabsContent>
-
-                  <TabsContent value="return" className="mt-6">
-                    <Card>
-                      <CardContent className="p-6">
-                        <h3 className="text-lg font-semibold mb-4">
-                          Política de Devoluciones
-                        </h3>
-                        <div className="space-y-4">
-                          <div>
-                            <h4 className="font-medium text-gray-900 mb-2">
-                              Garantía de Calidad
-                            </h4>
-                            <ul className="space-y-1">
-                              <li>
-                                • Garantía de 6 meses contra defectos de
-                                manufactura
-                              </li>
-                              <li>
-                                • Reemplazo gratuito por defectos probados
-                              </li>
-                              <li>• Certificación de calidad incluida</li>
-                            </ul>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </TabsContent>
-                </Tabs>
+                </div>
               </CardContent>
             </Card>
-          </div>
-        </div>
-      </main>
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   );
 }

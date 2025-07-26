@@ -33,6 +33,9 @@ import {
   Clock,
 } from "lucide-react";
 
+// Importar el hook de autenticación
+import { useAuthContext } from "@/contexts/AuthContext";
+
 const formSchema = z.object({
   email: z.string().email("Ingrese un email válido"),
   password: z.string().min(1, "La contraseña es requerida"),
@@ -42,6 +45,7 @@ type FormValues = z.infer<typeof formSchema>;
 
 export default function Login() {
   const navigate = useNavigate();
+  const { login } = useAuthContext();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState("");
@@ -86,6 +90,25 @@ export default function Login() {
       type: "supplier" as const,
       status: "rejected" as const,
     },
+    // Usuarios originales del backend
+    admin: {
+      email: "admin@zlcexpress.com",
+      password: "admin123",
+      type: "both" as const,
+      status: "verified" as const,
+    },
+    importadora: {
+      email: "importadora@empresa.com",
+      password: "importadora123",
+      type: "buyer" as const,
+      status: "verified" as const,
+    },
+    juan: {
+      email: "juanci123z@gmail.com",
+      password: "password123",
+      type: "buyer" as const,
+      status: "verified" as const,
+    },
   };
   // ============================================
   // END HARDCODED CREDENTIALS SECTION
@@ -105,53 +128,50 @@ export default function Login() {
     setAccountStatus(null);
 
     try {
-      // Simulate API call delay
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
       // ============================================
-      // HARDCODED DEMO LOGIN VALIDATION - FOR DEVELOPMENT ONLY
-      // TODO: REPLACE WITH REAL API AUTHENTICATION
+      // REAL BACKEND AUTHENTICATION
       // ============================================
-      const inputEmail = values.email.toLowerCase().trim();
-      const inputPassword = values.password.trim();
+      const credentials = {
+        email: values.email.trim(),
+        password: values.password.trim(),
+      };
 
-      // Find matching demo credential
-      const matchingCredential = Object.values(DEMO_CREDENTIALS).find(
-        (cred) =>
-          cred.email.toLowerCase() === inputEmail &&
-          cred.password === inputPassword,
-      );
+      console.log('Intentando login con:', credentials.email);
+      
+      const response = await login(credentials);
+      
+      console.log('Respuesta del login:', response);
 
-      if (matchingCredential) {
-        console.log(
-          `Demo login successful for ${matchingCredential.type} with status ${matchingCredential.status}`,
-        );
-
-        // Handle different account statuses
-        if (matchingCredential.status === "verified") {
-          // Successful login - redirect to appropriate dashboard
-          if (matchingCredential.type === "buyer") {
-            console.log("Redirecting to buyer dashboard...");
-            navigate("/"); // Redirect to main buyer dashboard/homepage
-          } else if (matchingCredential.type === "supplier") {
-            console.log("Redirecting to supplier dashboard...");
-            navigate("/supplier/dashboard"); // Redirect to supplier dashboard
-          }
-        } else {
-          // Account pending verification or rejected
-          setAccountStatus(matchingCredential.status);
+      if (response.success && response.user) {
+        // Login exitoso
+        console.log(`Login exitoso para ${response.user.userType} verificado`);
+        
+        // Redirigir según el tipo de usuario
+        if (response.user.userType === 'buyer' || response.user.userType === 'both') {
+          console.log("Redirigiendo al dashboard de comprador...");
+          navigate("/"); // Redirect to main buyer dashboard/homepage
+        } else if (response.user.userType === 'supplier') {
+          console.log("Redirigiendo al dashboard de proveedor...");
+          navigate("/supplier/dashboard"); // Redirect to supplier dashboard
         }
+        
       } else {
-        // No matching credentials found
-        setLoginError("Email o contraseña incorrectos");
-        console.log("Demo login failed - invalid credentials");
+        // Login fallido - manejar según el tipo de error
+        if (response.user && response.user.verificationStatus) {
+          // El usuario existe pero tiene problemas de verificación
+          setAccountStatus(response.user.verificationStatus);
+        }
+        
+        setLoginError(response.message || "Error desconocido");
+        console.log("Login fallido:", response.message);
       }
       // ============================================
-      // END HARDCODED LOGIN VALIDATION SECTION
+      // END REAL BACKEND AUTHENTICATION
       // ============================================
+      
     } catch (error) {
-      setLoginError("Error de conexión. Inténtelo nuevamente.");
-      console.error("Login error:", error);
+      setLoginError("Error de conexión. Verifica que el backend esté funcionando.");
+      console.error("Error de login:", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -227,13 +247,13 @@ export default function Login() {
             <CardHeader className="pb-3">
               <CardTitle className="text-sm text-amber-800 flex items-center gap-2">
                 <AlertCircle className="h-4 w-4" />
-                Credenciales Demo - Solo Desarrollo
+                Credenciales Demo - Conectado al Backend Real
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-0">
               <div className="space-y-3">
                 <div className="text-xs text-amber-700">
-                  <strong>Credenciales disponibles:</strong>
+                  <strong>🔗 Conectado a: http://localhost:3000/api</strong>
                 </div>
 
                 {/* Quick Login Buttons */}
@@ -245,13 +265,10 @@ export default function Login() {
                     className="text-xs h-8 justify-start"
                     onClick={() => {
                       form.setValue("email", DEMO_CREDENTIALS.buyer.email);
-                      form.setValue(
-                        "password",
-                        DEMO_CREDENTIALS.buyer.password,
-                      );
+                      form.setValue("password", DEMO_CREDENTIALS.buyer.password);
                     }}
                   >
-                    🛒 Comprador Verificado
+                    🛒 Comprador Verificado (Backend)
                   </Button>
 
                   <Button
@@ -260,17 +277,11 @@ export default function Login() {
                     size="sm"
                     className="text-xs h-8 justify-start"
                     onClick={() => {
-                      form.setValue(
-                        "email",
-                        DEMO_CREDENTIALS.buyerPending.email,
-                      );
-                      form.setValue(
-                        "password",
-                        DEMO_CREDENTIALS.buyerPending.password,
-                      );
+                      form.setValue("email", DEMO_CREDENTIALS.buyerPending.email);
+                      form.setValue("password", DEMO_CREDENTIALS.buyerPending.password);
                     }}
                   >
-                    ⏳ Comprador Pendiente
+                    ⏳ Comprador Pendiente (Backend)
                   </Button>
 
                   <Button
@@ -280,13 +291,10 @@ export default function Login() {
                     className="text-xs h-8 justify-start"
                     onClick={() => {
                       form.setValue("email", DEMO_CREDENTIALS.supplier.email);
-                      form.setValue(
-                        "password",
-                        DEMO_CREDENTIALS.supplier.password,
-                      );
+                      form.setValue("password", DEMO_CREDENTIALS.supplier.password);
                     }}
                   >
-                    🏭 Proveedor Verificado
+                    🏭 Proveedor Verificado (Backend)
                   </Button>
 
                   <Button
@@ -295,17 +303,11 @@ export default function Login() {
                     size="sm"
                     className="text-xs h-8 justify-start"
                     onClick={() => {
-                      form.setValue(
-                        "email",
-                        DEMO_CREDENTIALS.supplierPending.email,
-                      );
-                      form.setValue(
-                        "password",
-                        DEMO_CREDENTIALS.supplierPending.password,
-                      );
+                      form.setValue("email", DEMO_CREDENTIALS.admin.email);
+                      form.setValue("password", DEMO_CREDENTIALS.admin.password);
                     }}
                   >
-                    ⏳ Proveedor Pendiente
+                    👑 Administrador (Backend)
                   </Button>
 
                   <Button
@@ -314,23 +316,16 @@ export default function Login() {
                     size="sm"
                     className="text-xs h-8 justify-start"
                     onClick={() => {
-                      form.setValue(
-                        "email",
-                        DEMO_CREDENTIALS.supplierRejected.email,
-                      );
-                      form.setValue(
-                        "password",
-                        DEMO_CREDENTIALS.supplierRejected.password,
-                      );
+                      form.setValue("email", DEMO_CREDENTIALS.juan.email);
+                      form.setValue("password", DEMO_CREDENTIALS.juan.password);
                     }}
                   >
-                    ❌ Proveedor Rechazado
+                    🏢 Juan Mock Moreno (Backend)
                   </Button>
                 </div>
 
                 <div className="text-xs text-amber-600 mt-2">
-                  Haz clic en cualquier botón para auto-completar las
-                  credenciales
+                  ✅ Todos conectados al backend real en localhost:3000
                 </div>
               </div>
             </CardContent>
@@ -435,28 +430,19 @@ export default function Login() {
                     disabled={isSubmitting}
                     className="w-full bg-zlc-blue-800 hover:bg-zlc-blue-900 h-11"
                   >
-                    {isSubmitting ? "Iniciando sesión..." : "Iniciar Sesión"}
+                    {isSubmitting ? "Conectando al backend..." : "Iniciar Sesión"}
                   </Button>
 
-                  {/* Demo Credentials */}
-                  <div className="mt-6 p-4 bg-zlc-gray-50 rounded-lg">
-                    <p className="text-xs text-zlc-gray-600 mb-2 font-medium">
-                      Cuentas de demostración:
+                  {/* Backend Status */}
+                  <div className="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
+                    <p className="text-xs text-green-800 mb-2 font-medium flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4" />
+                      ✅ Conectado al Backend Real
                     </p>
-                    <div className="space-y-1 text-xs text-zlc-gray-500">
-                      <p>
-                        • <strong>pending@demo.com</strong> - Cuenta pendiente
-                        de verificación
-                      </p>
-                      <p>
-                        • <strong>rejected@demo.com</strong> - Cuenta rechazada
-                      </p>
-                      <p>
-                        • <strong>admin@demo.com</strong> - Cuenta verificada
-                      </p>
-                      <p className="mt-1 text-zlc-gray-400">
-                        Contraseña: cualquier valor
-                      </p>
+                    <div className="space-y-1 text-xs text-green-700">
+                      <p>• URL: http://localhost:3000/api/auth/login</p>
+                      <p>• Estado: Activo y funcionando</p>
+                      <p>• Base de datos: Mock (listo para MySQL)</p>
                     </div>
                   </div>
                 </form>

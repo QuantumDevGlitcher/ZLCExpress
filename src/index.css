@@ -1,8 +1,67 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+@import "react-day-picker/dist/style.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* React Day Picker Styles */
+.rdp {
+  --rdp-cell-size: 40px;
+  --rdp-accent-color: hsl(var(--primary));
+  --rdp-background-color: hsl(var(--muted));
+  --rdp-accent-color-dark: hsl(var(--primary));
+  --rdp-background-color-dark: hsl(var(--muted));
+  --rdp-outline: 2px solid hsl(var(--primary));
+  --rdp-outline-selected: 2px solid hsl(var(--primary));
+  font-family: inherit;
+}
+
+.rdp-day_selected {
+  background-color: hsl(var(--primary)) !important;
+  color: hsl(var(--primary-foreground)) !important;
+}
+
+.rdp-day_today {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+  font-weight: 600;
+}
+
+.rdp-day:hover:not(.rdp-day_selected):not(.rdp-day_disabled) {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+
+.rdp-day_disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.rdp-nav_button {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid hsl(var(--border));
+  background-color: transparent;
+  color: hsl(var(--foreground));
+}
+
+.rdp-nav_button:hover {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+
+.rdp-head_cell {
+  color: hsl(var(--muted-foreground));
+  font-weight: 500;
+  font-size: 0.8rem;
+}
+
+.rdp-caption_label {
+  font-weight: 600;
+  color: hsl(var(--foreground));
+}
 
 @layer base {
   :root {
