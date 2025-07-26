@@ -489,7 +489,7 @@ const SupplierCustoms = () => {
           <Card className="mb-6">
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-2">
-                <h3 className="font-medium">Progreso de Documentaci��n</h3>
+                <h3 className="font-medium">Progreso de Documentación</h3>
                 <span className="text-sm font-medium">
                   {getCompletionPercentage()}% completo
                 </span>
