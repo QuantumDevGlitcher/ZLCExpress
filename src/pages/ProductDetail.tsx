@@ -377,6 +377,7 @@ export default function ProductDetail() {
                 <CardContent className="p-6">
                   <div className="space-y-3">
                     <Button
+                      variant="default"
                       onClick={handleAddToCart}
                       className="w-full btn-professional"
                       size="lg"
