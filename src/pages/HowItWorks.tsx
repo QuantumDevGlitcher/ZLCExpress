@@ -133,20 +133,6 @@ const HowItWorks = () => {
             Conectamos compradores y proveedores B2B a través de una plataforma digital
             que simplifica el comercio internacional
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary" asChild>
-              <Link to="/register">
-                Empezar como Comprador
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-            </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-900" asChild>
-              <Link to="/supplier/register">
-                Registrarse como Proveedor
-                <Users className="ml-2 h-5 w-5" />
-              </Link>
-            </Button>
-          </div>
         </div>
       </div>
 
