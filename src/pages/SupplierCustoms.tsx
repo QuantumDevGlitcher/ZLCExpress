@@ -244,7 +244,7 @@ const SupplierCustoms = () => {
   const getStatusVariant = (status: string) => {
     switch (status) {
       case "approved":
-        return "default";
+        return "secondary";
       case "under_review":
         return "secondary";
       case "rejected":
@@ -537,28 +537,28 @@ const SupplierCustoms = () => {
             <CardContent className="p-4">
               <div className="flex flex-wrap gap-2">
                 <Button
-                  variant={activeTab === "documents" ? "default" : "outline"}
+                  variant={activeTab === "documents" ? "secondary" : "outline"}
                   onClick={() => setActiveTab("documents")}
                 >
                   <FileText className="h-4 w-4 mr-2" />
                   Mis Documentos
                 </Button>
                 <Button
-                  variant={activeTab === "generate" ? "default" : "outline"}
+                  variant={activeTab === "generate" ? "secondary" : "outline"}
                   onClick={() => setActiveTab("generate")}
                 >
                   <FilePlus className="h-4 w-4 mr-2" />
                   Generar Documentos
                 </Button>
                 <Button
-                  variant={activeTab === "checklist" ? "default" : "outline"}
+                  variant={activeTab === "checklist" ? "secondary" : "outline"}
                   onClick={() => setActiveTab("checklist")}
                 >
                   <FileCheck className="h-4 w-4 mr-2" />
                   Checklist Pre-Embarque
                 </Button>
                 <Button
-                  variant={activeTab === "history" ? "default" : "outline"}
+                  variant={activeTab === "history" ? "secondary" : "outline"}
                   onClick={() => setActiveTab("history")}
                 >
                   <History className="h-4 w-4 mr-2" />

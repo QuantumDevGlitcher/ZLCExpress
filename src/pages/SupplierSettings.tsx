@@ -436,7 +436,7 @@ const SupplierSettings = () => {
                   variant={activeTab === "profile" ? "default" : "outline"}
                   onClick={() => setActiveTab("profile")}
                 >
-                  <Building2 className="h-4 w-4 mr-2" />
+                  <Building2 className="h-4 w-4 mr-2 text-current" />
                   Perfil de Empresa
                 </Button>
                 <Button
@@ -662,7 +662,7 @@ const SupplierSettings = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="border rounded-lg p-4 text-center">
+                    <div className="border border-white rounded-lg p-4 text-center">
                       <Award className="h-8 w-8 text-green-600 mx-auto mb-2" />
                       <h4 className="font-medium">Licencia ZLC</h4>
                       <p className="text-sm text-gray-600 mb-2">
@@ -685,7 +685,7 @@ const SupplierSettings = () => {
                         </Button>
                       </div>
                     </div>
-                    <div className="border rounded-lg p-4 text-center">
+                    <div className="border border-white rounded-lg p-4 text-center">
                       <Award className="h-8 w-8 text-blue-600 mx-auto mb-2" />
                       <h4 className="font-medium">ISO 9001:2015</h4>
                       <p className="text-sm text-gray-600 mb-2">

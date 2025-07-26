@@ -492,7 +492,7 @@ export default function SupplierProducts() {
                     <Button
                       key={filter.key}
                       variant={
-                        statusFilter === filter.key ? "default" : "outline"
+                        statusFilter === filter.key ? "secondary" : "outline"
                       }
                       size="sm"
                       onClick={() => setStatusFilter(filter.key)}

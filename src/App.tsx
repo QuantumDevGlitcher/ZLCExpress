@@ -32,6 +32,8 @@ import CustomsSupport from "./pages/CustomsSupport";
 import SupplierDashboard from "./pages/SupplierDashboard";
 import SupplierProducts from "./pages/SupplierProducts";
 import SupplierCreateProduct from "./pages/SupplierCreateProduct";
+import SupplierProductEdit from "./pages/SupplierProductEdit";
+import SupplierProductDetail from "./pages/SupplierProductDetail";
 import SupplierRFQs from "./pages/SupplierRFQs";
 import SupplierRFQResponse from "./pages/SupplierRFQResponse";
 import SupplierOrders from "./pages/SupplierOrders";
@@ -112,6 +114,14 @@ const App = () => (
                   <Route
                     path="/supplier/products/new"
                     element={<SupplierCreateProduct />}
+                  />
+                  <Route
+                    path="/supplier/products/:id/edit"
+                    element={<SupplierProductEdit />}
+                  />
+                  <Route
+                    path="/supplier/products/:id"
+                    element={<SupplierProductDetail />}
                   />
                   <Route path="/supplier/rfqs" element={<SupplierRFQs />} />
                   <Route

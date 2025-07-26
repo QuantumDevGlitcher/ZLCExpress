@@ -46,10 +46,10 @@ const SupplierRFQs = () => {
       containerQuantity: 2,
       containerType: "20'" as const,
       incoterm: "FOB" as const,
-      receivedAt: new Date("2024-01-15"),
+      receivedAt: new Date("2024-01-28"),
       status: "pending" as const,
       estimatedValue: 19600,
-      validUntil: new Date("2024-02-15"),
+      validUntil: new Date("2024-03-15"), // Active - future date
     },
     {
       id: "RFQ-002",
@@ -59,10 +59,10 @@ const SupplierRFQs = () => {
       containerQuantity: 1,
       containerType: "40'" as const,
       incoterm: "CIF" as const,
-      receivedAt: new Date("2024-01-12"),
+      receivedAt: new Date("2024-01-26"),
       status: "quoted" as const,
       estimatedValue: 15800,
-      validUntil: new Date("2024-02-12"),
+      validUntil: new Date("2024-03-10"), // Active - future date
     },
     {
       id: "RFQ-003",
@@ -72,10 +72,62 @@ const SupplierRFQs = () => {
       containerQuantity: 3,
       containerType: "20'" as const,
       incoterm: "FOB" as const,
-      receivedAt: new Date("2024-01-10"),
+      receivedAt: new Date("2024-01-24"),
       status: "counter_offer" as const,
       estimatedValue: 29400,
-      validUntil: new Date("2024-02-10"),
+      validUntil: new Date("2024-03-05"), // Active - future date
+    },
+    {
+      id: "RFQ-007",
+      rfqNumber: "RFQ-2024-007",
+      buyerCompany: "Mega Distribuciones SA",
+      productTitle: "Jeans Denim Premium",
+      containerQuantity: 2,
+      containerType: "40'" as const,
+      incoterm: "FOB" as const,
+      receivedAt: new Date("2024-01-29"),
+      status: "pending" as const,
+      estimatedValue: 25000,
+      validUntil: new Date("2024-03-20"), // Active - future date
+    },
+    {
+      id: "RFQ-008",
+      rfqNumber: "RFQ-2024-008",
+      buyerCompany: "Retail Excellence Ltd",
+      productTitle: "Zapatos Deportivos Mixtos",
+      containerQuantity: 1,
+      containerType: "20'" as const,
+      incoterm: "CIF" as const,
+      receivedAt: new Date("2024-01-27"),
+      status: "pending" as const,
+      estimatedValue: 18500,
+      validUntil: new Date("2024-03-12"), // Active - future date
+    },
+    {
+      id: "RFQ-009",
+      rfqNumber: "RFQ-2024-009",
+      buyerCompany: "Fashion Forward Inc",
+      productTitle: "Accesorios de Moda Variados",
+      containerQuantity: 3,
+      containerType: "20'" as const,
+      incoterm: "FOB" as const,
+      receivedAt: new Date("2024-01-25"),
+      status: "quoted" as const,
+      estimatedValue: 13500,
+      validUntil: new Date("2024-03-08"), // Active - future date
+    },
+    {
+      id: "RFQ-010",
+      rfqNumber: "RFQ-2024-010",
+      buyerCompany: "Premium Textiles Group",
+      productTitle: "Camisa de Algodón Premium",
+      containerQuantity: 5,
+      containerType: "40'" as const,
+      incoterm: "FOB" as const,
+      receivedAt: new Date("2024-01-30"),
+      status: "pending" as const,
+      estimatedValue: 42500,
+      validUntil: new Date("2025-10-12"), // Valid until December 10, 2025
     },
     {
       id: "RFQ-004",
@@ -85,10 +137,36 @@ const SupplierRFQs = () => {
       containerQuantity: 1,
       containerType: "20'" as const,
       incoterm: "EXW" as const,
-      receivedAt: new Date("2024-01-08"),
-      status: "rejected" as const,
+      receivedAt: new Date("2024-01-05"),
+      status: "expired" as const,
       estimatedValue: 9800,
-      validUntil: new Date("2024-02-08"),
+      validUntil: new Date("2024-01-20"), // Expired - past date
+    },
+    {
+      id: "RFQ-005",
+      rfqNumber: "RFQ-2024-005",
+      buyerCompany: "Distribuidora Central",
+      productTitle: "Camisa de Algod��n Premium",
+      containerQuantity: 2,
+      containerType: "20'" as const,
+      incoterm: "FOB" as const,
+      receivedAt: new Date("2024-01-03"),
+      status: "expired" as const,
+      estimatedValue: 19600,
+      validUntil: new Date("2024-01-18"), // Expired - past date
+    },
+    {
+      id: "RFQ-006",
+      rfqNumber: "RFQ-2024-006",
+      buyerCompany: "Fashion Import Co.",
+      productTitle: "Camisa de Algodón Premium",
+      containerQuantity: 1,
+      containerType: "40'" as const,
+      incoterm: "CIF" as const,
+      receivedAt: new Date("2024-01-02"),
+      status: "rejected" as const,
+      estimatedValue: 15800,
+      validUntil: new Date("2024-01-15"), // Expired but already rejected
     },
   ];
 
@@ -101,6 +179,8 @@ const SupplierRFQs = () => {
       case "counter_offer":
         return "outline";
       case "rejected":
+        return "destructive";
+      case "expired":
         return "destructive";
       default:
         return "secondary";
@@ -117,8 +197,61 @@ const SupplierRFQs = () => {
         return "Contraoferta";
       case "rejected":
         return "Rechazado";
+      case "expired":
+        return "Vencida";
       default:
         return status;
+    }
+  };
+
+  // Helper function to check if RFQ is expired
+  const isRFQExpired = (rfq: any) => {
+    return new Date() > new Date(rfq.validUntil);
+  };
+
+  // Helper function to get appropriate button text and state
+  const getButtonConfig = (rfq: any) => {
+    const expired = isRFQExpired(rfq);
+
+    if (expired || rfq.status === "expired") {
+      return {
+        text: "Ver Detalles",
+        disabled: false,
+        variant: "outline" as const,
+      };
+    }
+
+    switch (rfq.status) {
+      case "pending":
+        return {
+          text: "Responder",
+          disabled: false,
+          variant: "secondary" as const,
+        };
+      case "quoted":
+        return {
+          text: "Ver Cotización",
+          disabled: false,
+          variant: "outline" as const,
+        };
+      case "counter_offer":
+        return {
+          text: "Ver Contraoferta",
+          disabled: false,
+          variant: "outline" as const,
+        };
+      case "rejected":
+        return {
+          text: "Ver Detalles",
+          disabled: false,
+          variant: "outline" as const,
+        };
+      default:
+        return {
+          text: "Ver Detalles",
+          disabled: false,
+          variant: "outline" as const,
+        };
     }
   };
 
@@ -132,12 +265,26 @@ const SupplierRFQs = () => {
         return <AlertCircle className="h-4 w-4" />;
       case "rejected":
         return <AlertCircle className="h-4 w-4" />;
+      case "expired":
+        return <AlertCircle className="h-4 w-4" />;
       default:
         return null;
     }
   };
 
-  const filteredRFQs = supplierRFQs.filter((rfq) => {
+  // Auto-update expired RFQs based on current date
+  const processedRFQs = supplierRFQs.map((rfq) => {
+    if (
+      isRFQExpired(rfq) &&
+      rfq.status !== "rejected" &&
+      rfq.status !== "expired"
+    ) {
+      return { ...rfq, status: "expired" as const };
+    }
+    return rfq;
+  });
+
+  const filteredRFQs = processedRFQs.filter((rfq) => {
     const matchesStatus = statusFilter === "all" || rfq.status === statusFilter;
     const matchesSearch =
       rfq.rfqNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -146,13 +293,16 @@ const SupplierRFQs = () => {
     return matchesStatus && matchesSearch;
   });
 
-  const pendingCount = supplierRFQs.filter(
+  const pendingCount = processedRFQs.filter(
     (rfq) => rfq.status === "pending",
   ).length;
-  const quotedCount = supplierRFQs.filter(
+  const quotedCount = processedRFQs.filter(
     (rfq) => rfq.status === "quoted",
   ).length;
-  const totalValue = supplierRFQs.reduce(
+  const expiredCount = processedRFQs.filter(
+    (rfq) => rfq.status === "expired",
+  ).length;
+  const totalValue = processedRFQs.reduce(
     (sum, rfq) => sum + rfq.estimatedValue,
     0,
   );
@@ -211,12 +361,12 @@ const SupplierRFQs = () => {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600">Total RFQs</p>
-                    <p className="text-2xl font-bold text-gray-900">
-                      {supplierRFQs.length}
+                    <p className="text-sm text-gray-600">Vencidas</p>
+                    <p className="text-2xl font-bold text-red-600">
+                      {expiredCount}
                     </p>
                   </div>
-                  <Package className="h-8 w-8 text-gray-600" />
+                  <AlertCircle className="h-8 w-8 text-red-600" />
                 </div>
               </CardContent>
             </Card>
@@ -265,6 +415,7 @@ const SupplierRFQs = () => {
                         Contraoferta
                       </SelectItem>
                       <SelectItem value="rejected">Rechazadas</SelectItem>
+                      <SelectItem value="expired">Vencidas</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -353,15 +504,21 @@ const SupplierRFQs = () => {
                           </span>
                         </TableCell>
                         <TableCell>
-                          <Button
-                            size="sm"
-                            onClick={() =>
-                              navigate(`/supplier/rfqs/${rfq.id}/respond`)
-                            }
-                            disabled={rfq.validUntil < new Date()}
-                          >
-                            Responder
-                          </Button>
+                          {(() => {
+                            const buttonConfig = getButtonConfig(rfq);
+                            return (
+                              <Button
+                                size="sm"
+                                variant={buttonConfig.variant}
+                                disabled={buttonConfig.disabled}
+                                onClick={() =>
+                                  navigate(`/supplier/rfqs/${rfq.id}/respond`)
+                                }
+                              >
+                                {buttonConfig.text}
+                              </Button>
+                            );
+                          })()}
                         </TableCell>
                       </TableRow>
                     ))}

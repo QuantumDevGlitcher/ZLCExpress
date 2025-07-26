@@ -265,7 +265,7 @@ const SupplierProfile = () => {
   const getInvoiceStatusVariant = (status: string) => {
     switch (status) {
       case "paid":
-        return "default";
+        return "secondary";
       case "sent":
         return "secondary";
       case "draft":
@@ -315,30 +315,28 @@ const SupplierProfile = () => {
             <CardContent className="p-4">
               <div className="flex flex-wrap gap-2">
                 <Button
-                  variant={activeTab === "profile" ? "default" : "outline"}
+                  variant={activeTab === "profile" ? "slate" : "outline"}
                   onClick={() => setActiveTab("profile")}
                 >
                   <Building2 className="h-4 w-4 mr-2" />
                   Datos de Empresa
                 </Button>
                 <Button
-                  variant={activeTab === "payments" ? "default" : "outline"}
+                  variant={activeTab === "payments" ? "slate" : "outline"}
                   onClick={() => setActiveTab("payments")}
                 >
                   <CreditCard className="h-4 w-4 mr-2" />
                   Métodos de Pago
                 </Button>
                 <Button
-                  variant={activeTab === "invoices" ? "default" : "outline"}
+                  variant={activeTab === "invoices" ? "slate" : "outline"}
                   onClick={() => setActiveTab("invoices")}
                 >
                   <FileText className="h-4 w-4 mr-2" />
                   Mis Facturas
                 </Button>
                 <Button
-                  variant={
-                    activeTab === "notifications" ? "default" : "outline"
-                  }
+                  variant={activeTab === "notifications" ? "slate" : "outline"}
                   onClick={() => setActiveTab("notifications")}
                 >
                   <Bell className="h-4 w-4 mr-2" />
@@ -460,7 +458,11 @@ const SupplierProfile = () => {
                       }
                     />
                   </div>
-                  <Button onClick={handleSaveProfile} className="w-full">
+                  <Button
+                    onClick={handleSaveProfile}
+                    variant="secondary"
+                    className="w-full"
+                  >
                     Guardar Cambios
                   </Button>
                 </CardContent>
@@ -684,11 +686,14 @@ const SupplierProfile = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {paymentMethods.map((method) => (
-                    <div key={method.id} className="border rounded-lg p-4">
+                    <div
+                      key={method.id}
+                      className="border border-white rounded-lg p-4"
+                    >
                       <div className="flex items-center justify-between mb-3">
                         <h4 className="font-medium">{method.title}</h4>
                         {method.isDefault && (
-                          <Badge variant="default">Principal</Badge>
+                          <Badge variant="secondary">Principal</Badge>
                         )}
                       </div>
                       <div className="space-y-2 text-sm">
@@ -791,7 +796,11 @@ const SupplierProfile = () => {
                       rows={3}
                     />
                   </div>
-                  <Button onClick={handleSavePaymentMethod} className="w-full">
+                  <Button
+                    variant="secondary"
+                    onClick={handleSavePaymentMethod}
+                    className="w-full"
+                  >
                     Guardar Configuración
                   </Button>
                 </CardContent>
@@ -952,7 +961,11 @@ const SupplierProfile = () => {
                     <Switch />
                   </div>
 
-                  <Button onClick={saveNotificationSettings} className="w-full">
+                  <Button
+                    variant="secondary"
+                    onClick={saveNotificationSettings}
+                    className="w-full"
+                  >
                     Guardar Configuración
                   </Button>
                 </div>

@@ -174,15 +174,15 @@ const SupplierOrders = () => {
       case "pending_payment":
         return "secondary";
       case "advance_paid":
-        return "default";
+        return "secondary";
       case "in_production":
         return "outline";
       case "ready_for_shipment":
-        return "default";
+        return "secondary";
       case "shipped":
         return "outline";
       case "completed":
-        return "default";
+        return "secondary";
       default:
         return "secondary";
     }
@@ -504,6 +504,7 @@ const SupplierOrders = () => {
                         <TableCell>
                           <Button
                             size="sm"
+                            variant="secondary"
                             onClick={() =>
                               navigate(`/supplier/orders/${order.id}`)
                             }
