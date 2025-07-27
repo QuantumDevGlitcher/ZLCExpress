@@ -552,9 +552,7 @@ export default function SupplierCreateProduct() {
                           name="unitsPerContainer"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>
-                                Unidades por Contenedor *
-                              </FormLabel>
+                              <FormLabel>Unidades por Contenedor *</FormLabel>
                               <FormControl>
                                 <Input
                                   type="number"
