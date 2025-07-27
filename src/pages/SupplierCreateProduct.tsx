@@ -553,7 +553,7 @@ export default function SupplierCreateProduct() {
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel>
-                                Unidades por Contenedor (MOQ) *
+                                Unidades por Contenedor *
                               </FormLabel>
                               <FormControl>
                                 <Input
