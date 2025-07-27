@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, ReactNode, useEffect } from "react";
+import React, { createContext, useContext, useReducer, ReactNode, useEffect, useCallback } from "react";
 import * as API from "@/services/api";
 
 export interface CartItem {
@@ -18,6 +18,27 @@ export interface CartItem {
   addedAt: Date;
 }
 
+export interface FreightQuote {
+  id: string;
+  origin: string;
+  destination: string;
+  containerType: string;
+  estimatedDate: string;
+  specialRequirements?: string;
+  selectedCarrier?: {
+    name: string;
+    cost: number;
+    currency: string;
+    transitTime: number;
+    incoterm: string;
+    conditions: string[];
+    availability: string;
+  };
+  cost: number;
+  currency: string;
+  createdAt: Date;
+}
+
 export interface Quote {
   id: string;
   items: CartItem[];
@@ -25,6 +46,7 @@ export interface Quote {
   paymentConditions: string;
   purchaseOrderFile?: File;
   freightEstimate?: number;
+  freightQuote?: FreightQuote; // Nueva propiedad para el flete calculado
   platformCommission?: number;
   status:
     | "draft"
@@ -45,6 +67,7 @@ interface CartState {
   isOpen: boolean;
   isLoading: boolean;
   error: string | null;
+  currentFreightQuote?: FreightQuote | null; // Nueva propiedad para el flete actual
 }
 
 type CartAction =
@@ -65,7 +88,8 @@ type CartAction =
   | {
       type: "UPDATE_QUOTE_STATUS";
       payload: { id: string; status: Quote["status"]; response?: string };
-    };
+    }
+  | { type: "SET_FREIGHT_QUOTE"; payload: FreightQuote | null };
 
 const initialState: CartState = {
   items: [],
@@ -73,6 +97,7 @@ const initialState: CartState = {
   isOpen: false,
   isLoading: false,
   error: null,
+  currentFreightQuote: null,
 };
 
 // API functions using imported services
@@ -166,7 +191,7 @@ const cartAPI = {
           const newItem: CartItem = {
             id: `local_${Date.now()}`,
             productId,
-            productTitle: product.name,
+            productTitle: product.title,
             productImage: product.images?.[0] || null,
             supplier: product.supplier?.companyName || 'Proveedor',
             supplierId: product.supplierId,
@@ -322,6 +347,12 @@ function cartReducer(state: CartState, action: CartAction): CartState {
         ),
       };
 
+    case "SET_FREIGHT_QUOTE":
+      return {
+        ...state,
+        currentFreightQuote: action.payload,
+      };
+
     default:
       return state;
   }
@@ -341,7 +372,12 @@ interface CartContextType {
   ) => void;
   getTotalItems: () => number;
   getTotalAmount: () => number;
+  getTotalAmountWithFreight: () => number;
   loadCart: () => Promise<void>;
+  setFreightQuote: (freightQuote: FreightQuote | null) => void;
+  clearFreightQuote: () => void;
+  hasFreightQuote: () => boolean;
+  canSendQuote: () => boolean;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -354,7 +390,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     loadCart();
   }, []);
 
-  const loadCart = async () => {
+  const loadCart = useCallback(async () => {
     dispatch({ type: "SET_LOADING", payload: true });
     dispatch({ type: "SET_ERROR", payload: null });
     
@@ -367,9 +403,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
     } finally {
       dispatch({ type: "SET_LOADING", payload: false });
     }
-  };
+  }, []);
 
-  const addItem = async (productId: string, containerQuantity: number, containerType = '20GP', incoterm = 'CIF') => {
+  const addItem = useCallback(async (productId: string, containerQuantity: number, containerType = '20GP', incoterm = 'CIF') => {
     console.log('🛒 Adding item to cart:', { productId, containerQuantity, containerType, incoterm });
     
     dispatch({ type: "SET_LOADING", payload: true });
@@ -380,8 +416,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
       
       dispatch({ type: "ADD_ITEM", payload: newItem });
       
-      // Reload cart to ensure consistency
-      await loadCart();
+      // No reload cart here - it causes infinite loop
+      console.log('✅ Item added successfully:', newItem);
     } catch (error) {
       console.error('❌ Error adding item to cart:', error);
       dispatch({ type: "SET_ERROR", payload: error instanceof Error ? error.message : 'Error adding to cart' });
@@ -389,9 +425,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
     } finally {
       dispatch({ type: "SET_LOADING", payload: false });
     }
-  };
+  }, []);
 
-  const removeItem = async (id: string) => {
+  const removeItem = useCallback(async (id: string) => {
     try {
       await cartAPI.removeFromCart(id);
       dispatch({ type: "REMOVE_ITEM", payload: id });
@@ -399,9 +435,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
       dispatch({ type: "SET_ERROR", payload: error instanceof Error ? error.message : 'Error removing item' });
       throw error;
     }
-  };
+  }, []);
 
-  const updateQuantity = async (id: string, quantity: number) => {
+  const updateQuantity = useCallback(async (id: string, quantity: number) => {
     try {
       dispatch({ type: "SET_LOADING", payload: true });
       
@@ -429,13 +465,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
     } finally {
       dispatch({ type: "SET_LOADING", payload: false });
     }
-  };
+  }, []);
 
-  const updateCustomPrice = (id: string, customPrice: number) => {
+  const updateCustomPrice = useCallback((id: string, customPrice: number) => {
     dispatch({ type: "UPDATE_CUSTOM_PRICE", payload: { id, customPrice } });
-  };
+  }, []);
 
-  const clearCart = async () => {
+  const clearCart = useCallback(async () => {
     try {
       await cartAPI.clearCart();
       dispatch({ type: "CLEAR_CART" });
@@ -443,40 +479,105 @@ export function CartProvider({ children }: { children: ReactNode }) {
       dispatch({ type: "SET_ERROR", payload: error instanceof Error ? error.message : 'Error clearing cart' });
       throw error;
     }
-  };
+  }, []);
 
-  const toggleCart = () => {
+  const toggleCart = useCallback(() => {
     dispatch({ type: "TOGGLE_CART" });
-  };
+  }, []);
 
-  const setCartOpen = (open: boolean) => {
+  const setCartOpen = useCallback((open: boolean) => {
     dispatch({ type: "SET_CART_OPEN", payload: open });
-  };
+  }, []);
 
-  const sendQuote = (
+  const sendQuote = useCallback(async (
     quoteData: Omit<Quote, "id" | "items" | "status" | "sentAt">,
   ) => {
-    const quote: Quote = {
-      ...quoteData,
-      id: `quote-${Date.now()}`,
-      items: [...state.items],
-      status: "sent",
-      sentAt: new Date(),
-    };
-    dispatch({ type: "ADD_QUOTE", payload: quote });
-    clearCart();
-  };
+    try {
+      // Convertir FreightQuote del contexto al formato de API
+      const apiFreightQuote = state.currentFreightQuote ? {
+        ...state.currentFreightQuote,
+        createdAt: state.currentFreightQuote.createdAt.toISOString()
+      } : undefined;
 
-  const getTotalItems = () => {
+      // Usar el nuevo servicio de API para enviar la cotización como RFQ al backend
+      const rfqResults = await API.sendQuoteAsRFQ({
+        items: state.items,
+        totalAmount: quoteData.totalAmount,
+        paymentConditions: quoteData.paymentConditions,
+        freightQuote: apiFreightQuote,
+        platformCommission: quoteData.platformCommission,
+        notes: quoteData.notes
+      });
+
+      // Verificar si al menos una RFQ se envió exitosamente
+      const hasSuccess = rfqResults.some(result => result.success);
+      
+      if (!hasSuccess) {
+        throw new Error('No se pudo enviar ninguna cotización');
+      }
+
+      // Crear el quote local para el contexto
+      const quote: Quote = {
+        ...quoteData,
+        id: `quote-${Date.now()}`,
+        items: [...state.items],
+        freightQuote: state.currentFreightQuote || undefined,
+        status: "sent",
+        sentAt: new Date(),
+      };
+      
+      dispatch({ type: "ADD_QUOTE", payload: quote });
+      
+      // Limpiar carrito Y freight quote para nueva cotización
+      try {
+        await cartAPI.clearCart();
+        dispatch({ type: "CLEAR_CART" });
+        dispatch({ type: "SET_FREIGHT_QUOTE", payload: null });
+      } catch (error) {
+        console.error('Error clearing cart after sending quote:', error);
+        dispatch({ type: "SET_ERROR", payload: error instanceof Error ? error.message : 'Error clearing cart' });
+      }
+    } catch (error) {
+      console.error('Error sending quote:', error);
+      dispatch({ type: "SET_ERROR", payload: error instanceof Error ? error.message : 'Error sending quote' });
+      throw error;
+    }
+  }, [state.items, state.currentFreightQuote]);
+
+  const getTotalItems = useCallback(() => {
     return state.items.reduce((total, item) => total + item.quantity, 0);
-  };
+  }, [state.items]);
 
-  const getTotalAmount = () => {
+  const getTotalAmount = useCallback(() => {
     return state.items.reduce((total, item) => {
-      const price = item.customPrice || item.pricePerContainer;
-      return total + price * item.quantity;
+      return total + item.pricePerContainer * item.quantity;
     }, 0);
-  };
+  }, [state.items]);
+
+  const getTotalAmountWithFreight = useCallback(() => {
+    const productTotal = state.items.reduce((total, item) => {
+      return total + item.pricePerContainer * item.quantity;
+    }, 0);
+    
+    const freightCost = state.currentFreightQuote?.cost || 0;
+    return productTotal + freightCost;
+  }, [state.items, state.currentFreightQuote]);
+
+  const clearFreightQuote = useCallback(() => {
+    dispatch({ type: "SET_FREIGHT_QUOTE", payload: null });
+  }, []);
+
+  const hasFreightQuote = useCallback(() => {
+    return state.currentFreightQuote !== null;
+  }, [state.currentFreightQuote]);
+
+  const canSendQuote = useCallback(() => {
+    return state.items.length > 0 && state.currentFreightQuote !== null;
+  }, [state.items, state.currentFreightQuote]);
+
+  const setFreightQuote = useCallback((freightQuote: FreightQuote | null) => {
+    dispatch({ type: "SET_FREIGHT_QUOTE", payload: freightQuote });
+  }, []);
 
   return (
     <CartContext.Provider
@@ -492,7 +593,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
         sendQuote,
         getTotalItems,
         getTotalAmount,
+        getTotalAmountWithFreight,
         loadCart,
+        setFreightQuote,
+        clearFreightQuote,
+        hasFreightQuote,
+        canSendQuote,
       }}
     >
       {children}

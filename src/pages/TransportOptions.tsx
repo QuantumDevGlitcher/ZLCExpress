@@ -8,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { Navigation } from "@/components/Navigation";
 import { TransportComparisonTable } from "@/components/TransportComparisonTable";
 import { useShipping } from "@/contexts/ShippingContext";
+import { useCart, FreightQuote } from "@/contexts/CartContext";
 import {
   ArrowLeft,
   ArrowRight,
@@ -24,12 +25,14 @@ export default function TransportOptions() {
   const navigate = useNavigate();
   const location = useLocation();
   const { state: shippingState, selectTransportOption } = useShipping();
+  const { setFreightQuote } = useCart();
 
   const [selectedOption, setSelectedOption] = useState<string | undefined>();
   const [isLoading, setIsLoading] = useState(false);
 
   const shippingData = location.state?.shippingData;
   const quoteId = location.state?.quoteId;
+  const freightQuote = location.state?.freightQuote;
 
   useEffect(() => {
     // Scroll to top when component mounts
@@ -47,12 +50,36 @@ export default function TransportOptions() {
     const option = shippingState.transportOptions.find(
       (o) => o.id === selectedOption,
     );
-    if (option) {
-      navigate("/booking-confirmation", {
+    
+    if (option && freightQuote) {
+      // Actualizar el freight quote con la opción seleccionada
+      const updatedFreightQuote: FreightQuote = {
+        ...freightQuote,
+        selectedCarrier: {
+          name: option.operatorName,
+          cost: option.cost,
+          currency: option.currency,
+          transitTime: option.transitTime,
+          incoterm: option.incoterm,
+          conditions: [
+            ...(option.conditions.insurance ? ['Seguro incluido'] : []),
+            ...(option.conditions.customs ? ['Gestión aduanera'] : []),
+            ...(option.conditions.documentation ? ['Documentación incluida'] : []),
+            ...(option.conditions.specialHandling || [])
+          ],
+          availability: option.availability.toISOString(),
+        },
+        cost: option.cost,
+      };
+
+      // Guardar el freight quote actualizado en el contexto
+      setFreightQuote(updatedFreightQuote);
+
+      // Regresar al carrito con el flete calculado
+      navigate("/cart", {
         state: {
-          quoteId,
-          shippingData,
-          selectedOption: option,
+          freightCalculated: true,
+          freightCost: option.cost,
         },
       });
     }

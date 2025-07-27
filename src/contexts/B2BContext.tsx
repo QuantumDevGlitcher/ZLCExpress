@@ -430,7 +430,7 @@ interface FreightQuoteParams {
   containerType: "20'" | "40'";
   quantity: number;
   includeInsurance: boolean;
-  serviceType?: string;
+  serviceType?: "standard" | "express" | "refrigerated";
 }
 
 interface ContainerValidation {

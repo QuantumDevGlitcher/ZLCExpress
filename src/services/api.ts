@@ -20,8 +20,8 @@ export interface User {
   city: string;
   postalCode: string;
   isVerified: boolean;
-  verificationStatus: 'pending' | 'verified' | 'rejected';
-  userType: 'buyer' | 'supplier' | 'both';
+  verificationStatus: 'PENDING' | 'VERIFIED' | 'REJECTED';
+  userType: 'BUYER' | 'SUPPLIER' | 'BOTH';
   createdAt: string;
   updatedAt: string;
 }
@@ -60,6 +60,54 @@ export const loginUser = async (credentials: LoginCredentials): Promise<LoginRes
     return data;
   } catch (error) {
     console.error('Error en login:', error);
+    return {
+      success: false,
+      message: 'Error de conexión. Verifica que el backend esté funcionando.',
+    };
+  }
+};
+
+// Tipos para el registro de usuarios
+export interface RegisterData {
+  email: string;
+  password: string;
+  companyName: string;
+  taxId: string;
+  operationCountry: string;
+  industry: string;
+  contactName: string;
+  contactPosition: string;
+  contactPhone: string;
+  fiscalAddress: string;
+  country: string;
+  state: string;
+  city: string;
+  postalCode: string;
+  userType: 'BUYER' | 'SUPPLIER' | 'BOTH';
+}
+
+export interface RegisterResponse {
+  success: boolean;
+  message: string;
+  user?: User;
+}
+
+// Función para registrar usuario
+export const registerUser = async (userData: RegisterData): Promise<RegisterResponse> => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/auth/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),
+    });
+
+    const data: RegisterResponse = await response.json();
+    
+    return data;
+  } catch (error) {
+    console.error('Error en registro:', error);
     return {
       success: false,
       message: 'Error de conexión. Verifica que el backend esté funcionando.',
@@ -176,19 +224,19 @@ export const getToken = (): string | null => {
 // ===== TIPOS PARA CATEGORÍAS Y PRODUCTOS =====
 
 export interface Category {
-  id: string;
+  id: number;
   name: string;
-  slug: string;
-  description: string;
-  parentId?: string;
-  level: number;
+  description: string | null;
+  parentId: number | null;
   isActive: boolean;
-  imageUrl?: string;
+  image: string | null;
   sortOrder: number;
-  productCount: number;
   createdAt: string;
   updatedAt: string;
-  subcategories?: Category[];
+  children?: Category[];
+  _count?: {
+    products: number;
+  };
 }
 
 export interface VolumeDiscount {
@@ -202,7 +250,7 @@ export interface VolumeDiscount {
 
 export interface Product {
   id: string;
-  name: string;
+  title: string;
   code: string;
   categoryId: string;
   supplierId: string;
@@ -603,5 +651,370 @@ export const clearCart = async (): Promise<CartResponse> => {
       success: false,
       message: 'Error de conexión'
     };
+  }
+};
+
+// ===== FUNCIONES PARA RFQ/COTIZACIONES =====
+
+export interface FreightQuote {
+  id: string;
+  origin: string;
+  destination: string;
+  containerType: string;
+  estimatedDate: string;
+  specialRequirements?: string;
+  selectedCarrier?: {
+    name: string;
+    cost: number;
+    currency: string;
+    transitTime: number;
+    incoterm: string;
+    conditions: string[];
+    availability: string;
+  };
+  cost: number;
+  currency: string;
+  createdAt: string;
+}
+
+export interface RFQRequest {
+  id?: string;
+  rfqNumber?: string;
+  productId: string;
+  productName?: string;
+  productDescription?: string;
+  supplierId?: string;
+  supplierName?: string;
+  requesterName: string;
+  requesterEmail: string;
+  requesterPhone?: string;
+  companyName?: string;
+  containerQuantity: number;
+  containerType: '20GP' | '40GP' | '40HC' | '45HC';
+  incoterm: 'EXW' | 'FOB' | 'CIF' | 'CFR' | 'DDP' | 'DAP';
+  tentativeDeliveryDate: string;
+  logisticsComments?: string;
+  specialRequirements?: string;
+  priority?: 'low' | 'medium' | 'high' | 'urgent';
+  status?: 'pending' | 'quoted' | 'accepted' | 'rejected' | 'expired';
+  estimatedValue?: number;
+  currency?: string;
+  freightQuote?: FreightQuote;
+  requestDate?: string;
+  responseDeadline?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface RFQResponse {
+  rfqId: string;
+  supplierId: string;
+  unitPrice: number;
+  totalPrice: number;
+  currency: string;
+  deliveryTime: number;
+  deliveryTerms: string;
+  validityPeriod: number;
+  paymentTerms: string;
+  minimumOrderQuantity: number;
+  supplierComments?: string;
+  technicalSpecifications?: string;
+  attachments?: string[];
+  status: 'draft' | 'submitted' | 'accepted' | 'rejected';
+  responseDate: string;
+  validUntil: string;
+}
+
+export interface RFQsResponse {
+  success: boolean;
+  data?: RFQRequest[];
+  total?: number;
+  message?: string;
+}
+
+export interface RFQDetailResponse {
+  success: boolean;
+  data?: RFQRequest;
+  message?: string;
+}
+
+export interface CreateRFQResponse {
+  success: boolean;
+  data?: RFQRequest;
+  message?: string;
+}
+
+// Crear nueva RFQ
+export const createRFQ = async (rfqData: Omit<RFQRequest, 'id' | 'rfqNumber' | 'createdAt' | 'updatedAt'>): Promise<CreateRFQResponse> => {
+  try {
+    console.log('🆕 Creando nueva RFQ:', rfqData);
+    const response = await fetch(`${API_BASE_URL}/rfq`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'user-id': 'demo_user'
+      },
+      body: JSON.stringify(rfqData),
+    });
+
+    console.log('📡 Respuesta del servidor para createRFQ:', response.status, response.statusText);
+    const data: CreateRFQResponse = await response.json();
+    console.log('📦 Datos de respuesta createRFQ:', data);
+    return data;
+  } catch (error) {
+    console.error('Error al crear RFQ:', error);
+    return {
+      success: false,
+      message: 'Error de conexión'
+    };
+  }
+};
+
+// Obtener todas las RFQs del usuario
+export const getUserRFQs = async (filters?: {
+  status?: string;
+  dateFrom?: string;
+  dateTo?: string;
+  supplierId?: string;
+}): Promise<RFQsResponse> => {
+  try {
+    console.log('🔍 Obteniendo RFQs del usuario con filtros:', filters);
+    const queryParams = new URLSearchParams();
+    queryParams.append('requesterId', 'demo_user'); // En producción vendría del token
+    
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          queryParams.append(key, value.toString());
+        }
+      });
+    }
+
+    const url = `${API_BASE_URL}/rfq?${queryParams.toString()}`;
+    console.log('🌐 URL de consulta:', url);
+    
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'user-id': 'demo_user'
+      },
+    });
+
+    console.log('📡 Respuesta del servidor:', response.status, response.statusText);
+    const data: RFQsResponse = await response.json();
+    console.log('📊 Datos recibidos:', data);
+    return data;
+  } catch (error) {
+    console.error('Error al obtener RFQs:', error);
+    return {
+      success: false,
+      data: [],
+      message: 'Error de conexión'
+    };
+  }
+};
+
+// Obtener RFQ por ID
+export const getRFQById = async (rfqId: string): Promise<RFQDetailResponse> => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/rfq/${rfqId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'user-id': 'demo_user'
+      },
+    });
+
+    const data: RFQDetailResponse = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error al obtener RFQ:', error);
+    return {
+      success: false,
+      message: 'Error de conexión'
+    };
+  }
+};
+
+// Obtener RFQs con información de flete
+export const getRFQsWithFreight = async (filters?: {
+  status?: string;
+  dateFrom?: string;
+  dateTo?: string;
+}): Promise<RFQsResponse> => {
+  try {
+    const queryParams = new URLSearchParams();
+    queryParams.append('requesterId', 'demo_user');
+    
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          queryParams.append(key, value.toString());
+        }
+      });
+    }
+
+    const url = `${API_BASE_URL}/rfq/freight?${queryParams.toString()}`;
+    
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'user-id': 'demo_user'
+      },
+    });
+
+    const data: RFQsResponse = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error al obtener RFQs con flete:', error);
+    return {
+      success: false,
+      data: [],
+      message: 'Error de conexión'
+    };
+  }
+};
+
+// Función de prueba para verificar conectividad del backend
+export const testBackendConnection = async (): Promise<{ success: boolean; message: string; data?: any }> => {
+  try {
+    console.log('🧪 Probando conexión al backend...');
+    
+    // Probar endpoint básico primero
+    const healthResponse = await fetch(`http://localhost:3000/health`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    console.log('❤️ Health check response:', healthResponse.status, healthResponse.statusText);
+    
+    if (!healthResponse.ok) {
+      throw new Error(`Health check failed: ${healthResponse.status}`);
+    }
+    
+    const healthData = await healthResponse.json();
+    console.log('❤️ Health data:', healthData);
+    
+    // Probar endpoint de productos para debug (opcional)
+    let productsData = { count: 0, products: [] };
+    try {
+      const productsResponse = await fetch(`http://localhost:3000/debug/products`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      console.log('🛍️ Products debug response:', productsResponse.status, productsResponse.statusText);
+      if (productsResponse.ok) {
+        productsData = await productsResponse.json();
+        console.log('📦 Products available:', productsData);
+      }
+    } catch (productError) {
+      console.log('⚠️ Products endpoint not available:', productError.message);
+    }
+    
+    // Probar endpoint de RFQ específicamente
+    const rfqTestResponse = await fetch(`${API_BASE_URL}/rfq?requesterId=demo_user`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'user-id': 'demo_user'
+      },
+    });
+    
+    console.log('🔍 RFQ test response:', rfqTestResponse.status, rfqTestResponse.statusText);
+    const rfqData = await rfqTestResponse.json();
+    console.log('📊 RFQ test data:', rfqData);
+    
+    return {
+      success: true,
+      message: `Backend conectado correctamente. Health: ${healthData.status}, Products: ${productsData.count || 0}, RFQs: ${rfqData.data?.length || 0}`,
+      data: { health: healthData, products: productsData, rfqs: rfqData }
+    };
+  } catch (error) {
+    console.error('❌ Error probando backend:', error);
+    return {
+      success: false,
+      message: `Error de conexión: ${error.message}`
+    };
+  }
+};
+
+// Función para convertir datos del carrito a RFQ
+export const sendQuoteAsRFQ = async (quoteData: {
+  items: any[];
+  totalAmount: number;
+  paymentConditions: string;
+  freightQuote?: FreightQuote;
+  platformCommission?: number;
+  notes?: string;
+}): Promise<CreateRFQResponse[]> => {
+  try {
+    console.log('🚀 Enviando cotización como RFQ:', quoteData);
+    const results: CreateRFQResponse[] = [];
+    
+    // Agrupar items por proveedor
+    const itemsBySupplier = quoteData.items.reduce((acc: { [supplierId: string]: any[] }, item: any) => {
+      if (!acc[item.supplierId]) {
+        acc[item.supplierId] = [];
+      }
+      acc[item.supplierId].push(item);
+      return acc;
+    }, {} as { [supplierId: string]: any[] });
+
+    console.log('📦 Items agrupados por proveedor:', itemsBySupplier);
+
+    // Crear una RFQ por cada proveedor
+    for (const [supplierId, items] of Object.entries(itemsBySupplier)) {
+      const itemsArray = items as any[]; // Asegurar que es un array
+      const firstItem = itemsArray[0];
+      const totalContainers = itemsArray.reduce((sum: number, item: any) => sum + item.quantity, 0);
+      
+      console.log(`🏭 Creando RFQ para proveedor ${supplierId}:`, {
+        supplierId,
+        itemCount: itemsArray.length,
+        totalContainers,
+        firstItem
+      });
+      
+      const rfqData: Omit<RFQRequest, 'id' | 'rfqNumber' | 'createdAt' | 'updatedAt'> = {
+        productId: firstItem.productId,
+        productName: firstItem.productTitle,
+        supplierId: firstItem.supplierId,
+        supplierName: firstItem.supplier,
+        requesterName: 'Demo User', // En producción vendría del contexto de usuario
+        requesterEmail: 'demo@example.com',
+        companyName: 'Demo Company',
+        containerQuantity: totalContainers,
+        containerType: firstItem.containerType as any,
+        incoterm: firstItem.incoterm as any,
+        tentativeDeliveryDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 días
+        logisticsComments: quoteData.notes,
+        specialRequirements: `Condiciones de pago: ${quoteData.paymentConditions}. Comisión de plataforma: $${quoteData.platformCommission || 0}`,
+        priority: 'medium',
+        estimatedValue: quoteData.totalAmount,
+        currency: 'USD',
+        freightQuote: quoteData.freightQuote
+      };
+
+      console.log('📋 Datos de RFQ a enviar:', rfqData);
+      const result = await createRFQ(rfqData);
+      console.log('📤 Resultado de createRFQ:', result);
+      results.push(result);
+    }
+
+    console.log('✅ Resultados finales:', results);
+    return results;
+  } catch (error) {
+    console.error('Error al enviar cotización como RFQ:', error);
+    return [{
+      success: false,
+      message: 'Error al procesar cotización'
+    }];
   }
 };

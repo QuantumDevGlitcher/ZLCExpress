@@ -17,7 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Navigation } from "@/components/Navigation";
 import { useShipping } from "@/contexts/ShippingContext";
-import { useCart } from "@/contexts/CartContext";
+import { useCart, FreightQuote } from "@/contexts/CartContext";
 import {
   ArrowLeft,
   Package,
@@ -61,7 +61,7 @@ export default function ShippingRequest() {
   const navigate = useNavigate();
   const location = useLocation();
   const { createShippingRequest, requestTransportOptions } = useShipping();
-  const { state: cartState } = useCart();
+  const { state: cartState, setFreightQuote } = useCart();
 
   // Get quote ID from navigation state or URL params
   const quoteId = location.state?.quoteId || "current-quote";
@@ -112,6 +112,25 @@ export default function ShippingRequest() {
     setIsSubmitting(true);
 
     try {
+      // Create freight quote object
+      const selectedDestPort = PORTS.find(p => p.code === formData.destinationPort);
+      const selectedOriginPort = PORTS.find(p => p.code === formData.originPort);
+      
+      const freightQuote: FreightQuote = {
+        id: `freight-${Date.now()}`,
+        origin: selectedOriginPort?.name || "Puerto de Colón, Panamá",
+        destination: selectedDestPort?.name || "",
+        containerType: formData.containerType,
+        estimatedDate: formData.estimatedDate,
+        specialRequirements: formData.specialRequirements,
+        cost: 0, // Se calculará en el paso 2
+        currency: "USD",
+        createdAt: new Date(),
+      };
+
+      // Guardar el freight quote en el contexto del carrito
+      setFreightQuote(freightQuote);
+
       // Create shipping request
       createShippingRequest({
         quoteId,
@@ -125,11 +144,12 @@ export default function ShippingRequest() {
       // Request transport options from logistics partners
       await requestTransportOptions(`shipping-${Date.now()}`);
 
-      // Navigate to transport options page
+      // Navigate to transport options page with freight quote info
       navigate("/transport-options", {
         state: {
           quoteId,
           shippingData: formData,
+          freightQuote,
         },
       });
     } catch (error) {

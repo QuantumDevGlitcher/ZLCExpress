@@ -223,8 +223,8 @@ export function Navigation({ className }: NavigationProps) {
 
           {/* Right side controls */}
           <div className="flex items-center space-x-4">
-            {/* Cart Dropdown - Only for Buyers */}
-            {userType === "buyer" && <CartDropdown />}
+            {/* Cart Dropdown - Only for Buyers and Both */}
+            {(userType === "buyer" || userType === "both") && <CartDropdown />}
             {/* Language & Currency Selector */}
             <div className="hidden lg:flex items-center space-x-2">
               <DropdownMenu>
@@ -285,7 +285,7 @@ export function Navigation({ className }: NavigationProps) {
             {/* User Authentication */}
             {isLoggedIn ? (
               <div className="flex items-center space-x-3">
-                {companyStatus === "verified" && (
+                {companyStatus === "VERIFIED" && (
                   <Badge
                     variant="secondary"
                     className="bg-green-100 text-green-800"
@@ -501,7 +501,7 @@ export function Navigation({ className }: NavigationProps) {
                       <div className="px-3 py-2">
                         <p className="font-medium text-sm">{user?.contactName}</p>
                         <p className="text-xs text-gray-600">{user?.companyName}</p>
-                        {companyStatus === "verified" && (
+                        {companyStatus === "VERIFIED" && (
                           <Badge variant="secondary" className="bg-green-100 text-green-800 mt-1">
                             Empresa Verificada
                           </Badge>

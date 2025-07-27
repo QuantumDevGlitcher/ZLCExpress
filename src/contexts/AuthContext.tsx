@@ -56,9 +56,9 @@ export const useUserRole = () => {
   const { user } = useAuthContext();
   
   return {
-    isBuyer: user?.userType === 'buyer' || user?.userType === 'both',
-    isSupplier: user?.userType === 'supplier' || user?.userType === 'both',
-    isAdmin: user?.userType === 'both',
-    userType: user?.userType || null,
+    isBuyer: user?.userType === 'BUYER' || user?.userType === 'BOTH',
+    isSupplier: user?.userType === 'SUPPLIER' || user?.userType === 'BOTH',
+    isAdmin: user?.userType === 'BOTH',
+    userType: user?.userType?.toLowerCase() || null, // Normalizar a minúsculas para el frontend
   };
 };

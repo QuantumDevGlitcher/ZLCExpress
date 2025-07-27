@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -46,6 +46,8 @@ import {
   ArrowRight,
   AlertCircle,
 } from "lucide-react";
+import { registerUser, type RegisterData } from "@/services/api";
+import { useToast } from "@/hooks/use-toast";
 
 // Form validation schema
 const formSchema = z
@@ -149,7 +151,7 @@ const provinciasPanel = [
   "Veraguas",
 ];
 
-type FormValues = z.infer<typeof formSchema>;
+type BuyerFormValues = z.infer<typeof formSchema>;
 
 // Geographic data structure for cascading dropdowns
 const geographicData = {
@@ -461,6 +463,8 @@ const steps = [
 ];
 
 export default function Register() {
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const [userType, setUserType] = useState<"buyer" | "supplier" | null>(null);
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -480,7 +484,7 @@ export default function Register() {
   >([]);
   const [uploadedDocuments, setUploadedDocuments] = useState<File[]>([]);
 
-  const form = useForm<FormValues>({
+  const form = useForm<BuyerFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       companyName: "",
@@ -525,27 +529,112 @@ export default function Register() {
 
   const progress = (currentStep / steps.length) * 100;
 
-  const onSubmit = async (values: FormValues) => {
+  const onSubmit = async (values: BuyerFormValues) => {
     setIsSubmitting(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    console.log("Buyer form submitted:", values);
-    setIsSubmitting(false);
-    // Here you would typically redirect to a success page or dashboard
+    
+    try {
+      // Preparar datos para el backend
+      const registerData: RegisterData = {
+        email: values.email,
+        password: values.password,
+        companyName: values.companyName,
+        taxId: values.taxId,
+        operationCountry: values.country,
+        industry: values.sector,
+        contactName: values.contactName,
+        contactPosition: values.contactPosition,
+        contactPhone: values.phone,
+        fiscalAddress: values.street,
+        country: values.fiscalCountry,
+        state: values.state,
+        city: values.city,
+        postalCode: values.postalCode,
+        userType: 'BUYER'
+      };
+
+      console.log("Enviando datos de buyer:", registerData);
+      
+      const response = await registerUser(registerData);
+      
+      if (response.success) {
+        toast({
+          title: "Registro exitoso",
+          description: "Tu cuenta ha sido creada exitosamente. Ya puedes iniciar sesión.",
+        });
+        
+        // Redirect to login page
+        navigate('/login');
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Error en el registro",
+          description: response.message || "Hubo un problema al crear tu cuenta.",
+        });
+      }
+    } catch (error) {
+      console.error('Error en registro:', error);
+      toast({
+        variant: "destructive",
+        title: "Error de conexión",
+        description: "No se pudo conectar con el servidor. Inténtalo más tarde.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const onSupplierSubmit = async (values: SupplierFormValues) => {
     setIsSubmitting(true);
-    // Simulate API call with supplier data
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    console.log("Supplier form submitted:", {
-      ...values,
-      paisOperacion: "Panamá", // Hidden field
-      paisDireccion: "Panamá", // Hidden field
-      documentosAdjuntos: uploadedDocuments,
-    });
-    setIsSubmitting(false);
-    // Redirect to verification pending page
+    
+    try {
+      // Preparar datos para el backend
+      const registerData: RegisterData = {
+        email: values.emailCorporativo,
+        password: values.password,
+        companyName: values.nombreEmpresa,
+        taxId: values.ruc,
+        operationCountry: "Panamá", // Hidden field
+        industry: values.sectorIndustria,
+        contactName: values.nombreContacto,
+        contactPosition: values.cargo,
+        contactPhone: values.telefonoContacto,
+        fiscalAddress: values.direccion,
+        country: "Panamá", // Hidden field
+        state: values.provincia,
+        city: values.ciudad,
+        postalCode: values.codigoPostal || "",
+        userType: 'SUPPLIER'
+      };
+
+      console.log("Enviando datos de supplier:", registerData);
+      
+      const response = await registerUser(registerData);
+      
+      if (response.success) {
+        toast({
+          title: "Registro exitoso",
+          description: "Tu cuenta ha sido creada exitosamente. Ya puedes iniciar sesión.",
+        });
+        
+        // Redirect to login page
+        navigate('/login');
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Error en el registro",
+          description: response.message || "Hubo un problema al crear tu cuenta.",
+        });
+      }
+    } catch (error) {
+      console.error('Error en registro:', error);
+      toast({
+        variant: "destructive",
+        title: "Error de conexión",
+        description: "No se pudo conectar con el servidor. Inténtalo más tarde.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const nextStep = () => {
@@ -644,7 +733,7 @@ export default function Register() {
   const canProceed = () => {
     const fieldsToValidate = getFieldsForStep(currentStep);
     return fieldsToValidate.every((field) => {
-      const value = form.getValues(field as keyof FormValues);
+      const value = form.getValues(field as keyof BuyerFormValues);
       return value && value !== "";
     });
   };

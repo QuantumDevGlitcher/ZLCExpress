@@ -161,7 +161,7 @@ export default function ProductDetail() {
             Categorías
           </Link>
           <span className="text-gray-400">/</span>
-          <span className="text-gray-900 font-medium">{product.name}</span>
+          <span className="text-gray-900 font-medium">{product.title}</span>
         </nav>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -170,7 +170,7 @@ export default function ProductDetail() {
             <div className="relative aspect-square bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-200">
               <img
                 src={product.images[selectedImageIndex]}
-                alt={product.name}
+                alt={product.title}
                 className="w-full h-full object-cover"
               />
               <Button
@@ -196,7 +196,7 @@ export default function ProductDetail() {
                   >
                     <img
                       src={image}
-                      alt={`${product.name} ${index + 1}`}
+                      alt={`${product.title} ${index + 1}`}
                       className="w-full h-full object-cover"
                     />
                   </button>
@@ -224,7 +224,7 @@ export default function ProductDetail() {
                 </Badge>
               </div>
               <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-                {product.name}
+                {product.title}
               </h1>
               <p className="text-lg text-gray-600 leading-relaxed">
                 {product.description}
@@ -312,7 +312,7 @@ export default function ProductDetail() {
                 product={{
                   id: product.id,
                   categoryId: product.categoryId,
-                  title: product.name,
+                  title: product.title,
                   description: product.description,
                   containerSize: product.containerType as "20'" | "40'",
                   moq: product.moq,

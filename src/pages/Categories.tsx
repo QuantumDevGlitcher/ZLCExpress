@@ -69,7 +69,7 @@ export default function Categories() {
   const [selectedIncoterm, setSelectedIncoterm] = useState<string>("");
   const [onlyNegotiable, setOnlyNegotiable] = useState(false);
   const [onlyCustomOrders, setOnlyCustomOrders] = useState(false);
-  const [sortBy, setSortBy] = useState<string>("name");
+  const [sortBy, setSortBy] = useState<string>("title");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   
@@ -136,29 +136,39 @@ export default function Categories() {
       if (onlyCustomOrders) filters.allowsCustomOrders = true;
 
       const response = await getProducts(filters);
+      console.log('🔍 Respuesta del API getProducts:', response);
+      
       if (response.success) {
-        setProducts(response.products);
-        setTotalProducts(response.total);
+        console.log('📦 Productos recibidos:', response.products);
+        setProducts(response.products || []);
+        setTotalProducts(response.total || 0);
+      } else {
+        setProducts([]);
+        setTotalProducts(0);
       }
     } catch (error) {
       console.error("Error al cargar productos:", error);
+      setProducts([]);
+      setTotalProducts(0);
     } finally {
       setProductsLoading(false);
     }
   };
 
-  const toggleCategory = (categoryId: string) => {
+  const toggleCategory = (categoryId: number) => {
+    const categoryIdStr = categoryId.toString();
     const newOpenCategories = new Set(openCategories);
-    if (newOpenCategories.has(categoryId)) {
-      newOpenCategories.delete(categoryId);
+    if (newOpenCategories.has(categoryIdStr)) {
+      newOpenCategories.delete(categoryIdStr);
     } else {
-      newOpenCategories.add(categoryId);
+      newOpenCategories.add(categoryIdStr);
     }
     setOpenCategories(newOpenCategories);
   };
 
-  const handleCategorySelect = (categoryId: string) => {
-    setSelectedCategory(categoryId === selectedCategory ? "" : categoryId);
+  const handleCategorySelect = (categoryId: number) => {
+    const categoryIdStr = categoryId.toString();
+    setSelectedCategory(categoryIdStr === selectedCategory ? "" : categoryIdStr);
     setCurrentPage(1);
   };
 
@@ -175,38 +185,49 @@ export default function Categories() {
     setSelectedIncoterm("");
     setOnlyNegotiable(false);
     setOnlyCustomOrders(false);
-    setSortBy("name");
+    setSortBy("title");
     setSortOrder("asc");
     setCurrentPage(1);
   };
 
   // Función para navegar a la página de detalles del producto
   const handleProductClick = (product: Product) => {
-    navigate(`/product/${product.id}`);
+    const productId = product.id || '0';
+    navigate(`/product/${productId}`);
   };
 
   // Función para agregar productos al carrito
   const addToCart = async (product: Product) => {
     try {
+      // Protección adicional para IDs
+      const productId = product.id || '0';
+      const containerType = product.containerType || '40GP';
+      const incoterm = product.incoterm || 'FOB';
+      
       await addItem(
-        product.id,
+        productId,
         1, // Cantidad mínima
-        product.containerType,
-        product.incoterm
+        containerType,
+        incoterm
       );
     } catch (error) {
       console.error('Error adding item to cart:', error);
     }
   };
 
-  const renderCategoryTree = (categoryList: Category[], level: number = 0) => {
-    const parentCategories = categoryList.filter(cat => cat.level === level);
+  const renderCategoryTree = (categoryList: Category[], parentId: number | null = null, level: number = 0) => {
+    // Add null check for categoryList
+    if (!categoryList || !Array.isArray(categoryList)) {
+      return null;
+    }
     
-    return parentCategories.map((category) => {
+    const filteredCategories = categoryList.filter(cat => cat.parentId === parentId);
+    
+    return filteredCategories.map((category) => {
       const subcategories = categoryList.filter(cat => cat.parentId === category.id);
       const hasSubcategories = subcategories.length > 0;
-      const isOpen = openCategories.has(category.id);
-      const isSelected = selectedCategory === category.id;
+      const isOpen = openCategories.has(category.id.toString());
+      const isSelected = selectedCategory === category.id.toString();
 
       return (
         <div key={category.id} className="space-y-1">
@@ -238,14 +259,14 @@ export default function Categories() {
                 {category.name}
               </span>
               <Badge variant="secondary" className="text-xs">
-                {category.productCount}
+                {category._count?.products || 0}
               </Badge>
             </div>
           </div>
 
           {hasSubcategories && isOpen && (
             <div className="ml-4 space-y-1">
-              {renderCategoryTree(subcategories, level + 1)}
+              {renderCategoryTree(categoryList, category.id, level + 1)}
             </div>
           )}
         </div>
@@ -260,6 +281,33 @@ export default function Categories() {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(price);
+  };
+
+  const formatDate = (dateString: string) => {
+    if (!dateString) return 'Fecha no disponible';
+    try {
+      return new Date(dateString).toLocaleDateString('es-ES', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    } catch (error) {
+      return 'Fecha inválida';
+    }
+  };
+
+  // Función helper para obtener valores seguros del producto
+  const getSafeProductValue = (product: Product, field: keyof Product, defaultValue: any = '') => {
+    try {
+      const value = product[field];
+      if (value === null || value === undefined) return defaultValue;
+      if (typeof value === 'string' && value.trim() === '') return defaultValue;
+      if (Array.isArray(value) && value.length === 0) return defaultValue;
+      return value;
+    } catch (error) {
+      console.warn(`Error accessing product field ${field}:`, error);
+      return defaultValue;
+    }
   };
 
   const getStatusBadge = (status: string) => {
@@ -341,7 +389,7 @@ export default function Categories() {
               <div>
                 <Label className="text-sm font-semibold mb-3 block">Categorías</Label>
                 <div className="max-h-96 overflow-y-auto border rounded-lg p-2">
-                  {renderCategoryTree(categories)}
+                  {renderCategoryTree(categories || [], null, 0)}
                 </div>
               </div>
 
@@ -429,9 +477,9 @@ export default function Categories() {
               <div className="flex items-center space-x-2 lg:space-x-4">
                 <span className="text-xs lg:text-sm text-gray-600">
                   {totalProducts} productos encontrados
-                  {selectedCategory && categories.find(c => c.id === selectedCategory) && (
+                  {selectedCategory && categories.find(c => c.id === parseInt(selectedCategory)) && (
                     <span className="ml-1 lg:ml-2 block lg:inline">
-                      en <strong>{categories.find(c => c.id === selectedCategory)?.name}</strong>
+                      en <strong>{categories.find(c => c.id === parseInt(selectedCategory))?.name}</strong>
                     </span>
                   )}
                 </span>
@@ -448,8 +496,8 @@ export default function Categories() {
                     <SelectValue placeholder="Ordenar por..." />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="name-asc" key="sort-name-asc">Nombre A-Z</SelectItem>
-                    <SelectItem value="name-desc" key="sort-name-desc">Nombre Z-A</SelectItem>
+                    <SelectItem value="title-asc" key="sort-title-asc">Nombre A-Z</SelectItem>
+                    <SelectItem value="title-desc" key="sort-title-desc">Nombre Z-A</SelectItem>
                     <SelectItem value="pricePerContainer-asc" key="sort-price-asc">Precio menor a mayor</SelectItem>
                     <SelectItem value="pricePerContainer-desc" key="sort-price-desc">Precio mayor a menor</SelectItem>
                     <SelectItem value="createdAt-desc" key="sort-date-desc">Más recientes</SelectItem>
@@ -485,7 +533,7 @@ export default function Categories() {
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
                 <p className="text-gray-600">Cargando productos...</p>
               </div>
-            ) : products.length === 0 ? (
+            ) : (products || []).length === 0 ? (
               <div className="text-center py-12 bg-gray-50 rounded-lg">
                 <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">No se encontraron productos</h3>
@@ -500,9 +548,9 @@ export default function Categories() {
                   ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6" 
                   : "space-y-3 lg:space-y-4"
               )}>
-                {products.map((product) => (
+                {(products || []).map((product, index) => (
                   <Card 
-                    key={product.id} 
+                    key={product.id || `product-${index}`} 
                     className="group hover:shadow-lg transition-all duration-200 cursor-pointer"
                     onClick={() => handleProductClick(product)}
                   >
@@ -517,12 +565,12 @@ export default function Categories() {
                           viewMode === "grid" ? "h-40 sm:h-48" : "h-40 sm:w-48 sm:h-32 flex-shrink-0"
                         )}>
                           <img
-                            src={product.images[0] || "/placeholder.svg"}
-                            alt={product.name}
+                            src={(product.images && product.images[0]) || "/placeholder.svg"}
+                            alt={product.title || 'Producto'}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
                           />
                           <div className="absolute top-2 left-2">
-                            {getStatusBadge(product.status)}
+                            {getStatusBadge(product.status || 'active')}
                           </div>
                           <div className="absolute top-2 right-2 flex space-x-1">
                             <Button 
@@ -554,56 +602,129 @@ export default function Categories() {
                         <div className="p-3 lg:p-4 flex-1">
                           <div className="flex items-start justify-between mb-2">
                             <h3 className="font-semibold text-gray-900 line-clamp-2 flex-1 text-sm lg:text-base">
-                              {product.name}
+                              {product.title || 'Producto sin nombre'}
                             </h3>
                           </div>
 
                           <p className="text-xs lg:text-sm text-gray-600 mb-3 line-clamp-2">
-                            {product.description}
+                            {product.description || 'Sin descripción disponible'}
                           </p>
+
+                          {/* Información del código del producto */}
+                          {(product.code && product.code.trim() !== '') && (
+                            <div className="text-xs text-gray-500 mb-2">
+                              Código: {product.code}
+                            </div>
+                          )}
+
+                          {/* Información de colores disponibles */}
+                          {(product.colors && Array.isArray(product.colors) && product.colors.length > 0) && (
+                            <div className="text-xs text-gray-500 mb-2">
+                              Colores: {product.colors.join(', ')}
+                            </div>
+                          )}
+
+                          {/* Información de tallas disponibles */}
+                          {(product.sizes && Array.isArray(product.sizes) && product.sizes.length > 0) && (
+                            <div className="text-xs text-gray-500 mb-2">
+                              Tallas: {product.sizes.join(', ')}
+                            </div>
+                          )}
+
+                          {/* Información de materiales */}
+                          {(product.materials && Array.isArray(product.materials) && product.materials.length > 0) && (
+                            <div className="text-xs text-gray-500 mb-2">
+                              Materiales: {product.materials.join(', ')}
+                            </div>
+                          )}
 
                           <div className="space-y-1 lg:space-y-2 mb-3 lg:mb-4">
                             <div className="flex items-center text-xs lg:text-sm text-gray-600">
                               <Package className="h-3 w-3 lg:h-4 lg:w-4 mr-1 lg:mr-2 text-blue-600 flex-shrink-0" />
-                              <span className="truncate">{product.containerType} - {product.unitsPerContainer.toLocaleString()} unidades</span>
+                              <span className="truncate">{product.containerType || '40GP'} - {(product.unitsPerContainer || 0).toLocaleString()} unidades</span>
                             </div>
                             
                             <div className="flex items-center text-xs lg:text-sm text-gray-600">
                               <Building className="h-3 w-3 lg:h-4 lg:w-4 mr-1 lg:mr-2 text-green-600 flex-shrink-0" />
-                              <span className="truncate">{product.supplier?.companyName}</span>
-                              {product.supplier?.isVerified && (
+                              <span className="truncate">{product.supplier?.companyName || 'Proveedor no disponible'}</span>
+                              {(product.supplier?.isVerified === true) && (
                                 <Badge variant="outline" className="ml-2 text-xs">Verificado</Badge>
                               )}
                             </div>
 
                             <div className="flex items-center text-xs lg:text-sm text-gray-600">
                               <Truck className="h-3 w-3 lg:h-4 lg:w-4 mr-1 lg:mr-2 text-orange-600 flex-shrink-0" />
-                              <span className="truncate">{product.incoterm}</span>
+                              <span className="truncate">{product.incoterm || 'FOB'}</span>
                             </div>
 
                             <div className="flex items-center text-xs lg:text-sm text-gray-600">
                               <Clock className="h-3 w-3 lg:h-4 lg:w-4 mr-1 lg:mr-2 text-purple-600 flex-shrink-0" />
-                              <span className="truncate">Producción: {product.productionTime} días</span>
+                              <span className="truncate">Producción: {product.productionTime || 0} días</span>
                             </div>
 
                             <div className="flex items-center text-xs lg:text-sm text-gray-600">
-                              <Eye className="h-3 w-3 lg:h-4 lg:w-4 mr-1 lg:mr-2 text-gray-500 flex-shrink-0" />
-                              <span className="truncate">{product.totalViews} vistas</span>
+                              <Package className="h-3 w-3 lg:h-4 lg:w-4 mr-1 lg:mr-2 text-blue-600 flex-shrink-0" />
+                              <span className="truncate">MOQ: {(product.moq || 0).toLocaleString()} unidades</span>
                             </div>
+
+                            <div className="flex items-center text-xs lg:text-sm text-gray-600">
+                              <Package className="h-3 w-3 lg:h-4 lg:w-4 mr-1 lg:mr-2 text-green-600 flex-shrink-0" />
+                              <span className="truncate">Stock: {(product.stockContainers || 0)} contenedores</span>
+                            </div>
+
+                            {(product.packagingType && product.packagingType.trim() !== '') && (
+                              <div className="flex items-center text-xs lg:text-sm text-gray-600">
+                                <Package className="h-3 w-3 lg:h-4 lg:w-4 mr-1 lg:mr-2 text-orange-600 flex-shrink-0" />
+                                <span className="truncate">Empaque: {product.packagingType}</span>
+                              </div>
+                            )}
+
+                            {/* Información de peso y volumen */}
+                            {(product.grossWeight && product.grossWeight > 0) && (
+                              <div className="flex items-center text-xs lg:text-sm text-gray-600">
+                                <Package className="h-3 w-3 lg:h-4 lg:w-4 mr-1 lg:mr-2 text-red-600 flex-shrink-0" />
+                                <span className="truncate">Peso: {product.grossWeight} kg</span>
+                              </div>
+                            )}
+
+                            {(product.volume && product.volume > 0) && (
+                              <div className="flex items-center text-xs lg:text-sm text-gray-600">
+                                <Package className="h-3 w-3 lg:h-4 lg:w-4 mr-1 lg:mr-2 text-indigo-600 flex-shrink-0" />
+                                <span className="truncate">Volumen: {product.volume} m³</span>
+                              </div>
+                            )}
+
+                            <div className="flex items-center text-xs lg:text-sm text-gray-600">
+                              <Eye className="h-3 w-3 lg:h-4 lg:w-4 mr-1 lg:mr-2 text-gray-500 flex-shrink-0" />
+                              <span className="truncate">{product.totalViews || 0} vistas • {product.totalInquiries || 0} consultas</span>
+                            </div>
+
+                            {/* Información adicional sobre órdenes personalizadas */}
+                            {(product.allowsCustomOrders === true) && (
+                              <div className="flex items-center text-xs lg:text-sm text-gray-600">
+                                <Package className="h-3 w-3 lg:h-4 lg:w-4 mr-1 lg:mr-2 text-purple-600 flex-shrink-0" />
+                                <span className="truncate">Acepta órdenes personalizadas</span>
+                              </div>
+                            )}
                           </div>
 
                           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 lg:mb-4 gap-2">
                             <div>
                               <div className="text-xl lg:text-2xl font-bold text-gray-900">
-                                {formatPrice(product.pricePerContainer)}
+                                {formatPrice(product.pricePerContainer || 0)}
                               </div>
                               <div className="text-xs lg:text-sm text-gray-600">
-                                ${product.unitPrice}/unidad
+                                {(product.currency || 'USD')} ${product.unitPrice || 0}/unidad
                               </div>
                             </div>
-                            {product.isNegotiable && (
+                            {(product.isNegotiable === true) && (
                               <Badge variant="outline" className="text-green-600 border-green-200 self-start sm:self-center text-xs">
                                 Negociable
+                              </Badge>
+                            )}
+                            {(product.volumeDiscounts && Array.isArray(product.volumeDiscounts) && product.volumeDiscounts.length > 0) && (
+                              <Badge variant="outline" className="text-blue-600 border-blue-200 self-start sm:self-center text-xs">
+                                Descuentos por volumen
                               </Badge>
                             )}
                           </div>

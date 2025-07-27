@@ -53,66 +53,7 @@ export default function Login() {
     "pending" | "verified" | "rejected" | null
   >(null);
 
-  // ============================================
-  // HARDCODED DEMO CREDENTIALS - FOR DEVELOPMENT ONLY
-  // TODO: REMOVE THIS SECTION BEFORE PRODUCTION
-  // ============================================
-  const DEMO_CREDENTIALS = {
-    // Buyer accounts
-    buyer: {
-      email: "comprador@demo.com",
-      password: "demo123",
-      type: "buyer" as const,
-      status: "verified" as const,
-    },
-    buyerPending: {
-      email: "comprador.pendiente@demo.com",
-      password: "demo123",
-      type: "buyer" as const,
-      status: "pending" as const,
-    },
-    // Supplier accounts
-    supplier: {
-      email: "proveedor@demo.com",
-      password: "demo123",
-      type: "supplier" as const,
-      status: "verified" as const,
-    },
-    supplierPending: {
-      email: "proveedor.pendiente@demo.com",
-      password: "demo123",
-      type: "supplier" as const,
-      status: "pending" as const,
-    },
-    supplierRejected: {
-      email: "proveedor.rechazado@demo.com",
-      password: "demo123",
-      type: "supplier" as const,
-      status: "rejected" as const,
-    },
-    // Usuarios originales del backend
-    admin: {
-      email: "admin@zlcexpress.com",
-      password: "admin123",
-      type: "both" as const,
-      status: "verified" as const,
-    },
-    importadora: {
-      email: "importadora@empresa.com",
-      password: "importadora123",
-      type: "buyer" as const,
-      status: "verified" as const,
-    },
-    juan: {
-      email: "juanci123z@gmail.com",
-      password: "password123",
-      type: "buyer" as const,
-      status: "verified" as const,
-    },
-  };
-  // ============================================
-  // END HARDCODED CREDENTIALS SECTION
-  // ============================================
+
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -128,46 +69,44 @@ export default function Login() {
     setAccountStatus(null);
 
     try {
-      // ============================================
-      // REAL BACKEND AUTHENTICATION
-      // ============================================
+      // Autenticación real con backend PostgreSQL
       const credentials = {
         email: values.email.trim(),
         password: values.password.trim(),
       };
 
-      console.log('Intentando login con:', credentials.email);
+      console.log('🔐 Autenticando con backend PostgreSQL:', credentials.email);
       
       const response = await login(credentials);
       
-      console.log('Respuesta del login:', response);
+      console.log('📡 Respuesta del backend:', response);
 
       if (response.success && response.user) {
-        // Login exitoso
-        console.log(`Login exitoso para ${response.user.userType} verificado`);
+        // Login exitoso con base de datos real
+        console.log(`✅ Login exitoso: ${response.user.userType} verificado desde PostgreSQL`);
+        
+        // Normalizar userType a minúsculas para comparación
+        const userType = response.user.userType.toLowerCase();
         
         // Redirigir según el tipo de usuario
-        if (response.user.userType === 'buyer' || response.user.userType === 'both') {
-          console.log("Redirigiendo al dashboard de comprador...");
-          navigate("/"); // Redirect to main buyer dashboard/homepage
-        } else if (response.user.userType === 'supplier') {
-          console.log("Redirigiendo al dashboard de proveedor...");
-          navigate("/supplier/dashboard"); // Redirect to supplier dashboard
+        if (userType === 'buyer' || userType === 'both') {
+          console.log("🛒 Redirigiendo al dashboard de comprador...");
+          navigate("/"); 
+        } else if (userType === 'supplier') {
+          console.log("🏭 Redirigiendo al dashboard de proveedor...");
+          navigate("/supplier/dashboard"); 
         }
         
       } else {
         // Login fallido - manejar según el tipo de error
         if (response.user && response.user.verificationStatus) {
           // El usuario existe pero tiene problemas de verificación
-          setAccountStatus(response.user.verificationStatus);
+          setAccountStatus(response.user.verificationStatus.toLowerCase() as "pending" | "verified" | "rejected");
         }
         
-        setLoginError(response.message || "Error desconocido");
-        console.log("Login fallido:", response.message);
+        setLoginError(response.message || "Credenciales incorrectas");
+        console.log("❌ Login fallido:", response.message);
       }
-      // ============================================
-      // END REAL BACKEND AUTHENTICATION
-      // ============================================
       
     } catch (error) {
       setLoginError("Error de conexión. Verifica que el backend esté funcionando.");
@@ -239,100 +178,7 @@ export default function Login() {
             </p>
           </div>
 
-          {/* ============================================ */}
-          {/* DEMO CREDENTIALS DISPLAY - FOR DEVELOPMENT ONLY */}
-          {/* TODO: REMOVE THIS SECTION BEFORE PRODUCTION */}
-          {/* ============================================ */}
-          <Card className="mb-6 border-amber-200 bg-amber-50">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm text-amber-800 flex items-center gap-2">
-                <AlertCircle className="h-4 w-4" />
-                Credenciales Demo - Conectado al Backend Real
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <div className="space-y-3">
-                <div className="text-xs text-amber-700">
-                  <strong>🔗 Conectado a: http://localhost:3000/api</strong>
-                </div>
 
-                {/* Quick Login Buttons */}
-                <div className="grid grid-cols-1 gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="text-xs h-8 justify-start"
-                    onClick={() => {
-                      form.setValue("email", DEMO_CREDENTIALS.buyer.email);
-                      form.setValue("password", DEMO_CREDENTIALS.buyer.password);
-                    }}
-                  >
-                    🛒 Comprador Verificado (Backend)
-                  </Button>
-
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="text-xs h-8 justify-start"
-                    onClick={() => {
-                      form.setValue("email", DEMO_CREDENTIALS.buyerPending.email);
-                      form.setValue("password", DEMO_CREDENTIALS.buyerPending.password);
-                    }}
-                  >
-                    ⏳ Comprador Pendiente (Backend)
-                  </Button>
-
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="text-xs h-8 justify-start"
-                    onClick={() => {
-                      form.setValue("email", DEMO_CREDENTIALS.supplier.email);
-                      form.setValue("password", DEMO_CREDENTIALS.supplier.password);
-                    }}
-                  >
-                    🏭 Proveedor Verificado (Backend)
-                  </Button>
-
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="text-xs h-8 justify-start"
-                    onClick={() => {
-                      form.setValue("email", DEMO_CREDENTIALS.admin.email);
-                      form.setValue("password", DEMO_CREDENTIALS.admin.password);
-                    }}
-                  >
-                    👑 Administrador (Backend)
-                  </Button>
-
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="text-xs h-8 justify-start"
-                    onClick={() => {
-                      form.setValue("email", DEMO_CREDENTIALS.juan.email);
-                      form.setValue("password", DEMO_CREDENTIALS.juan.password);
-                    }}
-                  >
-                    🏢 Juan Mock Moreno (Backend)
-                  </Button>
-                </div>
-
-                <div className="text-xs text-amber-600 mt-2">
-                  ✅ Todos conectados al backend real en localhost:3000
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          {/* ============================================ */}
-          {/* END DEMO CREDENTIALS DISPLAY SECTION */}
-          {/* ============================================ */}
 
           {/* Status Alert */}
           {accountStatus && <div className="mb-6">{getStatusAlert()}</div>}
@@ -430,19 +276,19 @@ export default function Login() {
                     disabled={isSubmitting}
                     className="w-full bg-zlc-blue-800 hover:bg-zlc-blue-900 h-11"
                   >
-                    {isSubmitting ? "Conectando al backend..." : "Iniciar Sesión"}
+                    {isSubmitting ? "Autenticando..." : "Iniciar Sesión"}
                   </Button>
 
                   {/* Backend Status */}
                   <div className="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
                     <p className="text-xs text-green-800 mb-2 font-medium flex items-center gap-2">
                       <CheckCircle className="h-4 w-4" />
-                      ✅ Conectado al Backend Real
+                      🗄️ Conectado a PostgreSQL
                     </p>
                     <div className="space-y-1 text-xs text-green-700">
-                      <p>• URL: http://localhost:3000/api/auth/login</p>
-                      <p>• Estado: Activo y funcionando</p>
-                      <p>• Base de datos: Mock (listo para MySQL)</p>
+                      <p>• Backend: http://localhost:3000/api</p>
+                      <p>• Base de datos: PostgreSQL + Prisma ORM</p>
+                      <p>• Autenticación: JWT + bcrypt</p>
                     </div>
                   </div>
                 </form>

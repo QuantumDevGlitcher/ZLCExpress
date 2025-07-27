@@ -46,15 +46,14 @@ export default function Cart() {
     state,
     removeItem,
     updateQuantity,
-    updateCustomPrice,
     clearCart,
     sendQuote,
     loadCart,
+    canSendQuote,
   } = useCart();
   
   const [paymentConditions, setPaymentConditions] = useState("");
   const [purchaseOrderFile, setPurchaseOrderFile] = useState<File | null>(null);
-  const [freightEstimate, setFreightEstimate] = useState<number>(0);
   const [notes, setNotes] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPaymentOptions, setShowPaymentOptions] = useState(false);
@@ -65,11 +64,12 @@ export default function Cart() {
   // Cargar el carrito al inicializar
   useEffect(() => {
     loadCart();
-  }, [loadCart]);
+  }, []); // Eliminar loadCart de las dependencias para evitar bucle infinito
 
   // Debug: Log cart items to see what data we're getting
   useEffect(() => {
     console.log('🛒 Cart state.items:', state.items);
+    console.log('🚛 Current freight quote:', state.currentFreightQuote);
     state.items.forEach((item, index) => {
       console.log(`Item ${index}:`, {
         id: item.id,
@@ -80,14 +80,16 @@ export default function Cart() {
         quantity: item.quantity
       });
     });
-  }, [state.items]);
+  }, [state.items, state.currentFreightQuote]);
 
   const platformCommission = 250; // Fixed platform commission
   const subtotal = state.items.reduce((total, item) => {
-    const price = item.customPrice || item.pricePerContainer;
-    return total + price * item.quantity;
+    return total + item.pricePerContainer * item.quantity;
   }, 0);
-  const grandTotal = subtotal + freightEstimate + platformCommission;
+  
+  // Usar el flete del contexto únicamente (no entrada manual)
+  const freightCost = state.currentFreightQuote?.cost || 0;
+  const grandTotal = subtotal + freightCost + platformCommission;
 
   const handleQuantityChange = async (itemId: string, change: number) => {
     const item = state.items.find((i) => i.id === itemId);
@@ -125,11 +127,6 @@ export default function Cart() {
         return next;
       });
     }
-  };
-
-  const handleCustomPriceChange = (itemId: string, value: string) => {
-    const price = parseFloat(value) || 0;
-    updateCustomPrice(itemId, price);
   };
 
   const handleRemoveItem = async (itemId: string) => {
@@ -218,7 +215,8 @@ export default function Cart() {
         totalAmount: grandTotal,
         paymentConditions,
         purchaseOrderFile,
-        freightEstimate,
+        freightEstimate: freightCost,
+        freightQuote: state.currentFreightQuote, // Incluir la información completa del flete
         platformCommission,
         notes,
       });
@@ -438,18 +436,15 @@ export default function Cart() {
                               </Label>
                               <Input
                                 type="number"
-                                value={
-                                  item.customPrice || item.pricePerContainer
-                                }
-                                onChange={(e) =>
-                                  handleCustomPriceChange(
-                                    item.id,
-                                    e.target.value,
-                                  )
-                                }
-                                className="h-8 text-sm mt-1 bg-gray-100 border-gray-300"
-                                placeholder="Precio personalizado"
+                                value={item.pricePerContainer}
+                                readOnly
+                                disabled
+                                className="h-8 text-sm mt-1 bg-gray-100 border-gray-300 cursor-not-allowed"
+                                placeholder="Precio fijo del proveedor"
                               />
+                              <p className="text-xs text-gray-400 mt-1">
+                                Precio establecido por el proveedor
+                              </p>
                             </div>
 
                             {/* Total */}
@@ -460,10 +455,7 @@ export default function Cart() {
                               <div className="mt-1">
                                 <span className="font-bold text-lg text-zlc-blue-600">
                                   $
-                                  {(
-                                    (item.customPrice ||
-                                      item.pricePerContainer) * item.quantity
-                                  ).toLocaleString()}
+                                  {(item.pricePerContainer * item.quantity).toLocaleString()}
                                 </span>
                               </div>
                             </div>
@@ -614,46 +606,80 @@ export default function Cart() {
             {/* Right Column - Summary & Actions */}
             <div className="space-y-6">
               {/* Freight Estimate */}
-              <Card>
+              <Card className={cn(
+                !state.currentFreightQuote && "border-red-200 bg-red-50"
+              )}>
                 <CardHeader>
                   <CardTitle className="flex items-center">
                     <Truck className="h-5 w-5 mr-2 text-zlc-blue-600" />
-                    Estimación de Flete
+                    Estimación de Flete 
+                    <span className="text-red-500 ml-1">*</span>
+                    <span className="text-xs font-normal text-gray-500 ml-2">(Requerido)</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div>
-                    <Label htmlFor="freight">Costo de Flete (USD)</Label>
-                    <Input
-                      id="freight"
-                      type="number"
-                      placeholder="0"
-                      value={freightEstimate || ""}
-                      onChange={(e) =>
-                        setFreightEstimate(parseFloat(e.target.value) || 0)
-                      }
-                      className="bg-white border-gray-400"
-                    />
-                    <p className="text-xs text-gray-500 mt-1">
-                      Ingrese el costo si ya tiene cotización de flete
-                    </p>
-                  </div>
-                  
-                  <Separator />
-                  
-                  <div>
-                    <Button
-                      variant="outline"
-                      onClick={handleFreightQuote}
-                      className="w-full"
-                    >
-                      <Calculator className="h-4 w-4 mr-2" />
-                      Solicitar Cotización de Flete
-                    </Button>
-                    <p className="text-xs text-gray-500 mt-1">
-                      Obtenga cotizaciones de múltiples transportistas
-                    </p>
-                  </div>
+                  {state.currentFreightQuote ? (
+                    <div className="space-y-3">
+                      <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <h4 className="font-medium text-green-800">
+                              Flete Calculado
+                            </h4>
+                            <p className="text-sm text-green-600">
+                              {state.currentFreightQuote.selectedCarrier?.name}
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-lg font-bold text-green-800">
+                              ${state.currentFreightQuote.cost.toLocaleString()} USD
+                            </p>
+                            <p className="text-xs text-green-600">
+                              {state.currentFreightQuote.selectedCarrier?.transitTime} días
+                            </p>
+                          </div>
+                        </div>
+                        <div className="mt-2 text-xs text-green-600">
+                          <strong>Ruta:</strong> {state.currentFreightQuote.origin} → {state.currentFreightQuote.destination}
+                        </div>
+                        <div className="text-xs text-green-600">
+                          <strong>Contenedor:</strong> {state.currentFreightQuote.containerType}
+                        </div>
+                      </div>
+                      <Button
+                        variant="outline"
+                        onClick={handleFreightQuote}
+                        className="w-full"
+                        size="sm"
+                      >
+                        <Calculator className="h-4 w-4 mr-2" />
+                        Cambiar Cotización de Flete
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
+                        <AlertCircle className="h-8 w-8 mx-auto mb-2 text-red-600" />
+                        <h4 className="font-medium text-red-800 mb-1">
+                          Cotización de Flete Requerida
+                        </h4>
+                        <p className="text-sm text-red-600 mb-3">
+                          Debe calcular el costo de flete antes de enviar la solicitud de cotización
+                        </p>
+                        <Button
+                          variant="default"
+                          onClick={handleFreightQuote}
+                          className="w-full bg-red-600 hover:bg-red-700 text-white"
+                        >
+                          <Calculator className="h-4 w-4 mr-2" />
+                          Calcular Flete Ahora
+                        </Button>
+                        <p className="text-xs text-red-500 mt-2">
+                          Obtenga cotizaciones oficiales de múltiples transportistas
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 
@@ -675,9 +701,31 @@ export default function Cart() {
                     </div>
 
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Flete Estimado:</span>
-                      <span className="font-medium">
-                        ${freightEstimate.toLocaleString()}
+                      <span className={cn(
+                        "text-gray-600 flex items-center",
+                        !state.currentFreightQuote && "text-red-600"
+                      )}>
+                        {state.currentFreightQuote ? (
+                          <>
+                            <CheckCircle className="h-4 w-4 mr-1 text-green-600" />
+                            Flete Calculado:
+                          </>
+                        ) : (
+                          <>
+                            <AlertCircle className="h-4 w-4 mr-1 text-red-600" />
+                            Flete Pendiente:
+                          </>
+                        )}
+                      </span>
+                      <span className={cn(
+                        "font-medium",
+                        !state.currentFreightQuote && "text-red-600"
+                      )}>
+                        {state.currentFreightQuote ? (
+                          `$${freightCost.toLocaleString()}`
+                        ) : (
+                          "Por calcular"
+                        )}
                       </span>
                     </div>
 
@@ -744,9 +792,10 @@ export default function Cart() {
                     disabled={
                       isSubmitting ||
                       state.items.length === 0 ||
-                      !paymentConditions
+                      !paymentConditions ||
+                      !state.currentFreightQuote
                     }
-                    className="w-full h-12 text-lg font-semibold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white"
+                    className="w-full h-12 text-lg font-semibold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white disabled:opacity-50 disabled:cursor-not-allowed"
                     size="lg"
                   >
                     {isSubmitting ? (
@@ -761,6 +810,29 @@ export default function Cart() {
                       </>
                     )}
                   </Button>
+
+                  {/* Validation Messages */}
+                  {(state.items.length === 0 || !paymentConditions || !state.currentFreightQuote) && (
+                    <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mt-3">
+                      <div className="flex items-start">
+                        <AlertCircle className="h-4 w-4 text-amber-600 mt-0.5 mr-2 flex-shrink-0" />
+                        <div className="text-sm text-amber-800">
+                          <p className="font-medium mb-1">Para enviar la solicitud, complete:</p>
+                          <ul className="text-xs space-y-1">
+                            {state.items.length === 0 && (
+                              <li>• Agregue al menos un producto al carrito</li>
+                            )}
+                            {!paymentConditions && (
+                              <li>• Seleccione las condiciones de pago</li>
+                            )}
+                            {!state.currentFreightQuote && (
+                              <li className="font-medium text-amber-900">• Calcule la cotización de flete (requerido)</li>
+                            )}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
                   <div className="text-center">
                     <div className="text-xs text-gray-500 mb-2">
